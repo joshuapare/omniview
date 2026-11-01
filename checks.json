@@ -37,6 +37,7 @@
   "narrowFooterVisible": true,
   "labelMapTyped": true,
   "visualGalleryReviewed": true,
+  "immutableLinksReachable": true,
   "screenshotFiles": [
     "NetworkPolicy.png",
     "NetworkPolicy-edit.png",
@@ -95,6 +96,18 @@
     "help-popover.png",
     "profile-label-map.png",
     "diagnostic-generated-status.png",
-    "controllers-effective-status.png"
+    "controllers-effective-status.png",
+    "NetworkPolicy-detail.png",
+    "GlobalNetworkPolicy-detail.png",
+    "HostEndpoint-detail.png",
+    "IPPool-detail.png",
+    "BGPConfiguration-detail.png",
+    "BGPFilter-detail.png",
+    "BGPPeer-detail.png",
+    "FelixConfiguration-detail.png",
+    "Profile-detail.png",
+    "StagedNetworkPolicy-detail.png",
+    "StagedGlobalNetworkPolicy-detail.png",
+    "StagedKubernetesNetworkPolicy-detail.png"
   ]
 }

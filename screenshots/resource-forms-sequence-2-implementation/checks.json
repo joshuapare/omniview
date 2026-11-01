@@ -18,7 +18,38 @@
     "dockerPasswordMasked": true,
     "tlsHostnameTyped": true,
     "explicitNoneYaml": true,
-    "portalRegressionFixed": true
+    "portalRegressionFixed": true,
+    "rawCancelStaysRedacted": true,
+    "rawCancelPreservesExactSource": true,
+    "rawEditorEnabled": true,
+    "rawMetadataEditOnly": true,
+    "rawHideRemasks": true,
+    "rawHidePreservesEdits": true,
+    "rawFormRemasks": true,
+    "rawModeRemasks": true,
+    "rawSourceSubmitted": true,
+    "neverProjectionSubmitted": true,
+    "rawCustomTypeOnly": true,
+    "rawCustomFallbackRedacted": true,
+    "rawCustomSourceSubmitted": true,
+    "rawContextRemasks": true,
+    "rawDiffRemasks": true,
+    "rawDiffExitStaysRedacted": true,
+    "rawPreviewUrisSeparated": true,
+    "rawDiffLifecycleRemasks": true,
+    "noModelAccumulationTenCycles": true,
+    "rapidDiffToggleStable": true,
+    "rapidDiffBeforeReadyObserved": true,
+    "closeWithDiffUnmounts": true,
+    "closeWithDiffReleasesModels": true,
+    "diffDisposalSafe": true,
+    "diffNoUnexpectedOtherErrors": true,
+    "rawFallbackSafe": true,
+    "rawNoDisposedModelError": true,
+    "rawNoUnexpectedOtherError": true,
+    "inspectedRawSafeCaptures": true,
+    "rawErrorsAreOnlyKnownCancellation": true,
+    "diffNoCancelledError": true
   },
   "files": {
     "01-service-named-numeric-ports.png": true,
@@ -47,6 +78,7 @@
     "20-ingress-added-hostname-token.png": true,
     "21-configmap-familiar-edit.png": true,
     "22-ingress-familiar-edit.png": true,
-    "23-pvc-explicit-none-yaml.png": true
+    "23-pvc-explicit-none-yaml.png": true,
+    "28-secret-raw-edit-confirmation.png": true
   }
 }

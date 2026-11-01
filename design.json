@@ -1,0 +1,28 @@
+{
+  "issue": 332,
+  "status": "Design mock; awaiting review; not shipped",
+  "coverage": ["StrimziPodSet"],
+  "sourceCommit": "40b9fa269ba87283bb0651711557922b14d715b3",
+  "sources": ["https://github.com/strimzi/strimzi-kafka-operator/blob/40b9fa269ba87283bb0651711557922b14d715b3/install/cluster-operator/042-Crd-strimzipodset.yaml", "https://github.com/strimzi/strimzi-kafka-operator/blob/40b9fa269ba87283bb0651711557922b14d715b3/cluster-operator/src/main/java/io/strimzi/operator/cluster/operator/assembly/KafkaAssemblyOperator.java", "https://github.com/omniviewdev/omniview/issues/249", "https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/72", "https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/74"],
+  "applicability": "Strimzi 0.47.0, core.strimzi.io/v1beta2, namespaced, served/storage true, status subresource. Requires installed discovered CRD, reachable API, resource get permission, and separate permissions for owner/Pod navigation. Installation/schema is not controller health or authorization. No scale subresource in pinned CRD.",
+  "fieldMapping": [
+    {"path":"apiVersion, kind", "control":"Locked identity / compatibility gate", "writes":"none"},
+    {"path":"metadata.name, metadata.namespace, metadata.uid", "control":"Destination / identity lock", "writes":"none"},
+    {"path":"metadata.ownerReferences[] (apiVersion, kind, name, uid, controller)", "control":"Owner reference and navigation review", "writes":"none; resolve actual reference, never infer from labels"},
+    {"path":"metadata.generation, status.observedGeneration", "control":"Generation comparison", "writes":"none; missing observedGeneration means unknown, not zero"},
+    {"path":"spec.selector.matchLabels", "control":"Expandable selector key/value inspection", "writes":"none"},
+    {"path":"spec.selector.matchExpressions", "control":"Unsupported selector warning when present", "writes":"none; Strimzi ignores these expressions"},
+    {"path":"spec.pods[i].metadata.name", "control":"Searchable desired-membership table and existing Pod-inspector navigation", "writes":"none"},
+    {"path":"spec.pods[i]", "control":"Opaque preserved Pod definitions; omitted from safe projection", "writes":"none; preserve unknown fields as pinned schema requires"},
+    {"path":"status.pods, status.readyPods, status.currentPods", "control":"Separate read-only status counts", "writes":"none; never synthesize from desired length"},
+    {"path":"status.conditions[i].type, .status, .reason, .message, .lastTransitionTime", "control":"Condition table / expandable sanitized detail", "writes":"none; fixture message only, production messages require privacy filtering"},
+    {"path":"Observed Pod status.conditions and desired/observed Pod revision metadata", "control":"Readiness / revision comparison", "writes":"none; separate Pod lookup, fixture comparison only; no invented status.revision field"}
+  ],
+  "boundaries": "No ordinary Create, direct Edit, Delete, Scale, Restart, annotation action or status write. Operator-generated workload remains inspection-only even without owner reference. Configuration belongs in installed Strimzi Kafka/KafkaNodePool provider. Unknown ownership is not permission. Review shows destination and no mutation payload. No save endpoint exists in prototype.",
+  "draftPolicy": "No authoring draft or bidirectional YAML exists for this generated resource. Safe Source is a read-only allowlist projection, not full source; annotations and Pod payloads omitted. Never parse or submit projection. Unsupported original source remains untouched outside this projection; no lossless parser claim. No credentials, resource data or preferences persist.",
+  "components": "Faithful isolated HTML mock, not shipped React. Compose existing base-ui Dialog, Button, Table, Input, Badge, Tooltip/Popover, Collapsible and section navigation. Production semantic tokens replace isolated palette. No new generic primitive requested. Existing resource inspector handles Pod/owner details rather than rebuilding logs or terminals.",
+  "provider": "Optional Strimzi add-on provider owns GVK-specific inspection and ownership semantics. Kubernetes plugin retains capability discovery, RBAC and safe generic fallback; no hardcoded ecosystem form registry.",
+  "browser": "18 final screenshots: 17 at 1440x900 CSS pixels, 1 at 700x800, all deviceScaleFactor 1.25. Actual clicks, input, selects, help keyboard/Escape, close/reopen, selector disclosure, owner/Pod navigation boundary, local filter-empty feedback and availability fixtures. Every screenshot visually inspected in contact sheet; full overview and corrected narrow image inspected separately. No repository tests/builds or cluster requests.",
+  "visualReview": "Used installed web-design-guidelines skill with fetched upstream command.md. Native semantic controls, focus-visible ring, compact 32px controls, 13px text, 1000x700 reference frame, fixed footer with internal scroll, concise safety lines, help on demand. No named mock skill exposed; used approved #249 workflow.",
+  "limits": ["Fixture navigation stops honestly at handoff; does not open real owner or Pod inspector.", "Condition and revision observations are synthetic; no controller health or production rollout verification.", "No authoring validation, add/remove rows, source edits or draft roundtrip needed for inspection-only kind.", "Prototype uses HTML and local fixtures, not actual base-ui React components.", "Generic source access and production privacy sanitizer remain host/provider integration contracts, not implemented production code."]
+}

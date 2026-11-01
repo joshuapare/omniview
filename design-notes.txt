@@ -1,0 +1,46 @@
+Flux notifications — design review, not shipped implementation
+
+Source baseline: notification-controller v1.7.0 resolves to a0a2f73784b6e90776e19048eb49370e4ca4fbaf.
+Primary sources (append paths to https://github.com/fluxcd/notification-controller/blob/a0a2f73784b6e90776e19048eb49370e4ca4fbaf/):
+config/crd/bases/notification.toolkit.fluxcd.io_alerts.yaml
+config/crd/bases/notification.toolkit.fluxcd.io_providers.yaml
+config/crd/bases/notification.toolkit.fluxcd.io_receivers.yaml
+api/v1beta3/alert_types.go
+api/v1beta3/provider_types.go
+api/v1/receiver_types.go
+api/v1/reference_types.go
+
+All three are namespaced user-authored configuration CRDs. Alert and Provider use v1beta3; Receiver uses v1. Alert/Provider v1beta2 are deprecated. Receiver v1beta2 compatibility does not justify presenting its older schema as v1. Discovery, installed served version, create/patch verbs and authorization must be checked independently. No live capability was inferred. Name, namespace and GVK lock during edit. Pinned spec definitions add no field-specific immutable markers. GitOps/managed ownership redirects to source of truth; direct patches may be reverted. ResourceVersion optimistic concurrency belongs to production submission, not mock success.
+
+Exact mapping: all paths are owned only when the corresponding control changes. Empty optional values stay omitted except reference namespaces in bounded generated fixtures. Production must patch AST nodes, not regenerate complete resources.
+Common: Name input -> metadata.name; destination -> metadata.namespace (fixed preview in mock); kind/version -> kind/apiVersion; suspend checkbox -> spec.suspend. Metadata labels/annotations and unknown fields stay source-only. No status editing.
+Alert:
+Provider picker -> spec.providerRef.name (same namespace).
+Severity select -> spec.eventSeverity: omitted/info/error; info includes all severities, not info-only.
+Event Source rows -> spec.eventSources[i].kind/name/namespace. Kinds follow exact pinned enum. Name supports *. Namespace omission uses current namespace. Advanced source -> eventSources[i].apiVersion, matchLabels; matchLabels requires name '*'. Cross-namespace controller policy remains a preflight requirement.
+Include/exclude pattern controls -> spec.inclusionList[] and spec.exclusionList[]; syntax is Go regex, not JavaScript. Mock supports one visible pattern per control; multiline precision stays source-only. Metadata key=value -> spec.eventMetadata[string]; source supports exact arbitrary map values. Original emitter metadata takes precedence. Legacy Summary -> spec.summary, deprecated, maximum 255 characters. Production validates Go regex and exact limits server-side; mock does not claim regex validation.
+Provider (notification configuration, not Crossplane):
+Type selector -> spec.type; all 29 pinned enum values included.
+Destination Address -> spec.address. Its meaning depends on provider type, not universally a URL. Never enter credential-bearing endpoints in this mock.
+Channel -> spec.channel.
+Authentication Secret -> spec.secretRef.name; proxy Secret -> spec.proxySecretRef.name; TLS Secret -> spec.certSecretRef.name. Reference names only; no resolved values fetched, rendered or logged. Secret namespace is local. Proxy Secret expects address and optional authentication. TLS supports CA-only, mutual TLS, or client-only; controller validates key sets. No implicit Secret creation.
+Delivery Timeout -> spec.timeout (duration units ms/s/m; omitted controller behavior 15s).
+Workload Identity ServiceAccount -> spec.serviceAccountName, only azureeventhub/azuredevops/googlepubsub; requires ObjectLevelWorkloadIdentity. No static credentials simultaneously. Omission may use controller-level identity; do not imply anonymous authentication.
+Commit Status CEL -> spec.commitStatusExpr; only github/gitlab/gitea/bitbucketserver/bitbucket/azuredevops. Eligible-type constraint demonstrated; actual CEL validation remains controller-side.
+Source-only: spec.username (posting identity), spec.proxy (deprecated, may contain credentials), spec.interval (deprecated and unused in v1beta3). Never capture these values. A production redacted projection must never become mutation input.
+Receiver:
+Sender -> spec.type; all 12 enum values included.
+Validation Secret -> spec.secretRef.name required; token never loaded. Token changes can change generated webhook path.
+Accepted Event Types -> spec.events[]; comma-separated mock input. Empty omission does not invent a sender default. Exact strings remain sender-specific.
+Targets -> spec.resources[i].kind/name/namespace; source-only apiVersion/matchLabels follows same rules as Alert.
+Secret Reconcile Interval -> spec.interval, ms/s/m/h; omitted API default 10m.
+Target Filter CEL -> spec.resourceFilter; must evaluate boolean. No claim of CEL compilation in browser.
+Inspect -> status.conditions / status.observedGeneration / status.lastHandledReconcileAt / status.webhookPath are read-only observations. Webhook path is generated from token+name+namespace and stays masked. No ready state is fabricated. No test webhook, reconciliation, ingress, external endpoint, or delivery action exists in this mock. Alert/Provider v1beta3 have no status field; delivery diagnostics connect to existing diagnostics rather than inventing /status.
+
+UX composition: isolated HTML faithfully composes Dialog, SegmentedControl, FormField, Input, Select, Checkbox, Tooltip/Popover, Collapsible and editable repeatable rows from approved #249 conventions. Not shipped React/base-ui. 1000x700 frame, 32px controls, 13px type, 20x24 content padding, 16px grid gap, visible destination/footer. No generic primitive proposal needed. Flux-owned add-on editor provider should register exact GVK applicability; Kubernetes plugin keeps generic fallback. Resource-specific policies do not belong in base-ui.
+
+Evidence: capture.cjs drives actual browser inputs/selects/buttons, add/remove targets, hover/focus/click help and Escape, required errors, suspension, reviews, edit lock, source fallback, unavailable/empty/denied/missing/ownership states. 20 screenshots; first 19 captured at 1440x900 deviceScaleFactor 1.25, final narrow at 720x760 same scale. Browser profiles are isolated and excluded from publication. Chrome closed after captures. GPU disabled and settled frames awaited after initial compositor artifacts; published captures are final settled originals. All originals visually reviewed through contact sheets, with narrow/help originals inspected directly. No external service or cluster request.
+
+Preservation scope: demonstrated exact raw text survives source/Form/source including a comment, large integer and invalid YAML. Manual source edits lock Form rather than claiming lossless AST parsing. Form-generated JSON is valid YAML 1.2, not a full YAML editor. No persistence of drafts or credentials. Changing Resource is a fixture reset and clears manual raw-source draft; source preservation claim applies within selected resource only. Mode preference persistence is not implemented. Production must preserve unknown siblings, scalar types, comments, exact numbers, omission and user mode preference with existing AST editor; no production round-trip proof here.
+
+Limits for review: offline references are synthetic, capability switches are fixture scenarios. No live API/controller/RBAC/Secret existence or deliveries verified. Destination namespace is fixed fixture. Detailed metadata and exact map/selector source editing use source-only fallback. Regex/CEL/duration and full admission validation remain server/controller work. Native HTML mock does not implement full production Dialog focus trap/opener lifecycle. Web-design-guidelines source fetched and applied: explicit labels, keyboard-native controls, focus rings, dark native selects, overflow-safe scrolling, live errors; production still must complete modal lifecycle and per-field error association. No design approval requested as already granted; issue remains open for review.

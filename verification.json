@@ -1,0 +1,48 @@
+{
+  "results": [
+    "00-real-app",
+    "01-browse",
+    "02-deleted-file",
+    "03-previous-version",
+    "04-filter-ancestors",
+    "05-no-matches",
+    "05b-hidden-files",
+    "05c-preview-closed",
+    "06-standalone-multiselect",
+    "07-context-actions",
+    "08-layer-changes",
+    "09-cumulative",
+    "10-layer-filter",
+    "11-runtime-diff",
+    "12-live-update",
+    "13-paused",
+    "14-watch-gap",
+    "14b-live-rename",
+    "14c-live-delete",
+    "15-export",
+    "16-missing-tar",
+    "17-state-permission",
+    "17-state-loading",
+    "17-state-empty",
+    "17-state-offline",
+    "17-state-binary",
+    "17-state-large",
+    "17-state-missing-tar",
+    "18-phone-browse",
+    "19-phone-layers"
+  ],
+  "pageErrors": [],
+  "desktop": [
+    1440,
+    900
+  ],
+  "phone": [
+    390,
+    844
+  ],
+  "wlan": "http://192.168.68.55:48732/",
+  "identity": {
+    "workspaceID": "f889cfc6-a139-4d77-aac3-8733bd1849b5",
+    "generation": "60d27bb7-edd8-4f77-bb93-497b4abe08c4"
+  }
+}

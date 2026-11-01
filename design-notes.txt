@@ -1,0 +1,84 @@
+VELERO RESOURCE EDITOR DESIGN — ISSUE 324
+Design proposal; no implementation or approval claim.
+
+Sources: Velero v1.16.0, pkg/apis/velero/v1 and v2alpha1. api-snapshot.json stores the researched public Go definitions; schema-scope.json records CRD citations. All 13 resources are namespaced. DataUpload/DataDownload use v2alpha1, others v1. References are synthetic in preview namespace. Namespace is explicit fixed fixture destination, not a real default.
+
+Ownership: optional Velero add-on editor provider, not hardcoded Kubernetes plugin forms. Require installed served version, matching schema, current RBAC verbs and ownership. CSI/data-movement flows depend on installed Velero CSI integration, snapshots, node-agent/data mover and provider plugins; discovery is not availability or controller health. No permission claims.
+
+FRAME AND REUSE
+Approved #249 workflow with faithful isolated HTML composition, not shipped React. 1000x700 desktop, 32px controls, 13px body, 20x24 padding, 16px grid gaps. Reuse base-ui Dialog, FormField, Input, Select/Combobox, SegmentedControl, Table/EditableList, Tooltip/Popover and existing source editor in production. No new generic primitive required. Reviewed using web-design-guidelines skill and fetched source guidelines.
+
+AUTHORING FIELD MAP
+Identity: Name -> Input -> metadata.name; edit locked. Destination -> namespace picker in production -> metadata.namespace; edit locked. Fixture namespace is preview.
+Schedule
+  Cron expression -> text -> spec.schedule
+  Paused -> bool -> spec.paused
+  Skip immediately -> tri -> spec.skipImmediately
+  Owner references on backups -> tri -> spec.useOwnerReferencesInBackup
+  Retention -> text -> spec.template.ttl
+  Namespaces -> list -> spec.template.includedNamespaces
+  Storage location -> storage -> spec.template.storageLocation
+
+BackupStorageLocation
+  Provider -> text -> spec.provider
+  Bucket -> text -> spec.objectStorage.bucket
+  Prefix -> text -> spec.objectStorage.prefix
+  Credential Secret -> secret -> spec.credential.name
+  Secret key -> text -> spec.credential.key
+  Access mode -> ReadWrite|ReadOnly -> spec.accessMode
+  Default location -> bool -> spec.default
+  Sync period -> text -> spec.backupSyncPeriod
+  Validation frequency -> text -> spec.validationFrequency
+
+VolumeSnapshotLocation
+  Provider -> text -> spec.provider
+  Credential Secret -> secret -> spec.credential.name
+  Secret key -> text -> spec.credential.key
+
+Backup
+  Namespaces -> list -> spec.includedNamespaces
+  Excluded namespaces -> list -> spec.excludedNamespaces
+  Included resources -> list -> spec.includedResources
+  Excluded resources -> list -> spec.excludedResources
+  Storage location -> storage -> spec.storageLocation
+  Retention -> text -> spec.ttl
+  Snapshot volumes -> tri -> spec.snapshotVolumes
+  File-system backup -> tri -> spec.defaultVolumesToFsBackup
+  Move snapshot data -> tri -> spec.snapshotMoveData
+  Cluster resources -> tri -> spec.includeClusterResources
+
+Restore
+  Backup -> backup -> spec.backupName
+  Schedule instead -> schedule -> spec.scheduleName
+  Namespaces -> list -> spec.includedNamespaces
+  Excluded resources -> list -> spec.excludedResources
+  Restore volumes -> tri -> spec.restorePVs
+  Preserve node ports -> tri -> spec.preserveNodePorts
+  Existing resources -> |none|update -> spec.existingResourcePolicy
+
+Rows: Restore namespace mapping -> key/value rows -> spec.namespaceMapping[source]=destination. BSL/VSL provider config -> key/value rows -> spec.config[key]; production must use provider allowlisted non-sensitive keys, credentials always existing Secret references. Secret key reference -> spec.credential.name/key; no Secret bytes fetched. CA material and annotations are not exposed.
+Backup hook rows -> name and command arguments -> spec.hooks.resources[i].name, .pre[j].exec.command[]. Schedule hooks have spec.template prefix. Hook phase, scope, container, timeout, error mode and post hooks remain advanced source-only. Restore init/exec hooks remain advanced source-only, never mislabeled backup hooks. Empty controls omit fields. Unchanged pointer booleans stay omitted. Lists use explicit comma-separated resource/namespace names in this bounded mock; production should compose TagInput/Combobox for those lists.
+
+BOUNDARIES
+Schedule supports create/edit; changes affect future backups only. paused, skipImmediately and useOwnerReferencesInBackup remain separate. Owner refs may affect garbage collection.
+BSL/VSL support create/edit subject to admission/provider constraints. Storage identity changes require review, never automatic replacement. Identity locks are guided-editor policy, not a claim every spec field is API-immutable. Retain provider config and unknown fields in production. Credentials selected by reference only; never test provider/cloud credentials.
+Backup/Restore: create means submit a job-like object, not mutable execution configuration. Existing Backup/Restore are inspect-only, including Schedule-generated Backup. Change Schedule for future runs. Status and progress belong to controllers. No ordinary update/delete shortcut. Generated Backup ownership uses ownerReferences plus schedule labels as context, not a blanket guarantee owner references exist.
+BackupRepository: inspect spec.volumeNamespace, .backupStorageLocation, .repositoryType, .maintenanceFrequency and status.lastMaintenanceTime. No creation or maintenance action invented. Repository identifiers/config stay hidden.
+PodVolumeBackup: inspect spec.pod, .volume, .node, .uploaderType, .backupStorageLocation, status.progress; owned by backup pipeline, no cancel API invented.
+PodVolumeRestore: inspect spec.pod, .volume, .sourceNamespace, .snapshotID, status.progress; owned by restore pipeline, no cancel API invented.
+DataUpload: inspect spec.sourcePVC, .sourceNamespace, .snapshotType, .csiSnapshot.volumeSnapshot, .backupStorageLocation and status.progress.
+DataDownload: inspect spec.targetVolume.pvc/namespace/pv, .sourceNamespace, .backupStorageLocation and status.progress. Both transfer cancellation actions review a narrowly scoped spec.cancel=true patch only; phase and other spec stay read-only. Production must check current phase, resourceVersion and update permission immediately before request. Cancellation is a request, not completion; no PATCH occurs here.
+DeleteBackupRequest: persisted action create with generated metadata.generateName, spec.backupName selected explicitly. Review warns backup data/snapshot deletion is irreversible. Do not delete Backup as substitute.
+DownloadRequest: persisted action create, spec.target.kind exact enum and spec.target.name. status.downloadURL and expiration remain controller-owned, URL not displayed/captured; existing artifact/download handoff rather than rebuilt logs. No artifact bytes downloaded.
+ServerStatusRequest: persisted action create with generated name and spec: {}; status.serverVersion/plugins inspected through existing result handling. Does not prove health.
+
+SAFETY AND SOURCE
+No raw credentials, imports, embedded annotation values, PEM, private data or resolved Secret values exist in captures. Only synthetic public fixture references. Raw source is bounded nonsensitive draft surface with visible no-credential warning; no production sensitive editor claim. No live cluster/cloud requests. Review never submits.
+Form writes bounded generated subset until raw edit. After ANY manual source edit, exact raw text retained and Form locks. Demonstrated invalid syntax, comments and 9007199254740993 retention are raw-byte string retention, NOT lossless parsed round trips. Production requires AST owned-path patches preserving comments, scalar types, omission, unknown fields, resourceVersion and unedited siblings. This prototype honestly does not implement that parser or schema validation.
+Only explicit mock mode preference uses sessionStorage. Drafts remain memory-only, no credentials persist. Missing/denied/unavailable/empty/unsupported states remain distinct; blocked capabilities disable review and action buttons. Existing unresolved refs must remain in real source.
+
+EVIDENCE
+44 distinct screenshot files (including advanced source), real Chrome at 1440x900 DPR1.25; narrow Restore at 700x780 DPR1.25. Every capture visually inspected using review sheets plus full advanced capture. Real typing, selection, row add/remove, help/focus/Escape, source/manual invalid source, immutable edit and cancellation preview exercised. checks.json contains boolean assertions and filenames only. Initial help Escape and narrow footer issues fixed and checked again. Runtime page error list empty in final run.
+
+LIMITS / REVIEW DECISIONS
+Local HTML, not authenticated host pixels or base-ui runtime. No server validation, cloud plugin discovery, RBAC proof, real hooks, cron execution, actual backups/restores, data transfer, repository maintenance or mutations. Structural source-only fallback is intentionally more conservative than production baseline. Detailed advanced API fields remain source-owned, not silently synthesized. No focus trap/opener-close lifecycle demonstrated because frame stays open. Confirm final provider UX and phase-specific cancellation eligibility during implementation. Mocks await user review; issue remains open.

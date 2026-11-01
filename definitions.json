@@ -1,0 +1,192 @@
+{
+  "Schedule": [
+    [
+      "Cron expression",
+      "schedule",
+      "text"
+    ],
+    [
+      "Paused",
+      "paused",
+      "bool"
+    ],
+    [
+      "Skip immediately",
+      "skipImmediately",
+      "tri"
+    ],
+    [
+      "Owner references on backups",
+      "useOwnerReferencesInBackup",
+      "tri"
+    ],
+    [
+      "Retention",
+      "template.ttl",
+      "text"
+    ],
+    [
+      "Namespaces",
+      "template.includedNamespaces",
+      "list"
+    ],
+    [
+      "Storage location",
+      "template.storageLocation",
+      "storage"
+    ]
+  ],
+  "BackupStorageLocation": [
+    [
+      "Provider",
+      "provider",
+      "text"
+    ],
+    [
+      "Bucket",
+      "objectStorage.bucket",
+      "text"
+    ],
+    [
+      "Prefix",
+      "objectStorage.prefix",
+      "text"
+    ],
+    [
+      "Credential Secret",
+      "credential.name",
+      "secret"
+    ],
+    [
+      "Secret key",
+      "credential.key",
+      "text"
+    ],
+    [
+      "Access mode",
+      "accessMode",
+      "ReadWrite|ReadOnly"
+    ],
+    [
+      "Default location",
+      "default",
+      "bool"
+    ],
+    [
+      "Sync period",
+      "backupSyncPeriod",
+      "text"
+    ],
+    [
+      "Validation frequency",
+      "validationFrequency",
+      "text"
+    ]
+  ],
+  "VolumeSnapshotLocation": [
+    [
+      "Provider",
+      "provider",
+      "text"
+    ],
+    [
+      "Credential Secret",
+      "credential.name",
+      "secret"
+    ],
+    [
+      "Secret key",
+      "credential.key",
+      "text"
+    ]
+  ],
+  "Backup": [
+    [
+      "Namespaces",
+      "includedNamespaces",
+      "list"
+    ],
+    [
+      "Excluded namespaces",
+      "excludedNamespaces",
+      "list"
+    ],
+    [
+      "Included resources",
+      "includedResources",
+      "list"
+    ],
+    [
+      "Excluded resources",
+      "excludedResources",
+      "list"
+    ],
+    [
+      "Storage location",
+      "storageLocation",
+      "storage"
+    ],
+    [
+      "Retention",
+      "ttl",
+      "text"
+    ],
+    [
+      "Snapshot volumes",
+      "snapshotVolumes",
+      "tri"
+    ],
+    [
+      "File-system backup",
+      "defaultVolumesToFsBackup",
+      "tri"
+    ],
+    [
+      "Move snapshot data",
+      "snapshotMoveData",
+      "tri"
+    ],
+    [
+      "Cluster resources",
+      "includeClusterResources",
+      "tri"
+    ]
+  ],
+  "Restore": [
+    [
+      "Backup",
+      "backupName",
+      "backup"
+    ],
+    [
+      "Schedule instead",
+      "scheduleName",
+      "schedule"
+    ],
+    [
+      "Namespaces",
+      "includedNamespaces",
+      "list"
+    ],
+    [
+      "Excluded resources",
+      "excludedResources",
+      "list"
+    ],
+    [
+      "Restore volumes",
+      "restorePVs",
+      "tri"
+    ],
+    [
+      "Preserve node ports",
+      "preserveNodePorts",
+      "tri"
+    ],
+    [
+      "Existing resources",
+      "existingResourcePolicy",
+      "|none|update"
+    ]
+  ]
+}

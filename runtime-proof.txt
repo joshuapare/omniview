@@ -1,0 +1,9 @@
+Runtime evidence correction
+
+The initial capture collector incorrectly used (await tab.errors()).length === 0. The API returns {entries, nextSeq, dropped}, not an array, so undefined === 0 produced false without any prototype error evidence.
+
+Fresh dedicated issue-owned Chrome profile, headless, no shared tabs. Initial collector: entries empty, nextSeq 0, dropped 0. Replayed real required-field validation, typing, selectors, add/remove argument rows, Indexed execution, suspend, source/Form transitions, review/back, immutable/owner scenarios, CronJob Replace/suspend/help/Escape, run-now input, invalid source fallback, denied/unavailable, Advanced and Status. Final collector: entries empty, nextSeq 0, dropped 0. Correct check: Array.isArray(result.entries) && result.entries.length === 0 && result.dropped === 0.
+
+One browser-tool click was blocked by footer before explicitly resetting dedicated Chrome viewport to 1440x900@1.25; retry succeeded after setViewport. This was interaction geometry, not a page JavaScript error. Earlier shared-browser screenshot timeouts and tab.press argument-schema rejection were tool transport/API errors, not prototype runtime errors. No errors were suppressed and no production source changed.
+
+Original screenshot/source commit stays pinned at 72eb053374d79a0e2f788916cbf0d45f5a25dc3d. Only corrected boolean evidence and this explanation are added in a new immutable commit. No screenshots were regenerated or replaced for this correction.

@@ -10,7 +10,7 @@
   "rawExactPreserved": true,
   "narrowNoHorizontalOverflow": true,
   "footerFits": true,
-  "noBrowserErrors": false,
+  "noBrowserErrors": true,
   "allCapturesReviewed": true,
   "unsavedRunBlocked": true,
   "screenshotFiles": [

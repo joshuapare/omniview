@@ -1,0 +1,996 @@
+{
+  "NetworkPolicy": {
+    "file": "networkpolicy.go",
+    "title": "Targets & rules",
+    "fields": [
+      [
+        "selector",
+        "Endpoint selector",
+        "selector"
+      ],
+      [
+        "tier",
+        "Tier",
+        "ref:default,security"
+      ],
+      [
+        "order",
+        "Order",
+        "number"
+      ],
+      [
+        "types",
+        "Directions",
+        "list"
+      ],
+      [
+        "ingress",
+        "Ingress rules",
+        "rules"
+      ],
+      [
+        "egress",
+        "Egress rules",
+        "rules"
+      ]
+    ],
+    "schema": [
+      "spec.tier",
+      "spec.order",
+      "spec.ingress",
+      "spec.egress",
+      "spec.selector",
+      "spec.types",
+      "spec.serviceAccountSelector",
+      "spec.performanceHints"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/networkpolicy.go"
+  },
+  "GlobalNetworkPolicy": {
+    "file": "globalnetworkpolicy.go",
+    "title": "Global traffic",
+    "fields": [
+      [
+        "selector",
+        "Endpoint selector",
+        "selector"
+      ],
+      [
+        "namespaceSelector",
+        "Namespace selector",
+        "selector"
+      ],
+      [
+        "tier",
+        "Tier",
+        "ref:default,security"
+      ],
+      [
+        "order",
+        "Order",
+        "number"
+      ],
+      [
+        "ingress",
+        "Ingress rules",
+        "rules"
+      ],
+      [
+        "egress",
+        "Egress rules",
+        "rules"
+      ],
+      [
+        "preDNAT",
+        "Pre-DNAT",
+        "bool"
+      ],
+      [
+        "applyOnForward",
+        "Forward traffic",
+        "bool"
+      ],
+      [
+        "doNotTrack",
+        "Untracked traffic",
+        "bool"
+      ]
+    ],
+    "schema": [
+      "spec.tier",
+      "spec.order",
+      "spec.ingress",
+      "spec.egress",
+      "spec.selector",
+      "spec.types",
+      "spec.doNotTrack",
+      "spec.preDNAT",
+      "spec.applyOnForward",
+      "spec.serviceAccountSelector",
+      "spec.namespaceSelector",
+      "spec.performanceHints"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/globalnetworkpolicy.go"
+  },
+  "NetworkSet": {
+    "file": "networkset.go",
+    "title": "Address membership",
+    "fields": [
+      [
+        "nets",
+        "Networks",
+        "list"
+      ]
+    ],
+    "schema": [
+      "spec.nets"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/networkset.go"
+  },
+  "GlobalNetworkSet": {
+    "file": "globalnetworkset.go",
+    "title": "Global address membership",
+    "fields": [
+      [
+        "nets",
+        "Networks",
+        "list"
+      ]
+    ],
+    "schema": [
+      "spec.nets"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/globalnetworkset.go"
+  },
+  "HostEndpoint": {
+    "file": "hostendpoint.go",
+    "title": "Host protection",
+    "fields": [
+      [
+        "node",
+        "Node",
+        "ref:preview-node-a,preview-node-b"
+      ],
+      [
+        "interfaceName",
+        "Interface",
+        "text"
+      ],
+      [
+        "expectedIPs",
+        "Expected IPs",
+        "list"
+      ],
+      [
+        "profiles",
+        "Profiles in order",
+        "list"
+      ],
+      [
+        "ports",
+        "Named ports",
+        "ports"
+      ]
+    ],
+    "schema": [
+      "spec.node",
+      "spec.interfaceName",
+      "spec.expectedIPs",
+      "spec.profiles",
+      "spec.ports"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/hostendpoint.go"
+  },
+  "IPPool": {
+    "file": "ippool.go",
+    "title": "Address allocation",
+    "fields": [
+      [
+        "cidr",
+        "Pool CIDR",
+        "cidr"
+      ],
+      [
+        "blockSize",
+        "Block prefix length",
+        "number"
+      ],
+      [
+        "ipipMode",
+        "IP-in-IP",
+        "ref:Never,Always,CrossSubnet"
+      ],
+      [
+        "vxlanMode",
+        "VXLAN",
+        "ref:Never,Always,CrossSubnet"
+      ],
+      [
+        "natOutgoing",
+        "Masquerade outgoing",
+        "bool"
+      ],
+      [
+        "disabled",
+        "Stop new allocations",
+        "bool"
+      ],
+      [
+        "nodeSelector",
+        "Eligible nodes",
+        "selector"
+      ],
+      [
+        "assignmentMode",
+        "Assignment",
+        "ref:Automatic,Manual"
+      ],
+      [
+        "allowedUses",
+        "Allowed uses",
+        "list"
+      ],
+      [
+        "disableBGPExport",
+        "Disable BGP export",
+        "bool"
+      ]
+    ],
+    "schema": [
+      "spec.cidr",
+      "spec.vxlanMode",
+      "spec.ipipMode",
+      "spec.natOutgoing",
+      "spec.disabled",
+      "spec.disableBGPExport",
+      "spec.blockSize",
+      "spec.nodeSelector",
+      "spec.ipip",
+      "spec.nat-outgoing",
+      "spec.allowedUses",
+      "spec.assignmentMode"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/ippool.go"
+  },
+  "IPReservation": {
+    "file": "ipreservation.go",
+    "title": "Reserved addresses",
+    "fields": [
+      [
+        "reservedCIDRs",
+        "Reserved IPs or CIDRs",
+        "list"
+      ]
+    ],
+    "schema": [
+      "spec.reservedCIDRs"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/ipreservation.go"
+  },
+  "BGPConfiguration": {
+    "file": "bgpconfig.go",
+    "title": "BGP routing",
+    "fields": [
+      [
+        "asNumber",
+        "Autonomous system",
+        "number"
+      ],
+      [
+        "nodeToNodeMeshEnabled",
+        "Node mesh",
+        "bool"
+      ],
+      [
+        "listenPort",
+        "Listen port",
+        "number"
+      ],
+      [
+        "serviceClusterIPs",
+        "Advertised service CIDRs",
+        "cidrrows"
+      ],
+      [
+        "communities",
+        "Communities",
+        "pairs"
+      ],
+      [
+        "prefixAdvertisements",
+        "Prefix advertisements",
+        "prefix"
+      ],
+      [
+        "logSeverityScreen",
+        "Log level",
+        "ref:Info,Warning,Error"
+      ]
+    ],
+    "schema": [
+      "spec.logSeverityScreen",
+      "spec.nodeToNodeMeshEnabled",
+      "spec.asNumber",
+      "spec.serviceLoadBalancerIPs",
+      "spec.serviceExternalIPs",
+      "spec.serviceClusterIPs",
+      "spec.communities",
+      "spec.prefixAdvertisements",
+      "spec.listenPort",
+      "spec.nodeMeshPassword",
+      "spec.nodeMeshMaxRestartTime",
+      "spec.bindMode",
+      "spec.ignoredInterfaces",
+      "spec.localWorkloadPeeringIPV4",
+      "spec.localWorkloadPeeringIPV6"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/bgpconfig.go"
+  },
+  "BGPFilter": {
+    "file": "bgpfilter.go",
+    "title": "Ordered route filters",
+    "fields": [
+      [
+        "importV4",
+        "Import IPv4",
+        "filters"
+      ],
+      [
+        "exportV4",
+        "Export IPv4",
+        "filters"
+      ],
+      [
+        "importV6",
+        "Import IPv6",
+        "filters"
+      ],
+      [
+        "exportV6",
+        "Export IPv6",
+        "filters"
+      ]
+    ],
+    "schema": [
+      "spec.exportV4",
+      "spec.importV4",
+      "spec.exportV6",
+      "spec.importV6"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/bgpfilter.go"
+  },
+  "BGPPeer": {
+    "file": "bgppeer.go",
+    "title": "Peer connection",
+    "fields": [
+      [
+        "nodeSelector",
+        "Local nodes",
+        "selector"
+      ],
+      [
+        "peerIP",
+        "Peer address",
+        "text"
+      ],
+      [
+        "asNumber",
+        "Peer AS number",
+        "number"
+      ],
+      [
+        "peerSelector",
+        "Peer nodes alternative",
+        "selector"
+      ],
+      [
+        "filters",
+        "Ordered filters",
+        "list"
+      ],
+      [
+        "sourceAddress",
+        "Source address",
+        "ref:UseNodeIP,None"
+      ],
+      [
+        "password.secretKeyRef.name",
+        "Password Secret reference",
+        "text"
+      ],
+      [
+        "password.secretKeyRef.key",
+        "Secret key reference",
+        "text"
+      ]
+    ],
+    "schema": [
+      "spec.node",
+      "spec.nodeSelector",
+      "spec.peerIP",
+      "spec.asNumber",
+      "spec.peerSelector",
+      "spec.keepOriginalNextHop",
+      "spec.password",
+      "spec.sourceAddress",
+      "spec.maxRestartTime",
+      "spec.numAllowedLocalASNumbers",
+      "spec.ttlSecurity",
+      "spec.reachableBy",
+      "spec.filters",
+      "spec.localWorkloadSelector"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/bgppeer.go"
+  },
+  "FelixConfiguration": {
+    "file": "felixconfig.go",
+    "title": "Dataplane settings",
+    "fields": [
+      [
+        "logSeverityScreen",
+        "Screen log level",
+        "ref:Info,Warning,Error,Debug"
+      ],
+      [
+        "ipv6Support",
+        "IPv6 support",
+        "bool"
+      ],
+      [
+        "iptablesBackend",
+        "iptables backend",
+        "ref:Auto,Legacy,NFT"
+      ],
+      [
+        "defaultEndpointToHostAction",
+        "Workload to host",
+        "ref:Drop,Accept,Return"
+      ],
+      [
+        "wireguardEnabled",
+        "WireGuard IPv4",
+        "bool"
+      ],
+      [
+        "prometheusMetricsEnabled",
+        "Metrics endpoint",
+        "bool"
+      ],
+      [
+        "failsafeInboundHostPorts",
+        "Inbound failsafes",
+        "protoports"
+      ]
+    ],
+    "schema": [
+      "spec.useInternalDataplaneDriver",
+      "spec.dataplaneDriver",
+      "spec.dataplaneWatchdogTimeout",
+      "spec.ipv6Support",
+      "spec.routeRefreshInterval",
+      "spec.interfaceRefreshInterval",
+      "spec.iptablesRefreshInterval",
+      "spec.iptablesPostWriteCheckInterval",
+      "spec.iptablesLockFilePath",
+      "spec.iptablesLockTimeout",
+      "spec.iptablesLockProbeInterval",
+      "spec.featureDetectOverride",
+      "spec.featureGates",
+      "spec.ipsetsRefreshInterval",
+      "spec.maxIpsetSize",
+      "spec.iptablesBackend",
+      "spec.xdpRefreshInterval",
+      "spec.netlinkTimeout",
+      "spec.metadataAddr",
+      "spec.metadataPort",
+      "spec.openstackRegion",
+      "spec.interfacePrefix",
+      "spec.interfaceExclude",
+      "spec.chainInsertMode",
+      "spec.defaultEndpointToHostAction",
+      "spec.iptablesFilterAllowAction",
+      "spec.iptablesMangleAllowAction",
+      "spec.iptablesFilterDenyAction",
+      "spec.logPrefix",
+      "spec.logFilePath",
+      "spec.logSeverityFile",
+      "spec.logSeverityScreen",
+      "spec.logSeveritySys",
+      "spec.logDebugFilenameRegex",
+      "spec.ipipEnabled",
+      "spec.ipipMTU",
+      "spec.vxlanEnabled",
+      "spec.vxlanMTU",
+      "spec.vxlanMTUV6",
+      "spec.vxlanPort",
+      "spec.vxlanVNI",
+      "spec.allowVXLANPacketsFromWorkloads",
+      "spec.allowIPIPPacketsFromWorkloads",
+      "spec.reportingInterval",
+      "spec.reportingTTL",
+      "spec.endpointReportingEnabled",
+      "spec.endpointReportingDelay",
+      "spec.endpointStatusPathPrefix",
+      "spec.iptablesMarkMask",
+      "spec.disableConntrackInvalidCheck",
+      "spec.healthEnabled",
+      "spec.healthHost",
+      "spec.healthPort",
+      "spec.healthTimeoutOverrides",
+      "spec.prometheusMetricsEnabled",
+      "spec.prometheusMetricsHost",
+      "spec.prometheusMetricsPort",
+      "spec.prometheusGoMetricsEnabled",
+      "spec.prometheusProcessMetricsEnabled",
+      "spec.prometheusWireGuardMetricsEnabled",
+      "spec.failsafeInboundHostPorts",
+      "spec.failsafeOutboundHostPorts",
+      "spec.kubeNodePortRanges",
+      "spec.policySyncPathPrefix",
+      "spec.usageReportingEnabled",
+      "spec.usageReportingInitialDelay",
+      "spec.usageReportingInterval",
+      "spec.natPortRange",
+      "spec.natOutgoingAddress",
+      "spec.deviceRouteSourceAddress",
+      "spec.deviceRouteSourceAddressIPv6",
+      "spec.deviceRouteProtocol",
+      "spec.removeExternalRoutes",
+      "spec.ipForwarding",
+      "spec.externalNodesList",
+      "spec.debugMemoryProfilePath",
+      "spec.debugDisableLogDropping",
+      "spec.debugSimulateCalcGraphHangAfter",
+      "spec.debugSimulateDataplaneHangAfter",
+      "spec.debugSimulateDataplaneApplyDelay",
+      "spec.debugHost",
+      "spec.debugPort",
+      "spec.iptablesNATOutgoingInterfaceFilter",
+      "spec.sidecarAccelerationEnabled",
+      "spec.xdpEnabled",
+      "spec.genericXDPEnabled",
+      "spec.nftablesMode",
+      "spec.nftablesRefreshInterval",
+      "spec.nftablesFilterAllowAction",
+      "spec.nftablesMangleAllowAction",
+      "spec.nftablesFilterDenyAction",
+      "spec.nftablesMarkMask",
+      "spec.bpfEnabled",
+      "spec.bpfDisableUnprivileged",
+      "spec.bpfLogLevel",
+      "spec.bpfConntrackLogLevel",
+      "spec.bpfConntrackMode",
+      "spec.bpfConntrackTimeouts",
+      "spec.bpfLogFilters",
+      "spec.bpfCTLBLogFilter",
+      "spec.bpfDataIfacePattern",
+      "spec.bpfL3IfacePattern",
+      "spec.bpfConnectTimeLoadBalancingEnabled",
+      "spec.bpfConnectTimeLoadBalancing",
+      "spec.bpfHostNetworkedNATWithoutCTLB",
+      "spec.bpfExternalServiceMode",
+      "spec.bpfDSROptoutCIDRs",
+      "spec.bpfExtToServiceConnmark",
+      "spec.bpfKubeProxyIptablesCleanupEnabled",
+      "spec.bpfKubeProxyMinSyncPeriod",
+      "spec.bpfKubeProxyEndpointSlicesEnabled",
+      "spec.bpfPSNATPorts",
+      "spec.bpfMapSizeNATFrontend",
+      "spec.bpfMapSizeNATBackend",
+      "spec.bpfMapSizeNATAffinity",
+      "spec.bpfMapSizeRoute",
+      "spec.bpfMapSizeConntrack",
+      "spec.bpfMapSizePerCpuConntrack",
+      "spec.bpfMapSizeConntrackScaling",
+      "spec.bpfMapSizeConntrackCleanupQueue",
+      "spec.bpfMapSizeIPSets",
+      "spec.bpfMapSizeIfState",
+      "spec.bpfHostConntrackBypass",
+      "spec.bpfEnforceRPF",
+      "spec.bpfPolicyDebugEnabled",
+      "spec.bpfForceTrackPacketsFromIfaces",
+      "spec.bpfDisableGROForIfaces",
+      "spec.bpfExcludeCIDRsFromNAT",
+      "spec.bpfExportBufferSizeMB",
+      "spec.flowLogsPolicyEvaluationMode",
+      "spec.bpfRedirectToPeer",
+      "spec.flowLogsFlushInterval",
+      "spec.flowLogsCollectorDebugTrace",
+      "spec.flowLogsGoldmaneServer",
+      "spec.bpfProfiling",
+      "spec.routeSource",
+      "spec.routeTableRanges",
+      "spec.routeTableRange",
+      "spec.routeSyncDisabled",
+      "spec.wireguardEnabled",
+      "spec.wireguardEnabledV6",
+      "spec.wireguardThreadingEnabled",
+      "spec.wireguardListeningPort",
+      "spec.wireguardListeningPortV6",
+      "spec.wireguardRoutingRulePriority",
+      "spec.wireguardInterfaceName",
+      "spec.wireguardInterfaceNameV6",
+      "spec.wireguardMTU",
+      "spec.wireguardMTUV6",
+      "spec.wireguardHostEncryptionEnabled",
+      "spec.wireguardKeepAlive",
+      "spec.awsSrcDstCheck",
+      "spec.serviceLoopPrevention",
+      "spec.workloadSourceSpoofing",
+      "spec.mtuIfacePattern",
+      "spec.floatingIPs",
+      "spec.windowsManageFirewallRules",
+      "spec.goGCThreshold",
+      "spec.goMemoryLimitMB",
+      "spec.goMaxProcs"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/felixconfig.go"
+  },
+  "KubeControllersConfiguration": {
+    "file": "kubecontrollersconfig.go",
+    "title": "Controller configuration",
+    "fields": [
+      [
+        "healthChecks",
+        "Health checks",
+        "ref:Enabled,Disabled"
+      ],
+      [
+        "logSeverityScreen",
+        "Screen log level",
+        "ref:Info,Warning,Error"
+      ],
+      [
+        "controllers.node.syncLabels",
+        "Copy node labels",
+        "ref:Enabled,Disabled"
+      ],
+      [
+        "controllers.node.hostEndpoint.autoCreate",
+        "Automatic host endpoints",
+        "ref:Enabled,Disabled"
+      ],
+      [
+        "controllers.loadBalancer.assignIPs",
+        "Load balancer allocation",
+        "ref:AllServices,RequestedServicesOnly"
+      ]
+    ],
+    "schema": [
+      "spec.logSeverityScreen",
+      "spec.healthChecks",
+      "spec.etcdV3CompactionPeriod",
+      "spec.prometheusMetricsPort",
+      "spec.controllers",
+      "spec.debugProfilePort"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/kubecontrollersconfig.go"
+  },
+  "IPAMConfiguration": {
+    "file": "ipamconfig.go",
+    "title": "IPAM behavior",
+    "fields": [
+      [
+        "strictAffinity",
+        "Prevent borrowing addresses",
+        "bool"
+      ],
+      [
+        "maxBlocksPerHost",
+        "Maximum blocks per host",
+        "number"
+      ]
+    ],
+    "schema": [
+      "spec.strictAffinity",
+      "spec.maxBlocksPerHost"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/ipamconfig.go"
+  },
+  "Tier": {
+    "file": "tier.go",
+    "title": "Policy precedence",
+    "fields": [
+      [
+        "order",
+        "Tier order",
+        "number"
+      ],
+      [
+        "defaultAction",
+        "Fall-through action",
+        "ref:Deny,Pass"
+      ]
+    ],
+    "schema": [
+      "spec.order",
+      "spec.defaultAction"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/tier.go"
+  },
+  "CalicoNodeStatus": {
+    "file": "nodestatus.go",
+    "title": "Diagnostic subscription",
+    "fields": [
+      [
+        "node",
+        "Node",
+        "ref:preview-node-a,preview-node-b"
+      ],
+      [
+        "classes",
+        "Diagnostic classes",
+        "list"
+      ],
+      [
+        "updatePeriodSeconds",
+        "Update interval (seconds)",
+        "number"
+      ]
+    ],
+    "schema": [
+      "spec.node",
+      "spec.classes",
+      "spec.updatePeriodSeconds"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/nodestatus.go"
+  },
+  "Profile": {
+    "file": "profile.go",
+    "title": "Independent profile",
+    "fields": [
+      [
+        "labelsToApply",
+        "Labels to apply",
+        "pairs"
+      ],
+      [
+        "ingress",
+        "Ingress rules",
+        "rules"
+      ],
+      [
+        "egress",
+        "Egress rules",
+        "rules"
+      ]
+    ],
+    "schema": [
+      "spec.ingress",
+      "spec.egress",
+      "spec.labelsToApply"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/profile.go"
+  },
+  "BlockAffinity": {
+    "file": "blockaffinity.go",
+    "title": "IPAM-owned record",
+    "fields": [
+      [
+        "node",
+        "Node",
+        "text"
+      ],
+      [
+        "cidr",
+        "Block",
+        "text"
+      ],
+      [
+        "state",
+        "State",
+        "text"
+      ],
+      [
+        "deleted",
+        "Pending deletion",
+        "bool"
+      ]
+    ],
+    "schema": [
+      "spec.state",
+      "spec.node",
+      "spec.cidr",
+      "spec.deleted"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/blockaffinity.go"
+  },
+  "ClusterInformation": {
+    "file": "clusterinfo.go",
+    "title": "System information",
+    "fields": [
+      [
+        "calicoVersion",
+        "Version",
+        "text"
+      ],
+      [
+        "clusterType",
+        "Cluster type",
+        "text"
+      ],
+      [
+        "datastoreReady",
+        "Datastore ready",
+        "bool"
+      ],
+      [
+        "variant",
+        "Variant",
+        "text"
+      ]
+    ],
+    "schema": [
+      "spec.clusterGUID",
+      "spec.clusterType",
+      "spec.calicoVersion",
+      "spec.datastoreReady",
+      "spec.variant"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/clusterinfo.go"
+  },
+  "StagedNetworkPolicy": {
+    "file": "stagednetworkpolicy.go",
+    "title": "Staged namespace policy",
+    "fields": [
+      [
+        "stagedAction",
+        "Staged action",
+        "ref:Set,Delete,Learn"
+      ],
+      [
+        "selector",
+        "Endpoint selector",
+        "selector"
+      ],
+      [
+        "tier",
+        "Tier",
+        "ref:default,security"
+      ],
+      [
+        "order",
+        "Order",
+        "number"
+      ],
+      [
+        "types",
+        "Directions",
+        "list"
+      ],
+      [
+        "ingress",
+        "Ingress rules",
+        "rules"
+      ],
+      [
+        "egress",
+        "Egress rules",
+        "rules"
+      ]
+    ],
+    "schema": [
+      "spec.stagedAction",
+      "spec.tier",
+      "spec.order",
+      "spec.ingress",
+      "spec.egress",
+      "spec.selector",
+      "spec.types",
+      "spec.serviceAccountSelector",
+      "spec.performanceHints"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/stagednetworkpolicy.go"
+  },
+  "StagedGlobalNetworkPolicy": {
+    "file": "stagedglobalnetworkpolicy.go",
+    "title": "Staged global policy",
+    "fields": [
+      [
+        "stagedAction",
+        "Staged action",
+        "ref:Set,Delete,Learn"
+      ],
+      [
+        "selector",
+        "Endpoint selector",
+        "selector"
+      ],
+      [
+        "namespaceSelector",
+        "Namespace selector",
+        "selector"
+      ],
+      [
+        "tier",
+        "Tier",
+        "ref:default,security"
+      ],
+      [
+        "order",
+        "Order",
+        "number"
+      ],
+      [
+        "ingress",
+        "Ingress rules",
+        "rules"
+      ],
+      [
+        "egress",
+        "Egress rules",
+        "rules"
+      ],
+      [
+        "preDNAT",
+        "Pre-DNAT",
+        "bool"
+      ],
+      [
+        "applyOnForward",
+        "Forward traffic",
+        "bool"
+      ],
+      [
+        "doNotTrack",
+        "Untracked traffic",
+        "bool"
+      ]
+    ],
+    "schema": [
+      "spec.stagedAction",
+      "spec.tier",
+      "spec.order",
+      "spec.ingress",
+      "spec.egress",
+      "spec.selector",
+      "spec.types",
+      "spec.doNotTrack",
+      "spec.preDNAT",
+      "spec.applyOnForward",
+      "spec.serviceAccountSelector",
+      "spec.namespaceSelector",
+      "spec.performanceHints"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/stagedglobalnetworkpolicy.go"
+  },
+  "StagedKubernetesNetworkPolicy": {
+    "file": "stagedkubernetesnetworkpolicy.go",
+    "title": "Staged Kubernetes policy",
+    "fields": [
+      [
+        "stagedAction",
+        "Staged action",
+        "ref:Set,Delete"
+      ],
+      [
+        "podSelector.matchLabels",
+        "Pod labels",
+        "pairs"
+      ],
+      [
+        "policyTypes",
+        "Directions",
+        "list"
+      ],
+      [
+        "ingress",
+        "Ingress peers and ports",
+        "k8srules"
+      ],
+      [
+        "egress",
+        "Egress peers and ports",
+        "k8srules"
+      ]
+    ],
+    "schema": [
+      "spec.stagedAction",
+      "spec.podSelector",
+      "spec.ingress",
+      "spec.egress",
+      "spec.policyTypes"
+    ],
+    "source": "https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/api/pkg/apis/projectcalico/v3/stagedkubernetesnetworkpolicy.go"
+  }
+}

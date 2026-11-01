@@ -1,0 +1,40 @@
+Issue 306 — Network Policy API interactive design, awaiting review
+
+Scope: AdminNetworkPolicy and BaselineAdminNetworkPolicy, policy.networking.k8s.io/v1alpha1. Both are cluster-scoped. This is faithful isolated HTML composition, not shipped React/base-ui code. Followed #249 interaction/capture workflow and web-design-guidelines skill; actual guideline source fetched from vercel-labs/web-interface-guidelines/main/command.md. Read Epic262 and plugin PR72/PR74. No named mock skill was exposed.
+
+Primary snapshot: projectcalico/calico commit 572a32dd9b2f9784d66d74712d5ec2e703d25083 (v3.30.0), libcalico-go/config/crd/policy.networking.k8s.io_adminnetworkpolicies.yaml and policy.networking.k8s.io_baselineadminnetworkpolicies.yaml. Snapshot copies included. Schema is not evidence of installation, permissions, implementation support or enforcement. Authoring must require explicit installed implementation support and discovered verbs/RBAC. Extended node/network peer support requires per-implementation capability qualification, not schema-only inference.
+
+Field → control → owned path
+Both kinds:
+- API version and kind: resource selector/locked identity → apiVersion, kind. No namespace field.
+- Name: text; locked in edit → metadata.name. BANP always default; schema CEL enforces singleton.
+- Subject union: Apply to selector → spec.subject.namespaces OR spec.subject.pods. Changing union intentionally replaces only subject subtree.
+- Namespace/pod selectors: compact key=value entry and advanced expression editor → matchLabels and matchExpressions under subject.namespaces, subject.pods.namespaceSelector, subject.pods.podSelector.
+- Ordered ingress: Add/remove/move-up list → spec.ingress[i]. Higher list rows take precedence.
+- Ordered egress: same list → spec.egress[i]. No rules has no effect in that direction, not an implicit deny.
+- Rule name: optional text, 100-character cap → spec.{ingress,egress}[i].name.
+- Action: select → spec.{ingress,egress}[i].action. ANP Allow/Deny/Pass; BANP Allow/Deny only.
+- Peer OR list: add/remove/type select → ingress[i].from[j] or egress[i].to[j]. Each peer owns exactly one union branch.
+- Namespace peer → peer.namespaces label selector.
+- Pod peer → peer.pods.namespaceSelector AND peer.pods.podSelector.
+- Egress-only node peer → peer.nodes label selector; egress-only networks peer → peer.networks CIDR list. Ingress deliberately has neither.
+- Ports: omission/specific selector → rule.ports. Individual port union → ports[j].portNumber.{port,protocol}, ports[j].portRange.{start,end,protocol}, or ports[j].namedPort. Protocol choices TCP/UDP/SCTP. Omitted ports remain omitted until explicit action. Schema TCP default is not inserted on untouched fields. Add port is explicit fixture intent, not a proposed executable policy default.
+- Metadata labels, annotations, uncommon fields: source only; no sensitive values imported. Unknown source remains source. No generated annotations or status writes.
+- status.conditions: read-only unavailable state; no fabricated conditions or health.
+ANP only: bounded number priority → spec.priority, integer 0–1000; lower first, equal priorities undefined order. BANP has no priority.
+
+Boundaries and consequences:
+Direct administrative create/edit are candidates, not ordinary engineer permissions. GitOps-managed fixture becomes inspect-only with owning-repository guidance. Enforcement-unknown, RBAC-denied and API-missing states are distinct, authoring disabled. Neither discovery nor a condition is treated as universal proof of CNI support. No implicit companion resources or actual Apply action. Review names destination and cluster-wide traffic consequences. ANP Allow may override NetworkPolicy; Pass delegates to NetworkPolicy and then BANP, not unconditional allow. BANP is fallback after ANP/NetworkPolicy. Host-network pods are excluded from pod selection. Empty selectors visibly say All.
+
+One YAML document backs both modes using yaml 2.7.1 AST operations and intAsBigInt. Evidence demonstrates untouched comment, unknown exact integer 9007199254740993, quoted scalar "001", Form priority edit, invalid syntax preservation and unsupported GVK retention. It does not prove every YAML construct. Subtree replacement for explicit union/list edits may reserialize that owned subtree; no promise to retain comments inside deliberately replaced nodes. Source is never persisted; localStorage stores explicit view preference only. Fixture kind/scenario switches deliberately load a fresh fixture. Edit identity lock is demonstrated in Form; production must enforce admitted identity/revision independently of source.
+
+Reuse:
+Use existing base-ui Button, Input, Select, Tabs, Tooltip/Popover, Collapsible, Alert and ScrollArea in implementation, plus existing shared manifest editor/frame. This standalone mock uses semantic native controls; no installed base-ui runtime claim. Ordered rows compose existing buttons with keyboard-operable move-up and remove. Label selectors and port/peer union semantics belong to add-on provider. No new generic primitive proposed. Network Policy API provider should be one shared ecosystem add-on, not duplicated in Calico provider or hardcoded into core plugin.
+
+Browser proof:
+22 screenshots: ordinary 1440x900 viewport at deviceScaleFactor1.25 (1800x1125 PNG), narrow 700x760 at same scale. All screenshots visually reviewed through contact sheets. Disabled GPU fixed an initial narrow screenshot compositor artifact; only corrected captures published. Main content scrolls independently; rules screenshots intentionally show different scroll positions. Frame footer stays visible. Input, actual select choices, add/reorder/remove, source typing, focus/help/Escape, invalid priority, empty peers, named-port/node conflict, invalid YAML, unsupported version and mode preference were exercised. checks.json contains named booleans and screenshot filenames, no source dumps. Browser profiles and runtime files excluded from publication.
+
+Limits / review decisions:
+This is not production API validation, enforcement, controller reconciliation, or a shipped editor. Full DNS/label/CIDR/selector/CEL validation, union structural detection for arbitrary malformed valid YAML, revision conflicts, RBAC refresh and async reference lookup require implementation with authoritative API admission. Advanced expressions currently use JSON in a progressive section; replace with selector expression rows in production. Fixture reference labels are freely typed rather than live lookup; no lookup success claimed. Form identity lock is not a source admission guard. No status editing, live cloud/cluster access or real mutation occurred. Review gate remains open; do not check issue acceptance or close issue from this design delivery.
+
+Preview: serve this directory with any static HTTP server, open index.html. bundle.js includes yaml parser and is ready to run without dependency installs. app.js is readable authored source. Capture scripts are local tooling paths, not portable install instructions.

@@ -1,0 +1,395 @@
+package resource
+
+import (
+	"context"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	plugintypes "github.com/omniviewdev/omniview/backend/pkg/plugin/types"
+	"github.com/omniviewdev/plugin-sdk/pkg/config"
+	resource "github.com/omniviewdev/plugin-sdk/pkg/resource/v2"
+	"github.com/omniviewdev/plugin-sdk/pkg/types"
+)
+
+// ============================================================================
+// OnPluginInit
+// ============================================================================
+
+func TestOnPluginInit_InitializesConnectionSlice(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	ctrl.OnPluginInit("p1", defaultMeta())
+
+	ctrl.connsMu.RLock()
+	conns, ok := ctrl.connections["p1"]
+	ctrl.connsMu.RUnlock()
+	assert.True(t, ok)
+	assert.Empty(t, conns)
+}
+
+func TestOnPluginInit_HandlesMissingStore(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	// No GOB file on disk — should not panic.
+	assert.NotPanics(t, func() {
+		ctrl.OnPluginInit("nonexistent-plugin", defaultMeta())
+	})
+}
+
+// ============================================================================
+// OnPluginStart
+// ============================================================================
+
+func TestOnPluginStart_RegistersProvider(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	mock := &mockProvider{
+		LoadConnectionsFunc: func(_ context.Context) ([]types.Connection, error) {
+			return nil, nil
+		},
+		ListenForEventsFunc: func(ctx context.Context, _ resource.WatchEventSink, onReady func() error) error {
+			if onReady != nil {
+				if err := onReady(); err != nil {
+					return err
+				}
+			}
+			<-ctx.Done()
+			return nil
+		},
+		WatchConnectionsFunc: func(ctx context.Context, _ chan<- []types.Connection) error {
+			<-ctx.Done()
+			return nil
+		},
+	}
+	registerMockPlugin(ctrl, "p1", mock)
+
+	ctrl.pluginsMu.RLock()
+	_, ok := ctrl.plugins["p1"]
+	ctrl.pluginsMu.RUnlock()
+	assert.True(t, ok)
+}
+
+func TestOnPluginStart_VersionStored(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	mock := &mockProvider{}
+	registerMockPlugin(ctrl, "p1", mock)
+
+	ctrl.pluginsMu.RLock()
+	ps := ctrl.plugins["p1"]
+	ctrl.pluginsMu.RUnlock()
+	assert.Equal(t, 1, ps.version)
+}
+
+func TestOnPluginStart_DoubleStart_CancelsOld(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+
+	var oldCancelCalled bool
+	oldCtx, oldCancel := context.WithCancel(context.Background())
+	ctrl.plugins["p1"] = &pluginState{
+		provider:    &mockProvider{},
+		version:     1,
+		watchCancel: func() { oldCancelCalled = true; oldCancel() },
+	}
+	ctrl.connections["p1"] = []types.Connection{}
+
+	// Register again — should cancel old.
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+
+	// Give a moment for cancel propagation.
+	assert.True(t, oldCancelCalled || oldCtx.Err() != nil,
+		"old watch context should have been cancelled")
+}
+
+// ============================================================================
+// OnPluginStop
+// ============================================================================
+
+func TestOnPluginStop_RemovesPlugin(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+
+	err := ctrl.OnPluginStop("p1", defaultMeta())
+	require.NoError(t, err)
+
+	ctrl.pluginsMu.RLock()
+	_, ok := ctrl.plugins["p1"]
+	ctrl.pluginsMu.RUnlock()
+	assert.False(t, ok)
+}
+
+func TestOnPluginStop_CancelsWatchCtx(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+
+	var cancelled bool
+	ctx, cancel := context.WithCancel(context.Background())
+	ctrl.plugins["p1"] = &pluginState{
+		provider: &mockProvider{},
+		version:  1,
+		watchCancel: func() {
+			cancelled = true
+			cancel()
+		},
+	}
+	ctrl.connections["p1"] = []types.Connection{}
+
+	_ = ctrl.OnPluginStop("p1", defaultMeta())
+	assert.True(t, cancelled || ctx.Err() != nil)
+}
+
+func TestOnPluginStop_RemovesConnections(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+	ctrl.connections["p1"] = []types.Connection{{ID: "c1"}}
+
+	_ = ctrl.OnPluginStop("p1", defaultMeta())
+
+	ctrl.connsMu.RLock()
+	_, ok := ctrl.connections["p1"]
+	ctrl.connsMu.RUnlock()
+	assert.False(t, ok)
+}
+
+func TestOnPluginStop_RemovesSubscriptions(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{CatalogFunc: lifecycleTestCatalog("pods")})
+	require.NoError(t, ctrl.SubscribeResource(testInvocationContext(), "p1", admittedSubscription(t, ctrl, "p1", "c1", "pods")))
+
+	_ = ctrl.OnPluginStop("p1", defaultMeta())
+
+	assert.False(t, ctrl.subs.IsSubscribed("p1", "c1", "pods"))
+}
+
+// ============================================================================
+// OnPluginShutdown
+// ============================================================================
+
+func TestOnPluginShutdown_DelegatesStop(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+
+	err := ctrl.OnPluginShutdown("p1", defaultMeta())
+	require.NoError(t, err)
+
+	ctrl.pluginsMu.RLock()
+	_, ok := ctrl.plugins["p1"]
+	ctrl.pluginsMu.RUnlock()
+	assert.False(t, ok)
+}
+
+// ============================================================================
+// ListPlugins / HasPlugin
+// ============================================================================
+
+func TestListPlugins_ReturnsRegistered(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+	registerMockPlugin(ctrl, "p2", &mockProvider{})
+
+	plugins, err := ctrl.ListPlugins(testInvocationContext())
+	require.NoError(t, err)
+	assert.Len(t, plugins, 2)
+	assert.Contains(t, plugins, "p1")
+	assert.Contains(t, plugins, "p2")
+}
+
+func TestHasPlugin_TrueAndFalse(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+
+	{
+		present, err := ctrl.HasPlugin(testInvocationContext(), "p1")
+		assert.NoError(t, err)
+		assert.True(t, present)
+	}
+	{
+		present, err := ctrl.HasPlugin(testInvocationContext(), "nonexistent")
+		assert.NoError(t, err)
+		assert.False(t, present)
+	}
+}
+
+// ============================================================================
+// listenForWatchEvents
+// ============================================================================
+
+func TestListenForWatchEvents_ContextCancel(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	mock := &mockProvider{
+		ListenForEventsFunc: func(ctx context.Context, _ resource.WatchEventSink, onReady func() error) error {
+			if onReady != nil {
+				if err := onReady(); err != nil {
+					return err
+				}
+			}
+			<-ctx.Done()
+			return nil
+		},
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	sink := &engineWatchSink{pluginID: "p1", ctrl: ctrl, store: ctrl.registryStore, dispatcher: ctrl.dispatcher}
+
+	done := make(chan struct{})
+	ready := make(chan error, 1)
+	go func() {
+		ctrl.listenForWatchEvents(ctx, "p1", mock, sink, ready)
+		close(done)
+	}()
+
+	cancel()
+	select {
+	case <-done:
+	case <-time.After(2 * time.Second):
+		t.Fatal("listenForWatchEvents did not exit after context cancel")
+	}
+}
+
+func TestListenForWatchEvents_ProviderError_CrashRecovery(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	var called atomic.Int32
+	ctrl.onCrashCallback = func(_ string) { called.Add(1) }
+	registerMockPlugin(ctrl, "p1", &mockProvider{})
+
+	errorProvider := &mockProvider{
+		ListenForEventsFunc: func(_ context.Context, _ resource.WatchEventSink, onReady func() error) error {
+			if onReady != nil {
+				if err := onReady(); err != nil {
+					return err
+				}
+			}
+			return assert.AnError
+		},
+	}
+
+	ctx := context.Background()
+	sink := &engineWatchSink{pluginID: "p1", ctrl: ctrl, store: ctrl.registryStore, dispatcher: ctrl.dispatcher}
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+	ready2 := make(chan error, 1)
+	go func() {
+		defer wg.Done()
+		ctrl.listenForWatchEvents(ctx, "p1", errorProvider, sink, ready2)
+	}()
+	wg.Wait()
+
+	// Crash callback should have been invoked.
+	assert.Eventually(t, func() bool { return called.Load() >= 1 }, 2*time.Second, 10*time.Millisecond)
+}
+
+func TestListenForWatchEvents_ProviderError_ContextDone_NoCrash(t *testing.T) {
+	ctrl, emitter := newTestControllerWithEmitter(t)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel() // Already cancelled.
+
+	errorProvider := &mockProvider{
+		ListenForEventsFunc: func(_ context.Context, _ resource.WatchEventSink, onReady func() error) error {
+			if onReady != nil {
+				if err := onReady(); err != nil {
+					return err
+				}
+			}
+			return assert.AnError
+		},
+	}
+	sink := &engineWatchSink{pluginID: "p1", ctrl: ctrl, store: ctrl.registryStore, dispatcher: ctrl.dispatcher}
+	ready3 := make(chan error, 1)
+
+	ctrl.listenForWatchEvents(ctx, "p1", errorProvider, sink, ready3)
+
+	events := emitter.EventsWithKey("plugin/crash")
+	assert.Empty(t, events, "should not crash if context already done")
+}
+
+// ============================================================================
+// listenForConnectionEvents
+// ============================================================================
+
+func TestListenForConnectionEvents_NewConnsMerged(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	ctrl.connections["p1"] = []types.Connection{}
+
+	provider := &mockProvider{
+		ListConnectionsFunc: func(context.Context) ([]types.Connection, error) {
+			return []types.Connection{{ID: "c1", Name: "New"}}, nil
+		},
+		WatchConnectionsFunc: func(ctx context.Context, stream chan<- []types.Connection) error {
+			stream <- []types.Connection{{ID: "c1", Name: "New"}}
+			<-ctx.Done()
+			return nil
+		},
+	}
+	registerMockPlugin(ctrl, "p1", provider)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	go ctrl.listenForConnectionEvents(ctx, "p1", provider, ctrl.plugins["p1"])
+
+	// Wait for merge.
+	assert.Eventually(t, func() bool {
+		ctrl.connsMu.RLock()
+		defer ctrl.connsMu.RUnlock()
+		return len(ctrl.connections["p1"]) > 0
+	}, 2*time.Second, 10*time.Millisecond)
+
+	cancel()
+}
+
+func TestListenForConnectionEvents_EmitsSync(t *testing.T) {
+	ctrl, emitter := newTestControllerWithEmitter(t)
+	ctrl.connections["p1"] = []types.Connection{}
+
+	provider := &mockProvider{
+		ListConnectionsFunc: func(context.Context) ([]types.Connection, error) { return []types.Connection{{ID: "c1"}}, nil },
+		WatchConnectionsFunc: func(ctx context.Context, stream chan<- []types.Connection) error {
+			stream <- []types.Connection{{ID: "c1"}}
+			<-ctx.Done()
+			return nil
+		},
+	}
+	registerMockPlugin(ctrl, "p1", provider)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	go ctrl.listenForConnectionEvents(ctx, "p1", provider, ctrl.plugins["p1"])
+
+	emitter.WaitForEvent(t, "p1/connection/sync", 2*time.Second)
+	cancel()
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+func defaultMeta() config.PluginMeta {
+	return config.PluginMeta{}
+}
+
+func lifecycleTestCatalog(resourceTypes ...string) func(context.Context, resource.CatalogRequest) (resource.Catalog, error) {
+	return func(context.Context, resource.CatalogRequest) (resource.Catalog, error) {
+		catalog := canonicalTestCatalog("proof", resourceTypes[0])
+		catalog.Types = nil
+		for _, resourceType := range resourceTypes {
+			descriptor := canonicalTestCatalog("proof", resourceType).Types[0]
+			descriptor.Capabilities = append(descriptor.Capabilities, resource.Capability{Operation: resource.OperationUpdate, Guarantee: resource.BestEffortGuarantee})
+			catalog.Types = append(catalog.Types, descriptor)
+		}
+		return catalog, nil
+	}
+}
+
+func TestOnPluginStart_CatalogOnlyDoesNotRequireUpdateListener(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	provider := &catalogOnlyProvider{CatalogFunc: func(context.Context, resource.CatalogRequest) (resource.Catalog, error) {
+		catalog := canonicalTestCatalog("proof", "pods")
+		catalog.Types[0].Capabilities = nil
+		return catalog, nil
+	}}
+	backend := plugintypes.NewInProcessBackend(map[string]interface{}{"resource": provider})
+	require.NoError(t, ctrl.OnPluginStart("catalog-only", defaultMeta(), backend))
+	t.Cleanup(func() { require.NoError(t, ctrl.OnPluginStop("catalog-only", defaultMeta())) })
+	catalog, err := ctrl.Catalog(testInvocationContext(), "catalog-only", resource.CatalogRequest{Route: resource.AccessRoute{Connection: "explicit"}})
+	require.NoError(t, err)
+	require.Equal(t, "pods", catalog.Types[0].Type)
+}

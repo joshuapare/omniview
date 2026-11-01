@@ -1,0 +1,32 @@
+// Auto-generated shim for "@omniviewdev/editors"
+// DO NOT EDIT -- regenerate with: pnpm --filter @omniviewdev/vite-plugin generate-shims
+const mod = window.__OMNIVIEW_SHARED__["@omniviewdev/editors"];
+if (!mod) throw new Error('[omniview] Shared dependency ' + "@omniviewdev/editors" + ' is not available on window.__OMNIVIEW_SHARED__.');
+const binding0 = mod["CelQueryEditor"];
+export { binding0 as "CelQueryEditor" };
+const binding1 = mod["CodeEditor"];
+export { binding1 as "CodeEditor" };
+const binding2 = mod["CommandPalette"];
+export { binding2 as "CommandPalette" };
+const binding3 = mod["DiffViewer"];
+export { binding3 as "DiffViewer" };
+const binding4 = mod["MarkdownPreview"];
+export { binding4 as "MarkdownPreview" };
+const binding5 = mod["OV_MONACO_THEME"];
+export { binding5 as "OV_MONACO_THEME" };
+const binding6 = mod["ObjectInspector"];
+export { binding6 as "ObjectInspector" };
+const binding7 = mod["Terminal"];
+export { binding7 as "Terminal" };
+const binding8 = mod["buildMonacoTheme"];
+export { binding8 as "buildMonacoTheme" };
+const binding9 = mod["buildXtermTheme"];
+export { binding9 as "buildXtermTheme" };
+const binding10 = mod["editorSchemas"];
+export { binding10 as "editorSchemas" };
+const binding11 = mod["getComputedToken"];
+export { binding11 as "getComputedToken" };
+const binding12 = mod["setupMonacoWorkers"];
+export { binding12 as "setupMonacoWorkers" };
+const binding13 = mod["useEditorTheme"];
+export { binding13 as "useEditorTheme" };

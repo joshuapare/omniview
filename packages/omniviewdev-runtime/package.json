@@ -1,0 +1,82 @@
+{
+  "author": "Omniview",
+  "license": "AGPL-3.0-only",
+  "name": "@omniviewdev/runtime",
+  "version": "0.7.4",
+  "description": "Runtime shared library for Omniview",
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./api": {
+      "import": "./dist/api.js",
+      "require": "./dist/api.cjs"
+    },
+    "./models": {
+      "import": "./dist/models.js",
+      "require": "./dist/models.cjs"
+    },
+    "./runtime": {
+      "import": "./dist/runtime.js",
+      "require": "./dist/runtime.cjs"
+    }
+  },
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "directory": "packages/omniviewdev-runtime",
+    "url": "https://github.com/omniviewdev/omniview.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:verbose": "vitest run --reporter=verbose",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "pnpm lint -- --fix"
+  },
+  "keywords": [
+    "omniview"
+  ],
+  "devDependencies": {
+    "@omniviewdev/base-ui": "~0.9.1",
+    "@tanstack/react-query": "5.105.0",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router": "8.5.0",
+    "ts-node": "10.9.2",
+    "tsup": "9.0.0",
+    "typescript": "npm:@typescript/typescript6@6.0.2",
+    "vite": "7.3.7",
+    "vite-plugin-dts": "5.1.2",
+    "@typescript/native": "npm:typescript@7.0.2"
+  },
+  "peerDependencies": {
+    "@omniviewdev/base-ui": "~0.9.1",
+    "@tanstack/react-query": "^5.105.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router": "^8.5.0"
+  },
+  "dependencies": {
+    "@wailsio/runtime": "3.0.0-beta.34",
+    "lodash.get": "4.4.2",
+    "ts-invariant": "0.10.3"
+  }
+}

@@ -1,0 +1,169 @@
+import React from 'react';
+import { Events } from '@wailsio/runtime';
+
+import { PluginContext } from './PluginContext';
+import { useScopedSettings } from '../../hooks/settings/useScopedSettings';
+import { PluginMeta } from '../../bindings/github.com/omniviewdev/plugin-sdk/pkg/config/models';
+import { GetPluginMeta } from '../../bindings/github.com/omniviewdev/omniview/backend/pkg/plugin/servicewrapper';
+import { parseAppError } from '../../errors/parseAppError';
+
+export type PluginContextProviderProps = {
+  pluginId: string;
+  /** Background extension contexts render no loading surface and delegate failures to their local error boundary. */
+  headless?: boolean;
+};
+
+export function PluginContextProvider(props: React.PropsWithChildren<PluginContextProviderProps>): React.ReactElement | null {
+  return <PluginContextSession key={props.pluginId} {...props} />;
+}
+
+function PluginContextSession(props: React.PropsWithChildren<PluginContextProviderProps>): React.ReactElement | null {
+  const { children, pluginId, headless = false } = props;
+  const { categories } = useScopedSettings({ kind: 'plugin', pluginId });
+  const settings = React.useMemo(() => Object.fromEntries(
+    Object.entries(categories.plugin?.settings ?? {}).filter(([, setting]) => setting !== undefined)
+      .map(([id, setting]) => [`${pluginId}.${id}`, setting!.value]),
+  ), [categories, pluginId]);
+  const [meta, setMeta] = React.useState<PluginMeta>(new PluginMeta);
+  const [metaLoaded, setMetaLoaded] = React.useState(false);
+  const [metaError, setMetaError] = React.useState<string | null>(null);
+  const metadataRequest = React.useRef(0);
+
+  console.debug(`[PluginContextProvider] render`, { pluginId, metaLoaded, metaError: !!metaError });
+
+
+  /**
+   * Fetch the metadata for the plugin from the backend stores
+   */
+  const fetchMeta = React.useCallback(() => {
+    if (pluginId === undefined || pluginId === '') {
+      console.debug(`[PluginContextProvider] skipping meta fetch — empty pluginId`);
+      return
+    }
+    const request = ++metadataRequest.current;
+
+    console.debug(`[PluginContextProvider] fetching meta for "${pluginId}"`);
+
+    GetPluginMeta(pluginId)
+      .then((values) => {
+        if (request !== metadataRequest.current) return;
+        console.debug(`[PluginContextProvider] meta loaded for "${pluginId}"`, { name: values?.name, version: values?.version });
+        setMeta(values)
+        setMetaLoaded(true)
+      })
+      .catch((error: unknown) => {
+        if (request !== metadataRequest.current) return;
+        const appErr = parseAppError(error);
+        console.error(`[PluginContextProvider] error fetching meta for "${pluginId}":`, appErr.detail);
+        setMetaError(appErr.detail);
+        setMetaLoaded(false)
+      })
+  }, [pluginId]);
+
+  React.useEffect(() => {
+    // Only unavailable context needs startup reconciliation. Loaded metadata
+    // must not be replaced by a candidate before its install transaction commits.
+    if (metaLoaded) return;
+    const refresh = () => {
+      setMetaError(null);
+      fetchMeta();
+    };
+    const cleanups = [
+      Events.On('plugin/init_complete', refresh),
+      Events.On('plugin/dev_install_complete', (event) => {
+        if (event.data?.id === pluginId) refresh();
+      }),
+      Events.On('plugin/inventory_changed', refresh),
+    ];
+    return () => {
+      for (const stop of cleanups) stop();
+    };
+  }, [pluginId, metaLoaded, fetchMeta]);
+
+  React.useEffect(() => {
+    console.debug(`[PluginContextProvider] useEffect — pluginId changed to "${pluginId}"`);
+    fetchMeta();
+    return () => {
+      ++metadataRequest.current;
+    };
+  }, [pluginId, fetchMeta]);
+
+  if (metaError) {
+    if (headless) throw new Error(metaError);
+    return (
+      <div style={{
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+      }}>
+        <div style={{
+          maxWidth: 480,
+          width: '100%',
+          border: '1px solid #7F1D1D',
+          borderRadius: 8,
+          backgroundColor: '#1C1917',
+          padding: 20,
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#FECACA' }}>
+              Plugin failed to load
+            </span>
+          </div>
+          <p style={{ fontSize: 13, color: '#A1A1AA', margin: '0 0 16px' }}>
+            {metaError}
+          </p>
+          <button
+            onClick={() => {
+              setMetaError(null);
+              fetchMeta();
+            }}
+            style={{
+              background: 'transparent',
+              color: '#F87171',
+              border: '1px solid #7F1D1D',
+              borderRadius: 6,
+              padding: '6px 14px',
+              fontSize: 13,
+              fontWeight: 500,
+              cursor: 'pointer',
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!metaLoaded) {
+    if (headless) return null;
+    return (
+      <div style={{
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <div style={{
+          width: 24,
+          height: 24,
+          border: '2px solid #3F3F46',
+          borderTopColor: '#A1A1AA',
+          borderRadius: '50%',
+          animation: 'plugin-spin 0.8s linear infinite',
+        }} />
+        <style>{`@keyframes plugin-spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  return <PluginContext.Provider value={{ pluginId, settings, meta }}>{children}</PluginContext.Provider>;
+}

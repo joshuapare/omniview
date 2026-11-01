@@ -1,0 +1,199 @@
+{
+  "issue": 321,
+  "scope": "All nine pkg.crossplane.io components; provider-managed resource APIs excluded.",
+  "workflow": "Approved #249 isolated interactive HTML composition, not shipped React/base-ui. web-design-guidelines reviewed against fetched rules.",
+  "sourceSnapshot": "Crossplane v2.0.0 commit b639502e2f93680ff83417a0f517ec459ce079cc",
+  "sources": [
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_providers.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_configurations.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_functions.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_deploymentruntimeconfigs.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_imageconfigs.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_providerrevisions.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_configurationrevisions.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_functionrevisions.yaml",
+    "https://github.com/crossplane/crossplane/blob/b639502e2f93680ff83417a0f517ec459ce079cc/cluster/crds/pkg.crossplane.io_locks.yaml"
+  ],
+  "versions": {
+    "v1": [
+      "Provider",
+      "Configuration",
+      "Function",
+      "ProviderRevision",
+      "ConfigurationRevision",
+      "FunctionRevision"
+    ],
+    "v1beta1": [
+      "DeploymentRuntimeConfig",
+      "ImageConfig",
+      "Lock"
+    ],
+    "compatibility": "Function and FunctionRevision also serve v1beta1; storage v1. All resources cluster scoped."
+  },
+  "ownership": {
+    "authorable": [
+      "Provider",
+      "Configuration",
+      "Function",
+      "DeploymentRuntimeConfig",
+      "ImageConfig"
+    ],
+    "generated": [
+      "ProviderRevision",
+      "ConfigurationRevision",
+      "FunctionRevision",
+      "Lock"
+    ],
+    "edit": "Metadata name immutable. Package image and policy updates require review. Runtime overrides affect referencing packages. Configuration does not expose runtimeConfigRef. Status never editable.",
+    "activation": "Dedicated request reviews spec.desiredState=Active; never arbitrary revision-spec editing. Production must re-read owner, automatic/manual policy, resourceVersion, RBAC and other active revisions.",
+    "lock": "Read-only packages[], not spec.packages. Show package name/kind/apiVersion/source/version and dependencies; no Create/Edit."
+  },
+  "mapping": [
+    {
+      "control": "Inspection result",
+      "path": "availability"
+    },
+    {
+      "control": "Name *",
+      "path": "metadata.name"
+    },
+    {
+      "control": "OCI package · registry / repository : tag *",
+      "path": "spec.package"
+    },
+    {
+      "control": "Revision activation",
+      "path": "spec.revisionActivationPolicy"
+    },
+    {
+      "control": "Pull policy",
+      "path": "spec.packagePullPolicy"
+    },
+    {
+      "control": "Runtime configuration",
+      "path": "spec.runtimeConfigRef.name"
+    },
+    {
+      "control": "Inactive revision history · 0 disables cleanup",
+      "path": "spec.revisionHistoryLimit"
+    },
+    {
+      "control": "Dependency resolution",
+      "path": "spec.skipDependencyResolution"
+    },
+    {
+      "control": "Ignore Crossplane constraints",
+      "path": "spec.ignoreCrossplaneConstraints"
+    },
+    {
+      "control": "Common label key",
+      "path": "spec.commonLabels.preview.example.com/team"
+    },
+    {
+      "control": "Replicas · omit or explicit 0",
+      "path": "spec.deploymentTemplate.spec.replicas"
+    },
+    {
+      "control": "Rollout strategy",
+      "path": "spec.deploymentTemplate.spec.strategy.type"
+    },
+    {
+      "control": "Package runtime container name",
+      "path": "spec.deploymentTemplate.spec.template.spec.containers[0].name"
+    },
+    {
+      "control": "CPU request",
+      "path": "spec.deploymentTemplate.spec.template.spec.containers[0].resources.requests.cpu"
+    },
+    {
+      "control": "Memory request",
+      "path": "spec.deploymentTemplate.spec.template.spec.containers[0].resources.requests.memory"
+    },
+    {
+      "control": "Service account name",
+      "path": "spec.serviceAccountTemplate.metadata.name"
+    },
+    {
+      "control": "Service name",
+      "path": "spec.serviceTemplate.metadata.name"
+    },
+    {
+      "control": "Deployment label",
+      "path": "spec.deploymentTemplate.metadata.labels.preview.example.com/team"
+    },
+    {
+      "control": "Image prefix *",
+      "path": "spec.matchImages[0].prefix"
+    },
+    {
+      "control": "Rewrite prefix · optional",
+      "path": "spec.rewriteImage.prefix"
+    },
+    {
+      "control": "Registry credential reference",
+      "path": "spec.registry.authentication.pullSecretRef.name"
+    },
+    {
+      "control": "Verification provider",
+      "path": "spec.verification.provider"
+    },
+    {
+      "control": "Authority name",
+      "path": "spec.verification.cosign.authorities[0].name"
+    },
+    {
+      "control": "Authority mode",
+      "path": "authorityMode"
+    },
+    {
+      "control": "Public key secret name",
+      "path": "spec.verification.cosign.authorities[0].key.secretRef.name"
+    },
+    {
+      "control": "Public key data key",
+      "path": "spec.verification.cosign.authorities[0].key.secretRef.key"
+    },
+    {
+      "control": "Exact identity issuer",
+      "path": "spec.verification.cosign.authorities[0].keyless.identities[0].issuer"
+    },
+    {
+      "control": "Exact identity subject",
+      "path": "spec.verification.cosign.authorities[0].keyless.identities[0].subject"
+    }
+  ],
+  "additionalMappings": {
+    "Pull secret rows": "spec.packagePullSecrets[].name",
+    "Common labels": "spec.commonLabels[key]",
+    "Runtime templates": "spec.deploymentTemplate, spec.serviceAccountTemplate, spec.serviceTemplate",
+    "Image match rows": "spec.matchImages[].prefix/type (Prefix only)",
+    "Cosign expert fields": "spec.verification.cosign.authorities[].key.hashAlgorithm/secretRef; keyless.identities[].issuer/issuerRegExp/subject/subjectRegExp, keyless.insecureIgnoreSCT, attestations[].name/predicateType",
+    "Revision read-only": "spec.image/revision/desiredState; status.conditions, objectRefs, foundDependencies/installedDependencies/invalidDependencies; runtimeConfigRef and TLS refs only for ProviderRevision/FunctionRevision; FunctionRevision status.endpoint"
+  },
+  "reuse": [
+    "Dialog",
+    "SegmentedControl",
+    "FormField",
+    "Input",
+    "Select",
+    "NumberInput",
+    "Tooltip/Popover",
+    "Collapsible",
+    "EditableList",
+    "host Monaco source editor",
+    "reference-resolution capability presentation"
+  ],
+  "providerOwnership": "Optional Crossplane add-on editor provider via #263; no hardcoded OSS family in core Kubernetes plugin. No new base-ui primitive requested.",
+  "prerequisites": "Discover installed GVKs, supported schema and verbs; Crossplane package manager and runtime support must be available. Registry access, secret lookup namespace, image verification support and package activation permission are not established by CRD presence.",
+  "preservation": "Manual source edits remain byte-for-byte in in-memory source draft, including invalid source/comments/unknown values. Guided form then becomes read-only. No source persistence or live mutation. This is not a lossless YAML parser demonstration.",
+  "limits": [
+    "HTML mock, not production React/base-ui or live host integration.",
+    "Guided controls cover common paths; expert source retains broad deployment pod/service template fields and Cosign attestation/regex options. No runtime validation of these fields.",
+    "No actual registry fetch, dependency solving, certificate verification, permission checks or controller health.",
+    "Availability options model distinct results; no real asynchronous lookup.",
+    "Production must use host AST leaf-patching and exact integer encoding; mock form-to-source only serializes bounded controls.",
+    "No production focus trap, draft close lifecycle or persisted mode preference claimed.",
+    "Only source raw retention proves exact preservation; guided 64-bit numeric editing needs exact-string/AST production handling."
+  ],
+  "review": "Mocks await user review; no issue checklist closed."
+}

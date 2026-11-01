@@ -1,0 +1,69 @@
+{
+  "surface": "Production React components in Storybook; local preview submission capture, no cluster mutations",
+  "checks": [
+    {
+      "check": "Form changes reach actual Monaco YAML",
+      "passed": true
+    },
+    {
+      "check": "Unknown field and exact integer survive form edits",
+      "passed": true
+    },
+    {
+      "check": "Actual YAML image edit appears in Form",
+      "passed": true
+    },
+    {
+      "check": "New unsupported YAML field survives return to Form and back",
+      "passed": true
+    },
+    {
+      "check": "Submit callback receives full edited manifest",
+      "passed": true
+    },
+    {
+      "check": "Reopening after submit remembers explicit YAML mode",
+      "passed": true
+    },
+    {
+      "check": "Create-name updates linked controller selector and Pod labels",
+      "passed": true
+    },
+    {
+      "check": "StatefulSet claim and mount reach YAML",
+      "passed": true
+    },
+    {
+      "check": "Unsupported resource kind uses same dialog without switcher",
+      "passed": true
+    },
+    {
+      "check": "Edit uses shared Form with immutable identity locked",
+      "passed": true
+    },
+    {
+      "check": "Edit preview baseline accepts updated draft",
+      "passed": true
+    },
+    {
+      "check": "Edited draft preserves unsupported exact data",
+      "passed": true
+    },
+    {
+      "check": "Clearing controlled YAML stays empty instead of restoring old content",
+      "passed": true
+    },
+    {
+      "check": "Invalid YAML keeps raw text and disables Form safely",
+      "passed": true
+    },
+    {
+      "check": "Container selector shows its name, not array index",
+      "passed": true
+    },
+    {
+      "check": "Mount target displays real container name",
+      "passed": true
+    }
+  ]
+}

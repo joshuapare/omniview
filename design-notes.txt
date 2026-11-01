@@ -1,0 +1,40 @@
+Issue 310 — Flux Kustomization design, awaiting review
+
+Scope: one namespaced Kustomization, kustomize.toolkit.fluxcd.io/v1. Not the local kustomization.yaml API. Add-on Flux editor provider should own this form; Kubernetes host retains discovery, draft, permissions, submission, and source fallback. No production source or shared package changed.
+
+Pinned primary snapshot: kustomize-controller v1.7.0 resolves to commit 91e762e51e5575d355be54d39c8d33b9c6376a66. CRD blob debaac7f160b5db245c22bf73d1e7a11aa6e1f49.
+https://github.com/fluxcd/kustomize-controller/blob/91e762e51e5575d355be54d39c8d33b9c6376a66/config/crd/bases/kustomize.toolkit.fluxcd.io_kustomizations.yaml
+Baseline: Epic262, issue249 and plugin PR72/74 read. Approved compact 1000x700 dialog, 180px navigation, 32px controls, 13px body, 20x24 content padding. Faithful isolated HTML composition, not shipped base-ui React.
+
+FIELD -> CONTROL -> OWNED PATH
+Name -> text, locked during edit -> metadata.name. Namespace fixed preview -> metadata.namespace. API version/kind fixed. No immutable spec-field rule found in v1 schema; identity follows Kubernetes immutable identity rules. Status and inventory never editable.
+Source kind -> explicit GitRepository/OCIRepository/Bucket/ExternalArtifact select -> spec.sourceRef.kind. Source name -> existing fixture choice / unresolved reference -> spec.sourceRef.name. Source directory -> text -> spec.path, omitted means source root. Source namespace/API version retained via source-only editing -> spec.sourceRef.namespace/apiVersion. Cross-namespace permission/controller policy must be discovered; no cross-namespace support claimed by fixture.
+Interval -> raw duration text -> spec.interval, required. Prune -> explicit true/false choice -> spec.prune, required; no guessed default.
+Target namespace -> optional text -> spec.targetNamespace. Does not create namespaces.
+Deletion policy -> omission or MirrorPrune/Delete/WaitForTermination/Orphan -> spec.deletionPolicy. MirrorPrune follows prune; Orphan leaves resources. Delete removes managed resources; WaitForTermination waits up to timeout. Choice requires review.
+Wait / force / suspend -> optional boolean selects -> spec.wait / force / suspend. Wait ignores healthChecks. Force may recreate on immutable resource-field failure. Suspend does not stop started executions.
+Timeout / retry interval -> duration text -> spec.timeout/retryInterval. Omitted defaults remain omitted.
+Dependencies -> add/remove name + namespace rows -> spec.dependsOn[i].name/namespace.
+Health -> add/remove resource name + kind rows -> spec.healthChecks[i].name/kind. API version/namespace source-only -> spec.healthChecks[i].apiVersion/namespace.
+Non-sensitive substitutions -> add/remove string pairs -> spec.postBuild.substitute[key]; values remain strings. Sensitive values must use references; never import resolved values.
+Substitution references -> add/remove kind + name -> spec.postBuild.substituteFrom[i].kind/name. optional source-only. Production must use enum picker and validate duplicates; fixture row text is not schema validation.
+Decryption -> none/sops -> spec.decryption.provider; existing Secret name -> spec.decryption.secretRef.name; cloud SA name -> spec.decryption.serviceAccountName. Static credentials take precedence. No Secret values fetched or shown; do not infer key validity.
+Apply identity -> text -> spec.serviceAccountName. Separate from decryption SA and remote kubeConfig authentication.
+Advanced SOURCE-ONLY -> spec.images[*].name/newName/newTag/digest (digest wins), patches[*].patch/target, components[], ignoreMissingComponents, namePrefix/nameSuffix, commonMetadata.labels/annotations, kubeConfig.configMapRef.name OR kubeConfig.secretRef.name/key (exactly one), dependsOn[*].readyExpr, healthCheckExprs[*].apiVersion/kind/current/failed/inProgress. No fake generated helper resource or credential form. Advanced YAML is editable, not a no-op preview.
+
+BOUNDARIES / PREREQUISITES
+Installed v1 discovery plus create/update verbs and actual authorization required. CRD schema does not prove controller availability. Source lookup loading/empty/denied/unavailable are explicit fixture choices. ExternalArtifact requires installed controller capability; decryption workload identity and remote kubeConfig support require actual deployment configuration. ReadyExpr replaces built-in dependency readiness unless AdditiveCELDependencyCheck enabled; do not claim this gate enabled. Controller flags may restrict cross-namespace refs or set default service account.
+Git-owned scenario locks direct editing and routes intent to source-of-truth work; no fake repository write. Direct-owned edit locks name and namespace. Production must inspect ownerReferences, managedFields, Git labels and revision conflicts rather than infer ownership solely from a dropdown.
+Reconcile request connects to metadata.annotations['reconcile.fluxcd.io/requestedAt']; suspend/resume to spec.suspend true/false. Only request review is shown, never action success. Inventory connects to status.inventory.entries[id,v]. Drift remains explicitly unavailable without live comparison; no rebuilt dashboard.
+
+SOURCE SAFETY
+One in-memory draft feeds form and YAML. Initial projection is JSON flow syntax, valid in YAML, with a comment. This is intentionally not a YAML AST implementation. Any manual source edit freezes Form; exact raw text, unknown content, comments, omission, scalar spelling and invalid text remain untouched thereafter. No claim of editable form round-trips after arbitrary YAML. Review disabled for manual source, because no parser/server validation exists here. No clipboard or credential import. No draft storage. Only explicit presentation preference uses mock-310-view localStorage.
+
+BROWSER EVIDENCE
+capture.cjs and availability.cjs use an isolated Chrome profile, real browser controls, 1440x900 at deviceScaleFactor 1.25. All 22 states visually inspected in contact sheets; narrow capture uses 760x800 at 1.25. Browser and owned pages closed. No preview service needed: file:// prototype. checks.json stores named booleans and filenames only. Actual typing, selection, add/remove, section switches, mode switches, help focus/Escape, ownership scenarios, request review, raw invalid-source preservation, preference-only reload and four reference availability states exercised. No cluster/cloud calls. Synthetic reference names only.
+
+REUSE / VISUAL REVIEW
+Compose installed Dialog, SegmentedControl, FormField/Input/Select, Tooltip/Popover, Collapsible, Table/Button and existing source editor. Resource semantics belong in Flux adapter. No new generic base-ui primitive requested. Visual skill web-design-guidelines read and actual guideline source fetched. Prototype uses accessible labels, semantic buttons, focus outlines, dark native selects, internal scroll, visible destination/footer, reduced-no-motion layout. Production Dialog focus trapping, close/opener restoration and field-local validation remain host responsibilities; mock does not prove them.
+
+LIMITS / REVIEW DECISIONS
+This prototype validates core required choices and interval only, not the complete schema or server admission. References and availability states are fixtures, not async backend proof. Advanced source does not parse or validate. Health optional version/namespace, reference optional flags, CEL, transforms and remote target remain source-based precision paths rather than bespoke subforms. No live status, drift, reconcile, Git write, controller health, decrypted content, RBAC grant, mutation or provisioning claimed. Review screen is design only. No issue checkboxes changed, no closure, no approval or shipped implementation claimed.

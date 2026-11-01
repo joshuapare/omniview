@@ -212,6 +212,7 @@ Provider defines case sensitivity and path rules. Remote Linux paths must not in
 **Recommendation:**
 
 - Use fixed-height, single-line rows by default.
+- Adopt compact desktop density using existing base-ui TreeList controls: `density="compact"` and `size="sm"`. Local source defines 22px minimum rows and 13px small-item text; use 12px caption metadata and 14px row icons. These dimensions are an Omniview design choice, not a claim about VS Code dimensions. Preserve the mock's 34px phone rows and 16px icons. Ensure virtualized estimates track effective density instead of the existing hardcoded 36px estimate.
 - Virtualize large visible projections, not every small tree automatically.
 - Flatten expanded branches only; avoid rebuilding collapsed subtrees.
 - Update affected parents and rows using stable IDs.

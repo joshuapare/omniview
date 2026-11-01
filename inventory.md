@@ -402,11 +402,13 @@ Theme provider accepts `themeId`, fallback, registry, root element, initial dens
 
 Theme density is `compact | comfortable`; tree also has its own `default` density option.
 
-Tree compact rows use 22px semantic height. Tree default rows follow density-overridden medium tokens.
+Tree compact rows use 22px semantic height. Tree default rows follow density-overridden medium tokens. `TreeList.Root` accepts `density="compact"` independently of `size="sm"`; small size applies 13px item text, while the body token defaults to 14px and caption token to 12px. Sources: `TreeList.module.css:35-43,54-58,145-153`, `types.ts:198`, and `theme/styles.css:91-95,120-121,386-390`.
 
 **Recommendation**
 
 Use semantic tokens, not copied palette values. Test mock layouts across light, dark, and high-contrast designs.
+
+Explorer decision: use compact density plus small size for desktop (22px rows, 13px text, 14px icons). Keep 12px desktop secondary metadata. Retain 34px mock phone rows and 16px phone icons. This is component-scoped styling, not a global theme change. The existing 36px virtualization estimate must be wired to effective row height before compact virtualized production acceptance.
 
 Use `--ov-font-mono` for paths and metadata. DiffViewer currently references `--ov-font-family-mono` with monospace fallback.
 

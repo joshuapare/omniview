@@ -2,7 +2,16 @@ const {chromium}=require('/Users/joshuapare/Repos/omniviewdev/omniview/node_modu
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const root=__dirname;const shots=root+'/screenshots';fs.mkdirSync(shots,{recursive:true});
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1.25,hasTouch:true});const errors=[];page.on('pageerror',e=>errors.push(e.message));const results=[];
-const snap=async name=>{await page.screenshot({path:shots+'/'+name+'.png',animations:'disabled',fullPage:name.includes('phone'),timeout:15000});results.push(name);console.log('CAPTURE',name)};
+const densityMeasurements=[];
+const snap=async name=>{
+  if(name!=='00-real-app'){
+    const metrics=await page.evaluate(()=>{const row=document.querySelector('.row'),icon=row?.querySelector('svg'),meta=document.querySelector('.kv');return {width:innerWidth,rowHeight:row?.getBoundingClientRect().height,fontSize:row?getComputedStyle(row).fontSize:null,iconSize:icon?.getBoundingClientRect().width,metadataFont:meta?getComputedStyle(meta).fontSize:null}});
+    if(metrics.rowHeight!==undefined){assert.equal(metrics.rowHeight,metrics.width<=700?34:22,name+' row density');assert.equal(metrics.fontSize,'13px',name+' filename font');assert.equal(metrics.iconSize,metrics.width<=700?16:14,name+' icon size')}
+    if(metrics.width>700&&metrics.metadataFont!==null)assert.equal(metrics.metadataFont,'12px',name+' metadata font');
+    densityMeasurements.push({capture:name,...metrics});
+  }
+  await page.screenshot({path:shots+'/'+name+'.png',animations:'disabled',fullPage:name.includes('phone'),timeout:15000});results.push(name);console.log('CAPTURE',name);
+};
 const check=async(fn,arg)=>assert(await page.evaluate(fn,arg));
 const mode=async name=>{await page.getByRole('button',{name,exact:true}).click();await check(n=>__mock.state.mode===n,name)};
 await page.goto('http://127.0.0.1:24932/');await page.waitForFunction(()=>window.__OMNIVIEW_INSTANCE__);await check(()=>__OMNIVIEW_INSTANCE__.instanceID==='f889cfc6-a139-4d77-aac3-8733bd1849b5'&&__OMNIVIEW_INSTANCE__.generation==='60d27bb7-edd8-4f77-bb93-497b4abe08c4');await snap('00-real-app');
@@ -18,4 +27,4 @@ await page.locator('#event-kind').selectOption('add');await page.getByRole('butt
 await page.getByRole('button',{name:'Export…',exact:true}).click();await snap('15-export');await page.getByLabel('Provider supports archive export (tar available)').uncheck();assert(await page.getByRole('button',{name:'Request export'}).isDisabled());await snap('16-missing-tar');await page.keyboard.press('Escape');
 await mode('States');for(const value of ['permission','loading','empty','offline','binary','large','missing-tar']){await page.locator('#scenario').selectOption(value);await check(v=>__mock.state.scenario===v,value);await snap('17-state-'+value)}
 await page.setViewportSize({width:390,height:844});await mode('Browse');await snap('18-phone-browse');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.locator('[data-path="/app/server.js"]').tap();await check(()=>__mock.state.selected==='/app/server.js');await mode('Image layers');await page.locator('[data-layer="2"]').click();await check(()=>__mock.state.layer===2);await snap('19-phone-layers');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-assert.deepEqual(errors,[]);fs.writeFileSync(root+'/verification.json',JSON.stringify({results,pageErrors:errors,desktop:[1440,900],phone:[390,844],wlan:'http://192.168.68.55:48732/',identity:{workspaceID:'f889cfc6-a139-4d77-aac3-8733bd1849b5',generation:'60d27bb7-edd8-4f77-bb93-497b4abe08c4'}},null,2));await browser.close();console.log('PASS',results.length,'captures');})().catch(e=>{console.error(e);process.exit(1)});
+assert.deepEqual(errors,[]);fs.writeFileSync(root+'/verification.json',JSON.stringify({revision:'compact-density',results,densityMeasurements,pageErrors:errors,desktop:[1440,900],phone:[390,844],wlan:'http://192.168.68.55:48732/',identity:{workspaceID:'f889cfc6-a139-4d77-aac3-8733bd1849b5',generation:'60d27bb7-edd8-4f77-bb93-497b4abe08c4'}},null,2));await browser.close();console.log('PASS',results.length,'captures; density and typography checked');})().catch(e=>{console.error(e);process.exit(1)});

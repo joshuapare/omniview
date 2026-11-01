@@ -1,4 +1,5 @@
 {
+  "revision": "compact-density",
   "results": [
     "00-real-app",
     "01-browse",
@@ -30,6 +31,224 @@
     "17-state-missing-tar",
     "18-phone-browse",
     "19-phone-layers"
+  ],
+  "densityMeasurements": [
+    {
+      "capture": "01-browse",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "02-deleted-file",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "03-previous-version",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "04-filter-ancestors",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "05-no-matches",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "05b-hidden-files",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "05c-preview-closed",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": null
+    },
+    {
+      "capture": "06-standalone-multiselect",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": null
+    },
+    {
+      "capture": "07-context-actions",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": null
+    },
+    {
+      "capture": "08-layer-changes",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "09-cumulative",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "10-layer-filter",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "11-runtime-diff",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "12-live-update",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "13-paused",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "14-watch-gap",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "14b-live-rename",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "14c-live-delete",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "15-export",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "16-missing-tar",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "17-state-permission",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-loading",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-empty",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-offline",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-binary",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-large",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "17-state-missing-tar",
+      "width": 1440,
+      "fontSize": null,
+      "metadataFont": null
+    },
+    {
+      "capture": "18-phone-browse",
+      "width": 390,
+      "rowHeight": 34,
+      "fontSize": "13px",
+      "iconSize": 16,
+      "metadataFont": "11px"
+    },
+    {
+      "capture": "19-phone-layers",
+      "width": 390,
+      "rowHeight": 34,
+      "fontSize": "13px",
+      "iconSize": 16,
+      "metadataFont": "11px"
+    }
   ],
   "pageErrors": [],
   "desktop": [

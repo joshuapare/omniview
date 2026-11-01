@@ -8,6 +8,24 @@ Build two reusable surfaces: `FileTree` and compound `FileExplorer`. Reuse exist
 
 The interactive HTML demonstrates component behavior with explicit local fixtures. The eventual React implementation must not copy its full-DOM rerender strategy, path-based fixture identity, or hardcoded content. Prototype is a design artifact, not production scaffolding.
 
+## Density revision
+
+Desktop defaults are compact across standalone, browsing, layer, comparison, and live-watch trees. Keep this choice local to the explorer rather than changing global theme typography.
+
+| Surface | Desktop default | Phone presentation |
+| --- | --- | --- |
+| File rows | 22px | 34px, unchanged for touch |
+| Filenames and explorer body | 13px | 13px |
+| Secondary metadata | 12px | Existing narrow-layout overrides retained |
+| Row icons | 14px | 16px |
+| Icon/label gap | 3px | 3px |
+
+Use existing `TreeList.Root density="compact" size="sm"` in the eventual React implementation. Compact density sets the 22px minimum row height and tighter gaps; small size selects the existing 13px typography. Theme body text otherwise defaults to 14px. Explorer metadata uses the existing 12px caption token. Keep independent density and size controls available for consumer needs.
+
+The initial mock already used 13px inherited body text; this revision makes that explorer default explicit instead of falsely claiming a font reduction. Row height changes from 29px to 22px on desktop.
+
+Virtualization must use the effective row height, including density and responsive changes. The existing hardcoded 36px estimate is an implementation acceptance blocker for compact virtualized trees, not fixed by this HTML mock. Scope that repair to existing TreeList rather than introducing another virtualizer. No production component code changes are part of this design revision.
+
 ## Component boundaries
 
 | Surface | Owns | Does not own |
@@ -97,7 +115,7 @@ These are requirements, not measured results:
 6. Preserve keyboard active row under virtualization; provide `aria-level`, `aria-posinset`, `aria-setsize`, and unknown totals honestly.
 7. Before implementation acceptance, measure 100k cached nodes with 50k visible, deep chains, wide sibling sets, and burst updates. Record mounted rows, frame latency, filtering latency, allocations, and retained heap. Establish budgets on the chosen reference device before claiming optimization.
 
-Existing `TreeList` has declared virtualization parameters that are not fully wired through: viewport estimate is hardcoded to 36 and overscan is omitted. Its viewport subscribes broadly. Repair those seams within existing primitives if needed; do not advertise current behavior as already optimized for this feature.
+Existing `TreeList` has declared virtualization parameters that are not fully wired through: viewport estimate is hardcoded to 36 and overscan is omitted. Its viewport subscribes broadly. Before accepting compact virtualized explorer implementation, wire effective density-aware row estimates and overscan through the existing primitive; verify keyboard reveal and scrolling without gaps at both desktop and phone sizes. Do not advertise current behavior as already optimized for this feature.
 
 ## Visual and interaction acceptance
 

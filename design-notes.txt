@@ -1,0 +1,61 @@
+ISSUE 313 — Flux image editors. Design proposal, not shipped or approved.
+
+Workflow: approved #249 interactive HTML/capture approach. No named mock skill installed. web-design-guidelines skill reviewed this known prototype against its fetched command.md. Native semantic labels, focus outlines, internal scroll, help button, keyboard trap, footer, no motion. Isolated HTML composition models base-ui Dialog, FormField, Input, Select, Tooltip/Popover, Collapsible, Buttons and editable rows; not actual shipped React or theme integration. No new generic primitive required. Source textarea stands in for existing Monaco. Flux add-on editor provider owns all three GVKs, not Kubernetes built-ins. Provider applies only to discovered image.toolkit.fluxcd.io/v1 kinds, with read/create/update capability and ownership gates; fallback retains source.
+
+PRIMARY SNAPSHOT
+image-reflector-controller v1.0.0 tree 30288d85a73b3da10af17083ec9cc2de546c7809: api/v1/imagerepository_types.go, imagepolicy_types.go and config/crd/bases/image.toolkit.fluxcd.io_{imagerepositories,imagepolicies}.yaml.
+image-automation-controller v1.0.0 tag 6747b8f8bfd0a24102a9537c808da0be629cf0e3: api/v1/{imageupdateautomation_types.go,git.go,reference.go} and config/crd/bases/image.toolkit.fluxcd.io_imageupdateautomations.yaml.
+https://github.com/fluxcd/image-reflector-controller/tree/v1.0.0/config/crd/bases
+https://github.com/fluxcd/image-automation-controller/tree/v1.0.0/config/crd/bases
+https://fluxcd.io/blog/2025/09/flux-v2.7.0/
+All three are Namespaced, v1, status subresource. Optional image controllers require separate installation. Discovery/schema is not controller health or authorization. Examined CRDs expose no oldSelf spec immutability transition rules; metadata identity remains locked in edit. Admission and installed-version restrictions still apply. No delete/recreate shortcut. Git/other-manager owned resources direct edits lock; change upstream source. Status, observed tags, selected digest and last pushed commit remain controller-owned.
+
+COMMON MAP
+Resource name -> text -> metadata.name (required; locked on edit).
+Namespace -> fixture destination picker -> metadata.namespace, preview only in this offline mock. Production create uses explicit destination; edit locks namespace.
+Suspend -> omission/true/false select -> spec.suspend. Resume explicitly sets false; omission remains distinct. It does not undo in-flight scans/reconciles.
+Review -> non-mutating draft summary, destination always visible. No Create/Save network action exists.
+Form -> source generation for bounded supported paths. JSON syntax is valid YAML. Manual YAML/source edits remain exact and lock Form and Review. No parser, lossless AST patching, unknown-field merge, or server validation is claimed. Exact raw preservation demonstrated with invalid source, comment and large integer sentinel. Production must use shared exact AST draft contract before enabling supported edit/import round trips.
+
+IMAGEREPOSITORY MAP
+Registry image text -> spec.image; required, no guessed image.
+Scan interval duration string -> spec.interval; required, duration syntax locally checked.
+Authentication provider optional select generic/aws/azure/gcp -> spec.provider; omitted remains omitted.
+Registry Secret existing same-namespace picker -> spec.secretRef.name.
+Service account picker -> spec.serviceAccountName; pull-secret authentication support depends on actual controller configuration.
+Scan timeout -> spec.timeout (API allows ms/s/m; interval allows hours too).
+Proxy Secret -> spec.proxySecretRef.name. TLS Secret -> spec.certSecretRef.name. No resolved data is fetched, validated or displayed.
+Allow plain HTTP explicit optional boolean -> spec.insecure; consequence visible at review.
+Excluded regex removable rows -> spec.exclusionList[] (API max 25; API default ^.*\\.sig$ when omitted).
+Allowed namespace labels removable key/value rows -> spec.accessFrom.namespaceSelectors[0].matchLabels[key]. Multiple selectors and matchExpressions use source fallback. Cross-namespace ImagePolicy access requires ACL/controller policy, never merely a namespace picker.
+Changes can redirect scans/auth or broaden cross-namespace access. Credentials stay references only; no credential reveal or import exists.
+
+IMAGEPOLICY MAP
+Repository existing picker -> spec.imageRepositoryRef.name; optional namespace text -> spec.imageRepositoryRef.namespace; omission means local namespace.
+Selection rule -> one branch of spec.policy. Semver range text -> spec.policy.semver.range. Numerical/alphabetical order -> spec.policy.numerical.order / spec.policy.alphabetical.order, asc/desc. Asc selects greatest value, desc smallest, not generic newest-time semantics.
+Branch switching is explicit replacement in this mock; prior branch values are discarded. No branch-draft retention claim.
+Digest tracking -> spec.digestReflectionPolicy Never/IfNotPresent/Always, or omit (API defaults Never).
+Digest refresh interval -> spec.interval, required iff Always by pinned CRD CEL. Despite prose about 10m, do not silently insert it: CRD requires field for Always. Both mismatch directions locally blocked.
+Tag regex and capture extraction -> spec.filterTags.pattern / .extract. No JavaScript regex/semver preview pretends to match controller evaluation.
+Policy change can affect downstream updates; selected tag/digest is not fabricated. Optional suspend supported.
+
+IMAGEUPDATEAUTOMATION MAP
+Existing GitRepository picker -> spec.sourceRef.name. Fixed kind GitRepository -> spec.sourceRef.kind, only when source selected. Source namespace/API version -> spec.sourceRef.namespace / .apiVersion.
+Run interval -> spec.interval; required.
+Update directory -> spec.update.path; omission uses repository root; single directory, not invented path array. Strategy omitted uses API default Setters. No directory browsing or checkout occurs.
+Checkout branch/tag/semver/commit -> spec.git.checkout.ref.{branch,tag,semver,commit}; source API precedence must remain controller-defined. Expert shapes use source fallback. Push branch -> spec.git.push.branch; missing push configuration uses checkout/source behavior, not a guessed branch.
+Commit author name/email -> spec.git.commit.author.{name,email}; email required in Git commit spec.
+Signing Secret existing same-namespace reference -> spec.git.commit.signingKey.secretRef.name; never retrieve key material.
+Commit message template -> spec.git.commit.messageTemplate (Changed template field, not removed Updated). No template rendering claim.
+Push refspec -> spec.git.push.refspec. Both branch and refspec can push; review consequence calls out both.
+Policy label rows -> spec.policySelector.matchLabels[key], AND semantics. Omission includes policies in automation namespace. matchExpressions via source.
+Commit template values / push options key/value rows -> spec.git.commit.messageTemplateValues[key] / spec.git.push.options[key].
+Saving enabled automation can cause Git commits and pushes. Draft review shows warning, checkout, path and push destination. No proposed Git diff offline; never synthesize a successful commit, PR, scan or pushed SHA.
+
+ACTIONS AND AVAILABILITY
+Scan/reconcile request boundary is metadata.annotations["reconcile.fluxcd.io/requestedAt"], not spec/status creation. Action review explains prospective patch but sends nothing. Production must check actual patch verb, ownership, suspension and controller installation. Resume/suspend are spec edits requiring review. Proposed Git updates unavailable without repository data; existing inspectors remain entry points rather than reimplemented dashboards.
+Capability selector separates API missing, write denied, lookup unavailable, genuinely empty references, unsupported version. Review disables for all non-ready capability fixtures. Reference picker disables on empty/unavailable; existing draft remains retained. Request disables for non-ready. Owned fixture locks all direct controls and review.
+
+EVIDENCE AND LIMITS
+34 selected screenshots, 1440x900 at deviceScaleFactor 1.25 except boundary-narrow at 760x760 scale 1.25. Each inspected in final contact sheets; footer remains visible. Real browser fills, selects, help focus/click/Escape, rule branch switching, add/remove, create/edit intent, capability changes and source edit drove captures. Named boolean checks only, with screenshot filenames; no source/value dumps. No page errors observed. Screenshots show synthetic sample references outside live cluster context, never credentials, PEM, Secret data, annotations or Base64 material.
+Source parsing, regex/semver validation, timeout bounds, Kubernetes name validation, duplicate row validation, template evaluation, reference permissions, cloud identity/feature flags, cross-namespace controller flags, production focus lifecycle, asynchronous lookup and actual dry-run/admission remain implementation requirements, not proven behavior. No draft persists; only explicit mock313-mode preference persists. Cannot claim untouched unknown-source patch preservation: manual-source lock is intentional safe fallback. No real cluster/cloud actions, repo builds/tests/lint/formatter or shared installs ran. Mock awaits review; issue stays open.

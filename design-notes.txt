@@ -1,0 +1,34 @@
+Issue 291 — review proposal, not shipped code
+
+Coverage: NodeMetrics (nodes, cluster scope) and PodMetrics (pods, namespace scope). Both are generated read-only resources from an optional aggregated metrics service. No Create, Edit, Delete, apply, status edit, install action, or companion object is offered. Source inspection and fixture refresh are non-mutating. No editable manifest draft exists, so authoring validation, add/remove rows, submit review, and Form/YAML draft round trips are intentionally not applicable. Source text is retained verbatim in memory; there is no parser, normalizer, local persistence, or writable source projection.
+
+Pinned sources:
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/apis/metrics/v1beta1/register.go
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/apis/metrics/v1beta1/types.go
+The registration supplies metrics.k8s.io/v1beta1 and both kinds. The schema declares readonly clients; NodeMetrics is explicitly nonNamespaced. List wrappers are not authoring resources. v1beta1 is the preferred fixture, not a claim about a connected cluster. Production discovers actual versions, resource scope and verbs, then separately evaluates authorization and reachability. Optional metrics-server is one possible serving implementation, not inferred as installed.
+
+Exact mapping (all read-only; no owned mutation paths):
+Both: apiVersion/kind -> destination/version context and source. metadata.name -> resource badge. Pod metadata.namespace -> persistent destination context. timestamp -> collected-at UTC fact; window -> collection-window fact. Interval-start is timestamp minus window, derived display only, never a new API field.
+Node: usage.cpu -> exact CPU quantity column; usage.memory -> exact memory working-set column. Other ResourceList keys and unknown metadata/fields belong in retained source, never silently normalized. No percentages or denominators are inferred.
+Pod: containers[i].name -> container row and local filter. containers[i].usage.cpu / .memory -> exact quantity columns. All container samples share timestamp/window. Filtering hides rows only; it does not alter source. ContainerMetrics name corresponds to pod.spec.containers per upstream schema, but no workload data or limits are guessed.
+Source: all paths, including unknown fields and quantities, remain read-only. Fixture source has no annotations or credentials. Production must apply privacy projection to potentially sensitive metadata before rendering; projection must never be submitted.
+
+State coverage:
+01-node.png: NodeMetrics populated inspection and cluster scope.
+02-pod.png: PodMetrics populated inspection, namespace and per-container table.
+03-source.png: read-only original PodMetrics fixture source.
+04-boundary.png: endpoint, fixture get/list verbs, owner and no authoring.
+05-loading.png / 05-empty.png / 05-missing.png / 05-denied.png / 05-unavailable.png: distinct loading, empty response, missing API, 403 and 503. Empty/error is never zero usage.
+05-unsupported.png: source-only fallback interaction, using the known v1beta1 fixture to exercise unsupported-inspector presentation; it does not demonstrate a real unknown API version or schema conversion.
+05-stale.png: explicit older-sample warning. Age is a chosen fixture state, not an automatic polling/staleness policy.
+06-help.png: focus-accessible usage semantics, Escape dismisses help first.
+07-narrow.png: 720x740 CSS viewport with internal scroll and footer visible.
+All wide captures use 1440x900 CSS viewport at device scale 1.25 (1800x1125 physical pixels).
+
+Composition: faithful isolated HTML, not production React or installed base-ui. Approved #249 compact 1000x700 frame, 32px controls, 13px body, 20x24 padding, 16px gaps and 180px section rail. Production reuse: Dialog, Button, Select, Input, Table, Tooltip/Popover, and existing read-only code editor. Semantic theme tokens must replace illustrative palette literals. No new generic primitive required. Native dialog mock uses modeless open/show; production must reuse host modal focus trapping. Help supports hover/focus/click, Escape dismissal, and focus restoration; close returns focus to opener. Browser exercised native typing, select changes, resource/section navigation, refresh, close/reopen and keyboard help.
+
+Provider ownership: Kubernetes plugin owns native metrics inspection routing and capability checks; an optional serving implementation does not justify installation or controller-management controls. Extension registry can route unknown group/version responses to safe generic read-only source inspection. No hardcoded health or permission claim.
+
+Visual review used web-design-guidelines skill and fetched https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md. Reviewed every final image. Narrow footer issue was fixed. Source and stale screens scroll internally. No named mock-generation skill was exposed; followed approved #249 workflow.
+
+Limits: synthetic snapshots only; no live cluster requests, metrics-server install, RBAC checks, polling, server errors, resource mutation, production tests or build. Unsupported mode deliberately reuses known-version fixture. Snapshot preservation checks prove unchanged fixture text only, not arbitrary YAML parsing. Initial shared browser screenshot API timed out; isolated installed Playwright/Chrome produced actual captures. No dependencies installed. Review remains required; issue stays open.

@@ -1,0 +1,35 @@
+ImageReview — protocol supplement mock, issue #290
+Design only; awaits user review. Faithful isolated HTML composition, not shipped React.
+
+Scope: imagepolicy.k8s.io/v1alpha1, k8s.io/api v0.35.0, Kubernetes v1.35.0. ImageReview is non-namespaced with no generated CRUD verbs. spec.namespace identifies the admitting Pod namespace. No collection, Create, Edit, Save status, or replay.
+
+Field mapping / ownership:
+apiVersion,kind -> identity subtitle and source -> fixed registered GVK.
+metadata -> optional evidence metadata; free-text omitted from this safe projection, never authored.
+spec.namespace -> read-only Pod namespace tile -> API server owns.
+spec.containers[i].image -> image rows -> API server owns atomic list. No container names or per-image decision invented.
+spec.annotations[key] -> count-only policy annotation summary -> API server filters *.image-policy.k8s.io/*; all values excluded.
+status.allowed -> true/false decision tile -> webhook owns; absent/invalid response is unknown.
+status.reason -> synthetic denial reason in decision; redacted in source -> webhook owns. Production must sanitize free text.
+status.auditAnnotations[key] -> count-only summary -> backend owns suffix keys; API server prefixes imagepolicywebhook.image-policy.k8s.io/. Values excluded.
+
+Interaction: fixture selector, request/decision/source/integration navigation, hover/focus/click help, Escape closes help and restores trigger focus, review boundary and return. No authored draft exists. Add/remove, source typing, create/edit and immutable edit tests are inapplicable; the inspection boundary replaces them. No lossless parser claim: source is read-only redacted projection, never parsed or submitted. Unsupported fixture illustrates preservation boundary, not an actual raw evidence store. No local storage or source persistence.
+
+API prerequisites: API server ImagePolicyWebhook admission plugin and backend kubeconfig/configuration; this inspector does not fetch either. Schema presence is not backend availability. Backend failure outcome depends on defaultAllow and configured caches, unknown here. Missing integration, evidence access denied, backend failure, request-only, malformed response, unsupported version remain distinct. Existing Pod admission may include regular/init container images or ephemeral container subresource images; evidence cannot infer container names.
+
+Built-in versus extension: Kubernetes plugin owns GVK-aware protocol inspection; optional evidence transport adapter must declare access/capability and provenance. No generic resource registration or third-party form override required. No new base-ui primitive proposed. Compose Dialog/frame, Button, Select, Table, Badge, Tooltip/Popover, ScrollArea and existing read-only editor; mock uses HTML equivalents and semantic local tokens. Production must use real components and shared focus behavior.
+
+Source citations:
+https://github.com/kubernetes/api/blob/v0.35.0/imagepolicy/v1alpha1/register.go
+https://github.com/kubernetes/api/blob/v0.35.0/imagepolicy/v1alpha1/types.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/plugin/pkg/admission/imagepolicy/admission.go
+https://github.com/omniviewdev/omniview/issues/262
+https://github.com/omniviewdev/omniview/issues/249
+https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/72
+https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/74
+
+Visual review used web-design-guidelines skill at /Users/joshuapare/.agents/skills/web-design-guidelines/SKILL.md and fetched https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md. Named mock skill unavailable; approved #249 interactive workflow used. Labels, semantic controls, focus ring, skip link, visible consequences, dark native controls, wrapping and internal scroll checked. Navigation is in-memory, not deep linked; production should integrate host navigation. No modal close action simulated.
+
+Evidence: 13 reference screenshots at1440x900 @1.25, plus650x800 @1.25 narrow screenshot. Browser inputs were real clicks, focus, Escape and native selects. No state injection. Every capture visually reviewed. Shared browser screenshots timed out; dedicated Chrome profile used, explicit viewport clipping fixed capture geometry. No cluster requests or mutations. No repository checks run. Browser fixture proof does not validate production adapter, RBAC, transport, controller health, admission result or source preservation.
+
+Run: serve index.html with any static server; no dependency/build. Choose Fixture and inspector sections.

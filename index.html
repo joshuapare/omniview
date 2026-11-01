@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Istio resource editor · Design preview</title><style>:root{color-scheme:dark;font:13px system-ui;background:#111419;color:#e4e7ed}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;color:inherit;background:#20262f;border:1px solid #3a4351;border-radius:5px;padding:6px 10px;min-height:32px}button{cursor:pointer}button:hover{background:#303c4d}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #8ab4ff;outline-offset:2px}.preview{max-width:1000px;margin:28px auto 12px;color:#a6b1c3;display:flex;justify-content:space-between}.frame{width:min(1000px,96vw);height:700px;margin:auto;background:#181d25;border:1px solid #3c4553;border-radius:10px;display:flex;flex-direction:column;overflow:hidden}header{padding:16px 24px;border-bottom:1px solid #343c49;display:flex;justify-content:space-between;align-items:center}h1{font-size:18px;margin:3px 0}small,.muted{color:#a7b4c9}.body{display:flex;min-height:0;flex:1}nav{width:180px;flex-shrink:0;padding:16px 10px;border-right:1px solid #343c49}nav button{display:block;width:100%;text-align:left;border:0;background:transparent;margin:3px 0}nav button.active{background:#263c59;color:#a9ceff}main{padding:20px 24px;overflow:auto;flex:1;min-width:0}h2{font-size:15px;margin:0 0 16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:flex;flex-direction:column;gap:6px;min-width:0}.wide{grid-column:1/-1}section{margin:20px 0;border-top:1px solid #343c49;padding-top:16px}.row{display:flex;gap:8px;align-items:center;margin:8px 0}.row input{min-width:0;flex:1}.tag{color:#9dbff5;background:#25364e;border-radius:4px;padding:4px 7px}.warning{padding:10px 12px;background:#3b3020;border:1px solid #826632;border-radius:5px;color:#f5d59a;margin-bottom:16px}.error{color:#ffaaa8;margin:8px 0}footer{border-top:1px solid #343c49;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.primary{background:#3874c8;border-color:#5996e5;color:white}textarea{width:100%;height:340px;font-family:ui-monospace,monospace;font-size:12px;resize:vertical}dialog{background:#202833;color:#e4e7ed;border:1px solid #61718b;border-radius:8px;max-width:480px}dialog::backdrop{background:#0008}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}@media(max-width:700px){nav{width:140px}.grid{grid-template-columns:1fr}.preview{padding:0 12px}.frame{height:85vh}main{padding:16px}header,footer{padding:12px}.preview span{display:none}}</style><div class="preview"><b>OMNIVIEW / RESOURCE DESIGN LAB</b><span>Synthetic fixtures · Istio 1.27.0 · No network mutations</span></div><div class="frame"><header><div><small>networking.istio.io / <span id="version"></span></small><h1 id="title"></h1></div><div class="row"><select id="lifecycle" aria-label="Lifecycle"><option>Create</option><option>Edit</option><option>Generated</option><option>Denied</option><option>Unavailable</option></select><button id="help" aria-label="Help for resource">?</button></div></header><div class="body"><nav id="nav"></nav><main id="main"></main></div><footer><small>preview-cluster / preview<br><span id="footerstate">Local draft only</span></small><div><button id="form">Form</button> <button id="source">Source</button> <button id="review" class="primary">Review Changes</button></div></footer></div><dialog id="helpdialog"><h2>Scope & Ownership</h2><p id="helptext"></p><button id="closehelp">Close Help</button></dialog><script>
+const kinds={
+VirtualService:{v:'v1',subtitle:'Route traffic',fields:[['Service hosts','spec.hosts[0]','reviews.preview.svc.cluster.local'],['Gateway reference','spec.gateways[0]','mesh'],['URI prefix','spec.http[0].match[0].uri.prefix','/'],['Destination host','spec.http[0].route[0].destination.host','reviews.preview.svc.cluster.local'],['Subset','spec.http[0].route[0].destination.subset','stable'],['Weight (%)','spec.http[0].route[0].weight','100','number'],['Timeout','spec.http[0].timeout','5s'],['Retry attempts','spec.http[0].retries.attempts','2','number']],rows:'HTTP destinations',consequence:'Route ordering and weights change live traffic. Destination subsets must already exist.'},
+DestinationRule:{v:'v1',subtitle:'Define destination policy',fields:[['Destination host','spec.host','reviews.preview.svc.cluster.local'],['Subset name','spec.subsets[0].name','stable'],['Version label','spec.subsets[0].labels.version','v1'],['Load balancing','spec.trafficPolicy.loadBalancer.simple','ROUND_ROBIN',['ROUND_ROBIN','LEAST_REQUEST','RANDOM','PASSTHROUGH']],['TLS mode','spec.trafficPolicy.tls.mode','ISTIO_MUTUAL',['ISTIO_MUTUAL','DISABLE','SIMPLE','MUTUAL']],['Maximum connections','spec.trafficPolicy.connectionPool.tcp.maxConnections','100','number'],['Consecutive 5xx errors','spec.trafficPolicy.outlierDetection.consecutive5xxErrors','5','number']],rows:'Subsets',consequence:'TLS and resilience policies change upstream connections. No certificates or companion subsets are created.'},
+Gateway:{v:'v1',subtitle:'Expose an Istio listener',fields:[['Gateway workload label','spec.selector.istio','ingressgateway'],['Server name','spec.servers[0].name','web'],['Port name','spec.servers[0].port.name','http'],['Port number','spec.servers[0].port.number','80','number'],['Protocol','spec.servers[0].port.protocol','HTTP',['HTTP','HTTPS','TLS','TCP']],['Allowed host','spec.servers[0].hosts[0]','preview.example.invalid'],['TLS mode','spec.servers[0].tls.mode','PASSTHROUGH',['PASSTHROUGH','SIMPLE','MUTUAL','AUTO_PASSTHROUGH']],['Credential reference','spec.servers[0].tls.credentialName','','text']],rows:'Servers',consequence:'Istio Gateway, not Gateway API. Listener changes may expose traffic. This creates no Service or certificate.'},
+ServiceEntry:{v:'v1',subtitle:'Register an external service',fields:[['Host','spec.hosts[0]','api.example.invalid'],['Location','spec.location','MESH_EXTERNAL',['MESH_EXTERNAL','MESH_INTERNAL']],['Resolution','spec.resolution','DNS',['DNS','STATIC','NONE','DNS_ROUND_ROBIN']],['Port number','spec.ports[0].number','443','number'],['Port name','spec.ports[0].name','https'],['Protocol','spec.ports[0].protocol','HTTPS',['HTTPS','HTTP','TCP','TLS']],['Endpoint address','spec.endpoints[0].address','api.example.invalid']],rows:'Endpoints',consequence:'Registry entries do not prove reachability or permit egress. DNS and STATIC use different endpoint semantics.'},
+Sidecar:{v:'v1',subtitle:'Limit sidecar configuration',fields:[['Workload app label','spec.workloadSelector.labels.app','reviews'],['Egress host','spec.egress[0].hosts[0]','preview/*'],['Outbound mode','spec.outboundTrafficPolicy.mode','REGISTRY_ONLY',['REGISTRY_ONLY','ALLOW_ANY']],['Ingress port','spec.ingress[0].port.number','8080','number'],['Ingress protocol','spec.ingress[0].port.protocol','HTTP',['HTTP','TCP']],['Default endpoint','spec.ingress[0].defaultEndpoint','127.0.0.1:8080']],rows:'Egress hosts',consequence:'Overlapping workload selectors have undefined behavior. This is not a network security boundary.'},
+WorkloadGroup:{v:'v1',subtitle:'Prepare VM registration',fields:[['Template address','spec.template.address','192.0.2.20'],['Service account','spec.template.serviceAccount','preview-vm'],['Network','spec.template.network','preview-network'],['Locality','spec.template.locality','region/zone/subzone'],['VM label app','spec.metadata.labels.app','external-reviews'],['Probe path','spec.probe.httpGet.path','/health'],['Probe port','spec.probe.httpGet.port','8080','number']],rows:'Template ports',consequence:'Template changes do not update existing registered entries. No bootstrap credentials or registration actions run here.'},
+ProxyConfig:{v:'v1beta1',subtitle:'Configure selected proxies',fields:[['Workload app label','spec.selector.matchLabels.app','reviews'],['Worker concurrency','spec.concurrency','2','number'],['Image type','spec.image.imageType','distroless',['distroless','debug']],['PREVIEW_MODE value','spec.environmentVariables.PREVIEW_MODE','preview']],rows:null,consequence:'Some settings require workload restart. Selector overlap and namespace-wide scope require review; no restart runs here.'},
+WorkloadEntry:{v:'v1',subtitle:'Register a manually managed workload',fields:[['Address','spec.address','192.0.2.20'],['HTTP port','spec.ports.http','8080','number'],['App label','spec.labels.app','external-reviews'],['Network','spec.network','preview-network'],['Locality','spec.locality','region/zone/subzone'],['Weight','spec.weight','1','number'],['Service account','spec.serviceAccount','preview-vm']],rows:null,consequence:'Manual entries only. Automatic registrations stay controller-owned; do not patch or recreate generated instances.'},
+EnvoyFilter:{v:'v1alpha3',subtitle:'Patch Envoy configuration',fields:[['Workload app label','spec.workloadSelector.labels.app','reviews'],['Proxy version regex','spec.configPatches[0].match.proxy.proxyVersion','^1\\.27\\..*'],['Apply to','spec.configPatches[0].applyTo','HTTP_FILTER',['HTTP_FILTER','NETWORK_FILTER','CLUSTER','LISTENER']],['Context','spec.configPatches[0].match.context','SIDECAR_OUTBOUND',['SIDECAR_OUTBOUND','SIDECAR_INBOUND','GATEWAY','ANY']],['Operation','spec.configPatches[0].patch.operation','MERGE',['MERGE','ADD','REMOVE','INSERT_BEFORE','INSERT_AFTER']],['Patch value (JSON object)','spec.configPatches[0].patch.value','{}']],rows:'Config patches',consequence:'Advanced, Envoy-version-sensitive patch. Compatibility is not established by CRD presence. Review stays blocked until acknowledged.'}
+};let current='VirtualService',mode='form',drafts={},sourceText={},reviewing=false;const $=x=>document.getElementById(x);function draft(){return drafts[current]??=Object.fromEntries([['metadata.name','preview-'+current.toLowerCase()],...kinds[current].fields.map(f=>[f[1],f[2]])])}function el(tag,text){let e=document.createElement(tag);e.textContent=text;return e}function field(label,path,value,type){let wrap=el('label',label);let input;if(Array.isArray(type)){input=el('select','');type.forEach(v=>input.add(new Option(v,v)));input.value=value}else{input=el('input','');input.type=type==='number'?'number':'text';input.value=value}input.name=path;input.autocomplete='off';input.setAttribute('aria-label',label);input.oninput=()=>{draft()[path]=input.value;sourceText[current]=null; $('footerstate').textContent='Unsaved local draft'};wrap.append(input);let hint=el('small',path);wrap.append(hint);return wrap}function source(){let d=draft();return '# Local mock source; exact text retained until form edits\n'+JSON.stringify({apiVersion:'networking.istio.io/'+kinds[current].v,kind:current,metadata:{name:d['metadata.name'],namespace:'preview'},ownedFields:d},null,2)}function render(){let k=kinds[current],life=$('lifecycle').value;$('version').textContent=k.v;$('title').textContent=(life==='Generated'?'Inspect ':life+' ')+current;$('nav').replaceChildren();Object.keys(kinds).forEach(n=>{let b=el('button',n);b.className=n===current?'active':'';b.onclick=()=>{current=n;mode='form';reviewing=false;render()};$('nav').append(b)});let m=$('main');m.replaceChildren();m.append(el('h2',reviewing?'Review Local Changes':k.subtitle));$('review').disabled=['Generated','Denied','Unavailable'].includes(life);if(['Denied','Unavailable'].includes(life)){m.append(el('div',life==='Denied'?'Access denied · Request permission for this namespaced resource. Draft remains local.':'API unavailable · Install/discover Istio CRDs before authoring. No fallback version selected.'));return}if(life==='Generated'){m.append(Object.assign(el('div',current==='WorkloadEntry'?'Automatically registered WorkloadEntry · Controller-owned. Edit and Create are unavailable.':'Controller-owned preview · Inspect only. No ownership override.'),{className:'warning'}));m.append(el('pre','Owner: WorkloadGroup / preview-vm\nAddress: 192.0.2.20\nRegistration: synthetic fixture\nStatus: not evaluated'));return}if(reviewing){m.append(Object.assign(el('div',k.consequence),{className:'warning'}));m.append(el('p','Destination: preview-cluster / preview · '+current+' / '+draft()['metadata.name']));m.append(el('pre',Object.entries(draft()).map(([p,v])=>p+' → '+v).join('\n')));m.append(el('small','Non-mutating review. No Apply request exists in this prototype.'));return}if(mode==='source'){m.append(Object.assign(el('div','Expert source scratchpad · Form projection is limited. Modified source stays intact; form edits disabled until source is restored.'),{className:'warning'}));let t=el('textarea','');t.id='sourcearea';t.setAttribute('aria-label','Expert source scratchpad');t.spellcheck=false;t.value=sourceText[current]??source();t.oninput=()=>{sourceText[current]=t.value;$('footerstate').textContent='Source retained verbatim · Form locked'};m.append(t);return}if(sourceText[current]!=null){m.append(el('div','Source changed. Return to Source; unsupported text is preserved without conversion.'));return}let grid=el('div','');grid.className='grid';let name=field('Name *','metadata.name',draft()['metadata.name']);name.querySelector('input').disabled=life==='Edit';grid.append(name,field('Namespace','metadata.namespace','preview'));grid.lastChild.querySelector('input').disabled=true;k.fields.forEach(f=>grid.append(field(f[0],f[1],draft()[f[1]],f[3])));m.append(grid);if(k.rows){let sec=el('section','');sec.append(el('h2',k.rows));let rows=el('div','');rows.id='rows';let add=el('button','+ Add '+k.rows.toLowerCase().replace(/s$/,''));add.onclick=()=>{let r=el('div','');r.className='row';let inp=el('input','');inp.setAttribute('aria-label','Additional '+k.rows);inp.placeholder='Expert row value…';let rem=el('button','Remove');rem.onclick=()=>r.remove();r.append(inp,rem);rows.append(r)};sec.append(rows,add);m.append(sec)}if(current==='EnvoyFilter'){let label=el('label','');let c=el('input','');c.type='checkbox';c.id='compat';label.append(c,document.createTextNode('I will verify proxy compatibility before applying'));m.append(label)}m.append(Object.assign(el('div',k.consequence),{className:'warning'}));let err=el('div','');err.id='error';err.className='error';err.setAttribute('role','alert');m.append(err)}$('form').onclick=()=>{mode='form';reviewing=false;render()};$('source').onclick=()=>{mode='source';reviewing=false;render()};$('lifecycle').onchange=()=>{reviewing=false;render()};$('review').onclick=()=>{let d=draft();if(mode==='source'||sourceText[current]!=null){$('footerstate').textContent='Source review unavailable: unsupported scratchpad remains intact';return}if(!d['metadata.name']||current==='VirtualService'&&Number(d['spec.http[0].route[0].weight'])!==100||current==='EnvoyFilter'&&!$('compat')?.checked){$('error').textContent=current==='VirtualService'?'Destination weights must total 100. Fix weight before review.':current==='EnvoyFilter'?'Confirm compatibility review before continuing.':'Name is required.';$('main').querySelector('input')?.focus();return}reviewing=true;render()};$('help').onclick=()=>{$('helptext').textContent='Namespaced '+current+' in Istio '+kinds[current].v+'. Names and namespaces cannot change during edit. Optional fields remain omitted unless you set them. '+kinds[current].consequence;$('helpdialog').showModal()};$('closehelp').onclick=()=>{$('helpdialog').close();$('help').focus()};$('helpdialog').addEventListener('close',()=>$('help').focus());render();</script></html>
+<style>label small{display:none}label:focus-within small{display:block;overflow-wrap:anywhere}label{position:relative}input[type=checkbox]{width:18px;min-height:18px}button,input,select{touch-action:manipulation}.warning{margin-top:16px}nav{overflow:auto}</style>
+<script>
+// Structured JSON is valid Kubernetes source; arbitrary source remains a locked scratchpad.
+source = function(){
+ const object={apiVersion:'networking.istio.io/'+kinds[current].v,kind:current,metadata:{name:draft()['metadata.name'],namespace:'preview'},spec:{}};
+ for(const [path,value] of Object.entries(draft())){
+  if(path==='metadata.name'||value==='')continue;
+  const parts=path.replace(/\[(\d+)\]/g,'.$1').split('.');
+  let node=object;
+  for(let i=0;i<parts.length-1;i++){const key=parts[i];node=node[key]??=(/^\d+$/.test(parts[i+1])?[]:{});}
+  const definition=kinds[current].fields.find(f=>f[1]===path);
+  node[parts.at(-1)]=definition?.[3]==='number'?Number(value):path.endsWith('.patch.value')?JSON.parse(value):value;
+ }
+ return JSON.stringify(object,null,2);
+};
+const rowSpecs={
+ VirtualService:[['Destination host','spec.http[0].route[{i}].destination.host',''],['Subset','spec.http[0].route[{i}].destination.subset',''],['Weight (%)','spec.http[0].route[{i}].weight','0','number']],
+ DestinationRule:[['Subset name','spec.subsets[{i}].name',''],['Version label','spec.subsets[{i}].labels.version','']],
+ Gateway:[['Server port','spec.servers[{i}].port.number','8080','number'],['Port name','spec.servers[{i}].port.name',''],['Protocol','spec.servers[{i}].port.protocol','HTTP',['HTTP','HTTPS','TCP','TLS']],['Allowed host','spec.servers[{i}].hosts[0]','']],
+ ServiceEntry:[['Endpoint address','spec.endpoints[{i}].address','']],
+ Sidecar:[['Egress host','spec.egress[0].hosts[{i}]','']],
+ WorkloadGroup:[['Port name','portName',''],['Port number','portValue','8080','number']],
+ EnvoyFilter:[['Apply to','spec.configPatches[{i}].applyTo','HTTP_FILTER',['HTTP_FILTER','NETWORK_FILTER','CLUSTER']],['Operation','spec.configPatches[{i}].patch.operation','MERGE',['MERGE','ADD','REMOVE']],['Patch value (JSON object)','spec.configPatches[{i}].patch.value','{}']]
+};
+const addedRows={};
+const baseRender=render;
+render=function(){
+ baseRender();
+ const rows=$('rows');if(!rows)return;
+ const specs=rowSpecs[current];if(!specs)return;
+ function showRows(){
+ rows.replaceChildren();
+ for(const index of addedRows[current]??[]){
+  const group=el('div','');group.className='grid';group.style.marginBottom='16px';
+  specs.forEach(f=>{const path=f[1].replace('{i}',index);group.append(field(f[0],path,draft()[path]??f[2],f[3]));});
+  let remove=el('button','Remove Row');remove.onclick=()=>{addedRows[current]=addedRows[current].filter(i=>i!==index);specs.forEach(f=>delete draft()[f[1].replace('{i}',index)]);showRows()};group.append(remove);rows.append(group);
+ }
+ }
+ rows.nextSibling.onclick=()=>{const list=addedRows[current]??=[];const i=Math.max(0,...list)+1;list.push(i);for(const f of specs)draft()[f[1].replace('{i}',i)]=f[2];showRows()};
+ showRows();
+};
+const baseReview=$('review').onclick;
+$('review').onclick=()=>{
+ if(current==='VirtualService'){
+  const sum=Object.entries(draft()).filter(([p])=>/^spec.http\[0\].route\[\d+\].weight$/.test(p)).reduce((a,[,v])=>a+Number(v),0);
+  if(sum!==100){$('error').textContent='Destination weights must total 100. Current total: '+sum;return}
+ }
+ if(current==='EnvoyFilter'){try{JSON.parse(draft()['spec.configPatches[0].patch.value'])}catch{$('error').textContent='Patch value must be valid JSON.';return}}
+ baseReview();
+};
+render();
+</script>
+<script>
+// Map rows use a fixed, explicit port key in this compact design.
+rowSpecs.WorkloadGroup=[['Metrics port','spec.template.ports.metrics','9090','number']];
+const priorSource=source;
+source=function(){
+ const obj=JSON.parse(priorSource());
+ for(const [path,value] of Object.entries(draft())){
+  if(!/\.weight$|\.port.number$|\.ports\.[^.]+$/.test(path)||value==='')continue;
+  const parts=path.replace(/\[(\d+)\]/g,'.$1').split('.');let n=obj;
+  for(let i=0;i<parts.length-1;i++)n=n[parts[i]];
+  n[parts.at(-1)]=Number(value);
+ }
+ if(current==='Gateway'&&obj.spec.servers?.[0]?.port?.protocol==='HTTP')delete obj.spec.servers[0].tls;
+ return JSON.stringify(obj,null,2);
+};
+$('review').onclick=()=>{
+ if(mode==='source'||sourceText[current]!=null){$('footerstate').textContent='Unsupported source remains intact; review unavailable';return}
+ let message='';const d=draft();
+ if(!d['metadata.name'])message='Enter a resource name.';
+ if(current==='VirtualService'){
+ const sum=Object.entries(d).filter(([p])=>/^spec.http\[0\].route\[\d+\].weight$/.test(p)).reduce((a,[,v])=>a+Number(v),0);
+ if(sum!==100)message='Destination weights must total 100. Current total: '+sum;
+ }
+ for(const [path,value] of Object.entries(d)){
+  if(/\.port.number$|\.ports\.[^.]+$/.test(path)&&(!(Number(value)>0)||Number(value)>65535))message='Enter a port from 1–65535.';
+ }
+ if(current==='EnvoyFilter'){
+  if(!$('compat')?.checked)message='Confirm compatibility review before continuing.';
+  try{JSON.parse(d['spec.configPatches[0].patch.value'])}catch{message='Patch value must be valid JSON.'}
+ }
+ if(message){$('error').textContent=message;$('error').scrollIntoView({block:'nearest'});return}
+ reviewing=true;render();
+};
+window.addEventListener('beforeunload',e=>{if(Object.keys(drafts).length){e.preventDefault();e.returnValue=''}});
+</script>
+<script>
+// Persist only explicit view preference. Never store resource drafts.
+const rowsRender=render;
+render=function(){
+ rowsRender();
+ for(const b of $('nav').querySelectorAll('button')){
+  b.onclick=()=>{current=b.textContent;mode=localStorage.getItem('istio-mock-view')==='source'?'source':'form';reviewing=false;render()};
+ }
+ const generated=Array.from($('lifecycle').options).find(option=>option.value==='Generated');
+ generated.disabled=current!=='WorkloadEntry';
+ if($('lifecycle').value==='Generated')$('main').querySelector('h2').textContent='Registered Workload Inspection';
+};
+$('source').onclick=()=>{mode='source';localStorage.setItem('istio-mock-view','source');reviewing=false;render()};
+$('form').onclick=()=>{mode='form';localStorage.setItem('istio-mock-view','form');reviewing=false;render()};
+mode=localStorage.getItem('istio-mock-view')==='source'?'source':'form';
+render();
+</script>
+<style>button:disabled,input:disabled{opacity:.48;cursor:not-allowed}button:disabled{background:#20262f;border-color:#3a4351;color:#a7b4c9}.grid>button{align-self:end;min-height:32px;height:32px}</style>

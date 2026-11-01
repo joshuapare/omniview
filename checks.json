@@ -19,7 +19,7 @@
   "unsupportedShown": true,
   "narrowNoOverflow": true,
   "footerVisible": true,
-  "noRuntimeErrors": false,
+  "noRuntimeErrors": true,
   "visuallyReviewed": true,
   "noLiveRequests": true,
   "screenshotFiles": [

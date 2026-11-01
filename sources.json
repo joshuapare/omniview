@@ -1,0 +1,97 @@
+[
+  {
+    "file": "application-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/crds/application-crd.yaml",
+    "blob": "3d644d0e5e9a4d5373b2f957282789a6766494cf"
+  },
+  {
+    "file": "applicationset-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/crds/applicationset-crd.yaml",
+    "blob": "8cb86b7b942796a54305d21574725017363da34e"
+  },
+  {
+    "file": "appproject-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/crds/appproject-crd.yaml",
+    "blob": "64b15b9b42ea0284ca26d8267f54e21e4d3dc3ad"
+  },
+  {
+    "file": "kustomization.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/crds/kustomization.yaml",
+    "blob": "bc619db63deeb64582458525338ff3bf71356ad7"
+  },
+  {
+    "file": "argoproj.io_clusterworkflowtemplates.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_clusterworkflowtemplates.yaml",
+    "blob": "3b06d720d577a037c6f20dbf5dc35c4cf1354e06"
+  },
+  {
+    "file": "argoproj.io_cronworkflows.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_cronworkflows.yaml",
+    "blob": "dfe9719c656e6841c8fa0f7e679f109468c87873"
+  },
+  {
+    "file": "argoproj.io_workflowartifactgctasks.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workflowartifactgctasks.yaml",
+    "blob": "f97e9b37fb2ac3a1296266679e88e21d96854971"
+  },
+  {
+    "file": "argoproj.io_workfloweventbindings.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workfloweventbindings.yaml",
+    "blob": "0cb90788267928ad3687b9b75dcefe945ea816df"
+  },
+  {
+    "file": "argoproj.io_workflows.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workflows.yaml",
+    "blob": "f490fad4bbf98f4cb1cc7525a3abbf0d3fedf803"
+  },
+  {
+    "file": "argoproj.io_workflowtaskresults.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workflowtaskresults.yaml",
+    "blob": "ebcdcb835feada52af484d61712bfb423c2f790b"
+  },
+  {
+    "file": "argoproj.io_workflowtasksets.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workflowtasksets.yaml",
+    "blob": "4979904be765ad5fda9ee798ee735fe61de1dcf9"
+  },
+  {
+    "file": "argoproj.io_workflowtemplates.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/argoproj.io_workflowtemplates.yaml",
+    "blob": "b14c53ea95bcdc6d5d6e003b217a8dd320ff5a8c"
+  },
+  {
+    "file": "kustomization.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-workflows/v3.7.3/manifests/base/crds/full/kustomization.yaml",
+    "blob": "6a479e4de9e7b115d4960515f57fe6d0e25d4189"
+  },
+  {
+    "file": "analysis-run-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/analysis-run-crd.yaml",
+    "blob": "e6256b151da25ba21d5a5c892a50daa07c555d56"
+  },
+  {
+    "file": "analysis-template-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/analysis-template-crd.yaml",
+    "blob": "0b9f22d2cb2e2df585555cad653c84df28d05226"
+  },
+  {
+    "file": "cluster-analysis-template-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/cluster-analysis-template-crd.yaml",
+    "blob": "f966d4f8b08bac3e5ffb515cf604e7360e6d1941"
+  },
+  {
+    "file": "experiment-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/experiment-crd.yaml",
+    "blob": "0dae59cb3b67b0ee90712169ab98c003a24c34a0"
+  },
+  {
+    "file": "kustomization.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/kustomization.yaml",
+    "blob": "bdc6bf5249338fcd8401bcc3abebae391496462e"
+  },
+  {
+    "file": "rollout-crd.yaml",
+    "url": "https://raw.githubusercontent.com/argoproj/argo-rollouts/v1.8.3/manifests/crds/rollout-crd.yaml",
+    "blob": "aa06634f9b43f13f05e5eb0a415c1ef734265cbf"
+  }
+]

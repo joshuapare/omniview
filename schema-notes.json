@@ -1,0 +1,649 @@
+[
+  {
+    "kind": "Experiment",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.duration",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.replicas",
+        "control": "number",
+        "schemaType": "integer",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.selector.matchLabels.app",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.template.metadata.labels.app",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.template.spec.containers.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.template.spec.containers.0.image",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "WorkflowTaskResult",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "message",
+      "metadata",
+      "outputs",
+      "phase",
+      "progress"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "ClusterWorkflowTemplate",
+    "scope": "Cluster",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "fields": [
+      {
+        "path": "spec.entrypoint",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.container.image",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.serviceAccountName",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "WorkflowArtifactGCTask",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "WorkflowTemplate",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "fields": [
+      {
+        "path": "spec.entrypoint",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.templates.0.container.image",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.serviceAccountName",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "AnalysisRun",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.metrics.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.address",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.query",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.successCondition",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.interval",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.failureLimit",
+        "control": "number",
+        "schemaType": null,
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "WorkflowTaskSet",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "CronWorkflow",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.schedules.0",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.timezone",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.concurrencyPolicy",
+        "control": "choice:Forbid,Allow,Replace",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.workflowSpec.workflowTemplateRef.name",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.suspend",
+        "control": "bool",
+        "schemaType": "boolean",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "WorkflowEventBinding",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "fields": [
+      {
+        "path": "spec.event.selector",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.submit.workflowTemplateRef.name",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.submit.workflowTemplateRef.clusterScope",
+        "control": "bool",
+        "schemaType": "boolean",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "ApplicationSet",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.generators.0.list.elements.0.cluster",
+        "control": "text",
+        "schemaType": null,
+        "found": false
+      },
+      {
+        "path": "spec.template.metadata.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.project",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.source.repoURL",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.source.targetRevision",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.source.path",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.destination.server",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.destination.namespace",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "Rollout",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.replicas",
+        "control": "number",
+        "schemaType": "integer",
+        "found": true
+      },
+      {
+        "path": "spec.selector.matchLabels.app",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.metadata.labels.app",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.containers.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.template.spec.containers.0.image",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.strategy.canary.steps.0.setWeight",
+        "control": "number",
+        "schemaType": "integer",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "AnalysisTemplate",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "fields": [
+      {
+        "path": "spec.metrics.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.address",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.query",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.successCondition",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.interval",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.failureLimit",
+        "control": "number",
+        "schemaType": null,
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "Application",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "operation",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.project",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.source.repoURL",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.source.targetRevision",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.source.path",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.destination.server",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.destination.namespace",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "Workflow",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.workflowTemplateRef.name",
+        "control": "ref",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.workflowTemplateRef.clusterScope",
+        "control": "bool",
+        "schemaType": "boolean",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "AppProject",
+    "scope": "Namespaced",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec",
+      "status"
+    ],
+    "fields": [
+      {
+        "path": "spec.sourceRepos.0",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.destinations.0.server",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.destinations.0.namespace",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      }
+    ]
+  },
+  {
+    "kind": "ClusterAnalysisTemplate",
+    "scope": "Cluster",
+    "version": "v1alpha1",
+    "served": true,
+    "storage": true,
+    "rootProperties": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "fields": [
+      {
+        "path": "spec.metrics.0.name",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.address",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.provider.prometheus.query",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.successCondition",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.interval",
+        "control": "text",
+        "schemaType": "string",
+        "found": true
+      },
+      {
+        "path": "spec.metrics.0.failureLimit",
+        "control": "number",
+        "schemaType": null,
+        "found": true
+      }
+    ]
+  }
+]

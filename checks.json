@@ -44,5 +44,9 @@
     "16-unload-dirty.png",
     "17-unload-recovered-source.png",
     "18-invalid-source-fallback.png"
-  ]
+  ],
+  "configurationHasNoDeveloperDiagnostics": true,
+  "footerHasNoDraftBookkeeping": true,
+  "validInputPatchesWithoutApplyStep": true,
+  "invalidInputBlocksSwitch": true
 }

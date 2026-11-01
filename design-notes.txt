@@ -1,0 +1,38 @@
+Issue 287 — StorageVersionMigration design proposal, not shipped or approved.
+Coverage: single assigned kind, new privileged request and immutable existing-request inspection. Kubernetes v1.35.0 / k8s.io v0.35.0, storagemigration.k8s.io/v1beta1, cluster scope. Native Kubernetes editor provider owns this adapter. No extension contract or generic control addition required.
+
+Pinned source research:
+https://github.com/kubernetes/api/blob/v0.35.0/storagemigration/v1beta1/types.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/registry/storagemigration/rest/storage_storagemigration.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/registry/storagemigration/storagemigration/strategy.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/apis/storagemigration/validation/validation.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/features/kube_features.go#L1830-L1833
+Read Epic262, issue287, approved249 and PR72/74. No named mock skill exposed. Used approved249 HTML workflow and web-design-guidelines skill/source for review.
+
+Field/control/path and ownership:
+Request name: text -> metadata.name; DNS subdomain; locked on existing request. generateName is not generated automatically; expert source fallback owns it.
+Target picker: existing fixture GroupResource choice -> spec.resource.group and spec.resource.resource. No API version field exists in spec. Empty group represents core, not missing group permission.
+Exact group: text -> spec.resource.group; optional DNS1123 subdomain.
+Plural resource: text -> spec.resource.resource; required DNS1035 label. Full spec immutable after create per validation.
+Condition/reason table: status.conditions[].type, .status, .reason; read-only.
+Details: status.conditions[].message, .lastTransitionTime, .observedGeneration; read-only, missing is Not reported. Running, Succeeded, Failed fixtures are observations, not results of prototype action.
+Observed resource version: status.resourceVersion; opaque string shown without numeric conversion. This is not metadata.resourceVersion and not progress percentage.
+Existing metadata changes: route to generic metadata editor under actual update permission. No metadata mutation is simulated here. User status writes are excluded; registry clears status on create and retains old status on regular update. /status belongs to controller.
+Destination: preview-cluster, cluster scope; no namespace selector, namespace filter or companion resources.
+
+Availability/safety:
+Beta/default-off in1.35 per pinned issue; REST registration checks resource enablement and StorageVersionMigrator gate. API discovery/schema is not authorization or controller readiness. Need actual served version, create permission and operational confirmation. Controller privileges and health cannot be inferred by client discovery. Request may rewrite objects across all namespaces and load API/storage. No user-selected destination storage version, pause, rollback or retry action exists here. No fabricated success or network mutation.
+Distinct fixture states: create denied, API not served, discovery unavailable, genuinely empty target list and target lookup denied. Fixture retry clearly reports unchanged fixture without network.
+
+Draft contract:
+Prototype generates a bounded manifest subset from three fields. Section/Form/YAML switches preserve that subset. Any manual source edit retains raw text exactly, locks Form fields and blocks Review. Unknown comments, malformed source and 9007199254740993 were exercised intact. No YAML parser or AST editing/lossless supported-source claim. Production should reuse existing leaf-level AST manifestDraft editor. Existing YAML view is a target-only projection, not full controller/status source. No source/credentials persisted; only explicit view preference uses mock287-mode. Synthetic scenario selector replaces existing fixture context and is outside working frame.
+
+Composition:
+Faithful isolated HTML, not shipped base-ui React. Production reuse Dialog, FormField, Input, Select/Combobox, SegmentedControl, Table, Collapsible, Tooltip/Popover, Button and host CodeEditor. Resource matching, DNS validation, cluster scope, capability gates and condition semantics remain adapter-owned. Existing compositions suffice; no shared release proposed.
+1000x700, 32px controls,13px text,24x20 content padding,180px navigation. Narrow720x740 uses internal scroll and visible footer. Hover/focus/click help and Escape tested. No add/remove semantics needed: spec contains exactly one GroupResource; inventing multiple targets would violate API.
+
+Evidence:
+17 reviewed screenshots: create, inline validation/focus, help, consequence review, generated source, unsupported exact source, Running, Failed expanded details, Succeeded, no observations, immutable target, five capability states and narrow layout. Main captures1440x900@1.25; narrow720x740@1.25. Real browser typing/select/click/focus/keyboard, no state injection. Shared browser capture timed out; switched to dedicated Chrome/profile and captured all delivered images there. No profile/cookies/cache published. Boolean checks record fixture behavior only. No repo tests/build/lint run. Browser error entries empty.
+
+Review limits:
+Local validation is illustrative, not complete server DNS/admission validation. Current regex is less strict for dotted DNS labels; server remains authority. No live permission, discovery, controller checks or mutation. No source imports, metadata editor, cluster diagnostics, close/reopen modal lifecycle or live controller observations implemented. Modal has local focus containment and help Escape, but no dismissal route/opener focus restoration. Production must reuse host Dialog lifecycle, not ship this mock HTML. Privacy-safe only: no credentials or annotation values in fixtures/captures.

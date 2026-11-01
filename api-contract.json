@@ -1,0 +1,880 @@
+{
+  "snapshot": "Cilium v1.18.0",
+  "commit": "274205f001bb24b89d19f0fe7c3fb3aca20030c2",
+  "resources": [
+    {
+      "kind": "CiliumBGPAdvertisement",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "advertisements.0.advertisementType",
+        "advertisements.0.service.addresses",
+        "advertisements.0.selector.matchLabels.advertise",
+        "advertisements.0.attributes.communities.standard"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpadvertisements.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.advertisements.0.advertisementType",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.advertisements.0.service.addresses",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.advertisements.0.selector.matchLabels.advertise",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.advertisements.0.attributes.communities.standard",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumBGPClusterConfig",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "nodeSelector.matchLabels.role",
+        "bgpInstances.0.name",
+        "bgpInstances.0.localASN",
+        "bgpInstances.0.peers.0.name",
+        "bgpInstances.0.peers.0.peerASN",
+        "bgpInstances.0.peers.0.peerAddress",
+        "bgpInstances.0.peers.0.peerConfigRef.name"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpclusterconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.localASN",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.peerASN",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.peerAddress",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.peerConfigRef.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumBGPNodeConfigOverride",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "bgpInstances.0.name",
+        "bgpInstances.0.routerID",
+        "bgpInstances.0.localPort",
+        "bgpInstances.0.peers.0.name",
+        "bgpInstances.0.peers.0.localAddress"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpnodeconfigoverrides.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.bgpInstances.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.routerID",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.localPort",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.bgpInstances.0.peers.0.localAddress",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumBGPNodeConfig",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "spec.bgpInstances",
+        "status.bgpInstances"
+      ],
+      "inspect": true,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpnodeconfigs.yaml",
+      "operation": "inspect; owner navigation unavailable in fixture",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.bgpInstances",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "status.bgpInstances",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumBGPPeerConfig",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "transport.peerPort",
+        "timers.holdTimeSeconds",
+        "timers.keepAliveTimeSeconds",
+        "gracefulRestart.enabled",
+        "families.0.afi",
+        "families.0.safi",
+        "families.0.advertisements.matchLabels.advertise",
+        "authSecretRef"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgppeerconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.transport.peerPort",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.timers.holdTimeSeconds",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.timers.keepAliveTimeSeconds",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.gracefulRestart.enabled",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.families.0.afi",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.families.0.safi",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.families.0.advertisements.matchLabels.advertise",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.authSecretRef",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumCIDRGroup",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "externalCIDRs"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumcidrgroups.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.externalCIDRs",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumClusterwideEnvoyConfig",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "services.0.name",
+        "services.0.namespace",
+        "services.0.listener",
+        "backendServices.0.name",
+        "backendServices.0.namespace",
+        "resources.0.@type",
+        "resources.0.name"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumclusterwideenvoyconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.services.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.services.0.namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.services.0.listener",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.backendServices.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.backendServices.0.namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.resources.0.@type",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.resources.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumClusterwideNetworkPolicy",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "nodeSelector.matchLabels.role",
+        "ingress.0.fromEntities",
+        "egressDeny.0.toCIDR",
+        "enableDefaultDeny.egress"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumclusterwidenetworkpolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.fromEntities",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.egressDeny.0.toCIDR",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.enableDefaultDeny.egress",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumEgressGatewayPolicy",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "selectors.0.podSelector.matchLabels.app",
+        "destinationCIDRs",
+        "excludedCIDRs",
+        "egressGateway.nodeSelector.matchLabels.role",
+        "egressGateway.egressIP"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumegressgatewaypolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.selectors.0.podSelector.matchLabels.app",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.destinationCIDRs",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.excludedCIDRs",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.egressGateway.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.egressGateway.egressIP",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumEndpoint",
+      "version": "v2",
+      "scope": "Namespaced",
+      "paths": [
+        "status.identity.id",
+        "status.networking.addressing",
+        "status.policy"
+      ],
+      "inspect": true,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumendpoints.yaml",
+      "operation": "inspect; owner navigation unavailable in fixture",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "status.identity.id",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "status.networking.addressing",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "status.policy",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumEnvoyConfig",
+      "version": "v2",
+      "scope": "Namespaced",
+      "paths": [
+        "services.0.name",
+        "services.0.namespace",
+        "services.0.listener",
+        "backendServices.0.name",
+        "backendServices.0.namespace",
+        "resources.0.@type",
+        "resources.0.name"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumenvoyconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "spec.services.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.services.0.namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.services.0.listener",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.backendServices.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.backendServices.0.namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.resources.0.@type",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.resources.0.name",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumIdentity",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "security-labels"
+      ],
+      "inspect": true,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumidentities.yaml",
+      "operation": "inspect; owner navigation unavailable in fixture",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "security-labels",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumLoadBalancerIPPool",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "blocks.0.cidr",
+        "serviceSelector.matchLabels.team",
+        "allowFirstLastIPs",
+        "disabled"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumloadbalancerippools.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.blocks.0.cidr",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.serviceSelector.matchLabels.team",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.allowFirstLastIPs",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.disabled",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumLocalRedirectPolicy",
+      "version": "v2",
+      "scope": "Namespaced",
+      "paths": [
+        "redirectFrontend.serviceMatcher.serviceName",
+        "redirectFrontend.serviceMatcher.namespace",
+        "redirectBackend.localEndpointSelector.matchLabels.app",
+        "redirectBackend.toPorts.0.port",
+        "redirectBackend.toPorts.0.protocol",
+        "skipRedirectFromBackend"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumlocalredirectpolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "spec.redirectFrontend.serviceMatcher.serviceName",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only immutable"
+        },
+        {
+          "path": "spec.redirectFrontend.serviceMatcher.namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only immutable"
+        },
+        {
+          "path": "spec.redirectBackend.localEndpointSelector.matchLabels.app",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only immutable"
+        },
+        {
+          "path": "spec.redirectBackend.toPorts.0.port",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only immutable"
+        },
+        {
+          "path": "spec.redirectBackend.toPorts.0.protocol",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only immutable"
+        },
+        {
+          "path": "spec.skipRedirectFromBackend",
+          "control": "Checkbox",
+          "edit": "read-only immutable"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumNetworkPolicy",
+      "version": "v2",
+      "scope": "Namespaced",
+      "paths": [
+        "endpointSelector.matchLabels.app",
+        "ingress.0.fromEndpoints.0.matchLabels.app",
+        "ingress.0.toPorts.0.ports.0.port",
+        "ingress.0.toPorts.0.ports.0.protocol",
+        "ingress.0.toPorts.0.rules.http.0.method",
+        "ingress.0.toPorts.0.rules.http.0.path",
+        "enableDefaultDeny.ingress"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnetworkpolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "spec.endpointSelector.matchLabels.app",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.fromEndpoints.0.matchLabels.app",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.toPorts.0.ports.0.port",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.toPorts.0.ports.0.protocol",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.toPorts.0.rules.http.0.method",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ingress.0.toPorts.0.rules.http.0.path",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.enableDefaultDeny.ingress",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumNodeConfig",
+      "version": "v2",
+      "scope": "Namespaced",
+      "paths": [
+        "nodeSelector.matchLabels.role",
+        "defaults.enable-ipv4"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnodeconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "spec.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.defaults.enable-ipv4",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumNode",
+      "version": "v2",
+      "scope": "Cluster",
+      "paths": [
+        "spec.addresses",
+        "spec.ipam.podCIDRs",
+        "status.ipam"
+      ],
+      "inspect": true,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnodes.yaml",
+      "operation": "inspect; owner navigation unavailable in fixture",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.addresses",
+          "control": "Repeatable rows",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "spec.ipam.podCIDRs",
+          "control": "Repeatable rows",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "status.ipam",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumBGPPeeringPolicy",
+      "version": "v2alpha1",
+      "scope": "Cluster",
+      "paths": [
+        "nodeSelector.matchLabels.role",
+        "virtualRouters.0.localASN",
+        "virtualRouters.0.exportPodCIDR",
+        "virtualRouters.0.neighbors.0.peerAddress",
+        "virtualRouters.0.neighbors.0.peerASN"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumbgppeeringpolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.virtualRouters.0.localASN",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.virtualRouters.0.exportPodCIDR",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.virtualRouters.0.neighbors.0.peerAddress",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.virtualRouters.0.neighbors.0.peerASN",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumEndpointSlice",
+      "version": "v2alpha1",
+      "scope": "Cluster",
+      "paths": [
+        "namespace",
+        "endpoints"
+      ],
+      "inspect": true,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumendpointslices.yaml",
+      "operation": "inspect; owner navigation unavailable in fixture",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "namespace",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        },
+        {
+          "path": "endpoints",
+          "control": "Labeled input or enumerated select",
+          "edit": "read-only observation"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumGatewayClassConfig",
+      "version": "v2alpha1",
+      "scope": "Namespaced",
+      "paths": [
+        "service.type",
+        "service.externalTrafficPolicy",
+        "service.allocateLoadBalancerNodePorts",
+        "service.loadBalancerClass",
+        "service.loadBalancerSourceRanges",
+        "service.ipFamilyPolicy"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumgatewayclassconfigs.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name + metadata.namespace immutable on edit",
+      "fields": [
+        {
+          "path": "spec.service.type",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.service.externalTrafficPolicy",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.service.allocateLoadBalancerNodePorts",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.service.loadBalancerClass",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.service.loadBalancerSourceRanges",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.service.ipFamilyPolicy",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumL2AnnouncementPolicy",
+      "version": "v2alpha1",
+      "scope": "Cluster",
+      "paths": [
+        "nodeSelector.matchLabels.role",
+        "serviceSelector.matchLabels.team",
+        "interfaces",
+        "externalIPs",
+        "loadBalancerIPs"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliuml2announcementpolicies.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.nodeSelector.matchLabels.role",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.serviceSelector.matchLabels.team",
+          "control": "Labeled input or enumerated select",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.interfaces",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.externalIPs",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.loadBalancerIPs",
+          "control": "Checkbox",
+          "edit": "owned leaf only"
+        }
+      ]
+    },
+    {
+      "kind": "CiliumPodIPPool",
+      "version": "v2alpha1",
+      "scope": "Cluster",
+      "paths": [
+        "ipv4.cidrs",
+        "ipv4.maskSize",
+        "ipv6.cidrs",
+        "ipv6.maskSize"
+      ],
+      "inspect": false,
+      "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumpodippools.yaml",
+      "operation": "create/edit user-owned; controller-owned inspect only",
+      "identity": "metadata.name immutable on edit",
+      "fields": [
+        {
+          "path": "spec.ipv4.cidrs",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ipv4.maskSize",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ipv6.cidrs",
+          "control": "Repeatable rows",
+          "edit": "owned leaf only"
+        },
+        {
+          "path": "spec.ipv6.maskSize",
+          "control": "Number input",
+          "edit": "owned leaf only"
+        }
+      ]
+    }
+  ]
+}

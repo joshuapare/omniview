@@ -1,0 +1,298 @@
+[
+  {
+    "kind": "CiliumBGPAdvertisement",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "advertisements.0.advertisementType",
+      "advertisements.0.service.addresses",
+      "advertisements.0.selector.matchLabels.advertise",
+      "advertisements.0.attributes.communities.standard"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpadvertisements.yaml"
+  },
+  {
+    "kind": "CiliumBGPClusterConfig",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "nodeSelector.matchLabels.role",
+      "bgpInstances.0.name",
+      "bgpInstances.0.localASN",
+      "bgpInstances.0.peers.0.name",
+      "bgpInstances.0.peers.0.peerASN",
+      "bgpInstances.0.peers.0.peerAddress",
+      "bgpInstances.0.peers.0.peerConfigRef.name"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpclusterconfigs.yaml"
+  },
+  {
+    "kind": "CiliumBGPNodeConfigOverride",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "bgpInstances.0.name",
+      "bgpInstances.0.routerID",
+      "bgpInstances.0.localPort",
+      "bgpInstances.0.peers.0.name",
+      "bgpInstances.0.peers.0.localAddress"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpnodeconfigoverrides.yaml"
+  },
+  {
+    "kind": "CiliumBGPNodeConfig",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "spec.bgpInstances",
+      "status.bgpInstances"
+    ],
+    "inspect": true,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgpnodeconfigs.yaml"
+  },
+  {
+    "kind": "CiliumBGPPeerConfig",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "transport.peerPort",
+      "timers.holdTimeSeconds",
+      "timers.keepAliveTimeSeconds",
+      "gracefulRestart.enabled",
+      "families.0.afi",
+      "families.0.safi",
+      "families.0.advertisements.matchLabels.advertise",
+      "authSecretRef"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumbgppeerconfigs.yaml"
+  },
+  {
+    "kind": "CiliumCIDRGroup",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "externalCIDRs"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumcidrgroups.yaml"
+  },
+  {
+    "kind": "CiliumClusterwideEnvoyConfig",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "services.0.name",
+      "services.0.namespace",
+      "services.0.listener",
+      "backendServices.0.name",
+      "backendServices.0.namespace",
+      "resources.0.@type",
+      "resources.0.name"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumclusterwideenvoyconfigs.yaml"
+  },
+  {
+    "kind": "CiliumClusterwideNetworkPolicy",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "nodeSelector.matchLabels.role",
+      "ingress.0.fromEntities",
+      "egressDeny.0.toCIDR",
+      "enableDefaultDeny.egress"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumclusterwidenetworkpolicies.yaml"
+  },
+  {
+    "kind": "CiliumEgressGatewayPolicy",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "selectors.0.podSelector.matchLabels.app",
+      "destinationCIDRs",
+      "excludedCIDRs",
+      "egressGateway.nodeSelector.matchLabels.role",
+      "egressGateway.egressIP"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumegressgatewaypolicies.yaml"
+  },
+  {
+    "kind": "CiliumEndpoint",
+    "version": "v2",
+    "scope": "Namespaced",
+    "paths": [
+      "status.identity.id",
+      "status.networking.addressing",
+      "status.policy"
+    ],
+    "inspect": true,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumendpoints.yaml"
+  },
+  {
+    "kind": "CiliumEnvoyConfig",
+    "version": "v2",
+    "scope": "Namespaced",
+    "paths": [
+      "services.0.name",
+      "services.0.namespace",
+      "services.0.listener",
+      "backendServices.0.name",
+      "backendServices.0.namespace",
+      "resources.0.@type",
+      "resources.0.name"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumenvoyconfigs.yaml"
+  },
+  {
+    "kind": "CiliumIdentity",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "security-labels"
+    ],
+    "inspect": true,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumidentities.yaml"
+  },
+  {
+    "kind": "CiliumLoadBalancerIPPool",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "blocks.0.cidr",
+      "serviceSelector.matchLabels.team",
+      "allowFirstLastIPs",
+      "disabled"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumloadbalancerippools.yaml"
+  },
+  {
+    "kind": "CiliumLocalRedirectPolicy",
+    "version": "v2",
+    "scope": "Namespaced",
+    "paths": [
+      "redirectFrontend.serviceMatcher.serviceName",
+      "redirectFrontend.serviceMatcher.namespace",
+      "redirectBackend.localEndpointSelector.matchLabels.app",
+      "redirectBackend.toPorts.0.port",
+      "redirectBackend.toPorts.0.protocol",
+      "skipRedirectFromBackend"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumlocalredirectpolicies.yaml"
+  },
+  {
+    "kind": "CiliumNetworkPolicy",
+    "version": "v2",
+    "scope": "Namespaced",
+    "paths": [
+      "endpointSelector.matchLabels.app",
+      "ingress.0.fromEndpoints.0.matchLabels.app",
+      "ingress.0.toPorts.0.ports.0.port",
+      "ingress.0.toPorts.0.ports.0.protocol",
+      "ingress.0.toPorts.0.rules.http.0.method",
+      "ingress.0.toPorts.0.rules.http.0.path",
+      "enableDefaultDeny.ingress"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnetworkpolicies.yaml"
+  },
+  {
+    "kind": "CiliumNodeConfig",
+    "version": "v2",
+    "scope": "Namespaced",
+    "paths": [
+      "nodeSelector.matchLabels.role",
+      "defaults.enable-ipv4"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnodeconfigs.yaml"
+  },
+  {
+    "kind": "CiliumNode",
+    "version": "v2",
+    "scope": "Cluster",
+    "paths": [
+      "spec.addresses",
+      "spec.ipam.podCIDRs",
+      "status.ipam"
+    ],
+    "inspect": true,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2/ciliumnodes.yaml"
+  },
+  {
+    "kind": "CiliumBGPPeeringPolicy",
+    "version": "v2alpha1",
+    "scope": "Cluster",
+    "paths": [
+      "nodeSelector.matchLabels.role",
+      "virtualRouters.0.localASN",
+      "virtualRouters.0.exportPodCIDR",
+      "virtualRouters.0.neighbors.0.peerAddress",
+      "virtualRouters.0.neighbors.0.peerASN"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumbgppeeringpolicies.yaml"
+  },
+  {
+    "kind": "CiliumEndpointSlice",
+    "version": "v2alpha1",
+    "scope": "Cluster",
+    "paths": [
+      "namespace",
+      "endpoints"
+    ],
+    "inspect": true,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumendpointslices.yaml"
+  },
+  {
+    "kind": "CiliumGatewayClassConfig",
+    "version": "v2alpha1",
+    "scope": "Namespaced",
+    "paths": [
+      "service.type",
+      "service.externalTrafficPolicy",
+      "service.allocateLoadBalancerNodePorts",
+      "service.loadBalancerClass",
+      "service.loadBalancerSourceRanges",
+      "service.ipFamilyPolicy"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumgatewayclassconfigs.yaml"
+  },
+  {
+    "kind": "CiliumL2AnnouncementPolicy",
+    "version": "v2alpha1",
+    "scope": "Cluster",
+    "paths": [
+      "nodeSelector.matchLabels.role",
+      "serviceSelector.matchLabels.team",
+      "interfaces",
+      "externalIPs",
+      "loadBalancerIPs"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliuml2announcementpolicies.yaml"
+  },
+  {
+    "kind": "CiliumPodIPPool",
+    "version": "v2alpha1",
+    "scope": "Cluster",
+    "paths": [
+      "ipv4.cidrs",
+      "ipv4.maskSize",
+      "ipv6.cidrs",
+      "ipv6.maskSize"
+    ],
+    "inspect": false,
+    "source": "https://raw.githubusercontent.com/cilium/cilium/274205f001bb24b89d19f0fe7c3fb3aca20030c2/pkg/k8s/apis/cilium.io/client/crds/v2alpha1/ciliumpodippools.yaml"
+  }
+]

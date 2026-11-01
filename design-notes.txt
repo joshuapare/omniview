@@ -1,0 +1,38 @@
+ISSUE 285 — events.k8s.io Event inspection mock; awaits user review, not production code.
+
+Coverage: Event is the only unchecked component. Native events.k8s.io/v1; Kubernetes v1.35.0 / modules v0.35.0. Namespaced resource, no feature gate or optional controller installation required by this stable API. Discover the served version and read verbs independently from authorization. API read availability does not imply health. No ordinary Create/Edit/Delete action is offered, even if API verbs exist. An Event is reporter-generated best-effort diagnostic data with finite retention, not editable desired state. No status subresource or repair protocol is invented.
+
+Read references: Epic262, issue285, approved249 workflow and PR72/74 bodies. Primary schema read: https://github.com/kubernetes/kubernetes/blob/v1.35.0/api/openapi-spec/swagger.json#L63878-L64763 (Event/EventSeries definitions and namespaced endpoints); supplementary exact types https://github.com/kubernetes/api/blob/v0.35.0/events/v1/types.go . OpenAPI declares eventTime required; new Event constraints also require nonempty reporter/action/reason/type. Those constraints are producer concerns, not a mock creation form.
+
+FIELD -> CONTROL -> MANIFEST PATH (ALL READ-ONLY; owned write paths: none)
+GVK -> header/source -> apiVersion, kind.
+Destination -> persistent header/footer -> connection context plus metadata.namespace.
+Identity -> ownership/source -> metadata.name, metadata.namespace, metadata.uid, metadata.resourceVersion. resourceVersion is an opaque string, not an arithmetic integer. Source demonstrates exact digit string preservation.
+Severity -> badge -> type. Production must retain unrecognized future types as text, not coerce to Normal/Warning.
+Reason -> compact detail -> reason.
+Action -> compact detail -> action.
+Note -> wrapped diagnostic block -> note. Current mock note is a vetted fixed synthetic sentence. Production notes are untrusted free text and may contain sensitive information; require privacy-safe projection before display/capture. Never render HTML.
+Producer -> paired read-only fields -> reportingController, reportingInstance. This does not prove metadata.ownerReferences or managedFields ownership.
+Regarding object -> existing-inspector handoff button -> regarding.apiVersion/kind/namespace/name/uid; optional regarding.resourceVersion and fieldPath remain source metadata, not creation controls. Regarding.fieldPath gets a compact container path display.
+Related object -> optional secondary handoff -> related.apiVersion/kind/namespace/name/uid. Its scope comes from discovered target GVK, not Event namespace; Node is cluster-scoped in fixture. Absent references should show Not reported.
+First observation -> exact ISO timestamp -> eventTime (MicroTime).
+Series -> occurrence label/heartbeat fields -> series.count (int32), series.lastObservedTime (MicroTime). Omitted series is singleton, never fabricated zero count or current timestamp. Count is as-of heartbeat, not request count or proof of present health.
+Compatibility -> not-reported display/source when present -> deprecatedCount, deprecatedFirstTimestamp, deprecatedLastTimestamp, deprecatedSource.component/host. Never synthesize these fields or sum them with series.count. Mock fixtures omit them and show omission explicitly.
+Other metadata -> privacy-safe source fallback -> preserve unknown fields in retained original; redact annotations separately. This mock has no parser, source import, editing, submissions or lossless authoring claims. Source is JSON projection, not editable YAML, not original byte-for-byte document. Source projection omits note and annotations and cannot become a payload.
+
+CORE EVENT DEDUP
+Within same cluster and namespace, same Event UID across core/v1 and events.k8s.io/v1 is one underlying record. Prefer events.k8s.io/v1 representation, keep alias provenance; never sum aliases. Different/missing UID remains separate. Similar reason/time/message is insufficient. Fixture table illustrates this contract, not a production dedup algorithm. No core Event editor is rebuilt.
+
+INTERACTION/SAFETY
+Overview, links, timing, source and ownership share compact frame. Actual native selects/clicks drive scenarios; no source injection for captures. UID mismatch, denied, missing object and unavailable reference states retain reference identity and block name-only resolution. Available link reports preview handoff only: no unrelated inspector/dashboard built. Review shows destination, reporter-owned boundary and no mutation. Denied, not-served, API unavailable, empty, expired and unsupported-version states remain distinct. Retry explicitly leaves fixture unchanged without network. No authorized record means no source fabricated. Expired snapshot is retained synthetic data only. Unsupported version is a preserved read-only fixture representation, not converted to supported GVK.
+
+DESIGN COMPOSITION
+Approved 1000x700 frame, 32px controls, 13px text, 20x24 padding, 16px field gaps; internal scrolling and anchored footer. Faithful isolated HTML composition, not shipped base-ui React. Existing approved primitive mappings: Dialog, Button, Badge, Table, Select, Tooltip/Popover, ScrollArea, and existing source editor read-only surface. Production uses semantic tokens; HTML uses isolated dark palette approximations. No new generic base-ui primitive required. Event/reference/version/ownership rules belong in Kubernetes adapter, built-in native inspector rather than an add-on editor provider. Existing host reference resolver and inspector own actual navigation. No new provider contract needed.
+
+BROWSER EVIDENCE
+18 screenshots: 17 desktop at 1440x900 deviceScaleFactor1.25 (1800x1125 PNG); 12-narrow at 760x700 deviceScaleFactor1.25 (950x875 PNG). Every image visually reviewed. checks.json contains only named booleans and filenames. Browser actions covered scenarios, sections, five lookup branches, retry, review/back, focus help/Escape, close/reopen/focus restoration, source stability and scrolling, exact revision string, singleton omission and source consistency. Text typing/add/remove are inapplicable: no editable fields or row authoring for system records. No fake validation form: invalidity is capability/reference/version boundary instead.
+
+Visual-review skill used: /Users/joshuapare/.agents/skills/web-design-guidelines/SKILL.md; fetched https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md . Known-file review: semantic buttons, labels for selects, visible focus, help through focus/hover/click, Escape before close, modal focus wrap, live status for reference/retry, wrapped strings and internal source scroll. Source snapshots intentionally show only visible scroll portion.
+
+LIMITS/DECISIONS FOR REVIEW
+No cluster/cloud connections, credentials, source import, mutations, API validation or production build/tests. Source projection is intentionally lossy and never submitted. Dedup and references are fixture-only interface contracts. No claim that warning indicates current workload health. No raw sensitive material captured. Reopen focuses help; production Dialog must reuse shared focus management. Fixture selector lives outside modal for review and is not production UI. Explicit source preference persistence is not relevant to this read-only inspector; no localStorage/cookies/drafts saved. Browser initially hit shared-Chrome capture timeouts; dedicated owned Chrome profile resolved this. Profile/cache never published. All accepted captures use isolated Chrome. API error handling/RBAC are simulated, not verified against server.

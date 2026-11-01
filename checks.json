@@ -18,6 +18,7 @@
   "noMutationControls": true,
   "unsupportedSourceReadonly": true,
   "everyCaptureVisuallyReviewed": true,
+  "isolatedOwnedChromeProfile": true,
   "screenshotFiles": [
     "01-node.png",
     "02-pod.png",

@@ -1,7 +1,0 @@
-.NavPane {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: var(--ov-color-bg-surface);
-}

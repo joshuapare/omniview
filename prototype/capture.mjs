@@ -1,0 +1,82 @@
+import { chromium } from '/Users/joshuapare/Repos/omniviewdev/omniview/e2e/node_modules/@playwright/test/index.mjs';
+import assert from 'node:assert/strict';
+import { writeFile } from 'node:fs/promises';
+const out = '/Users/joshuapare/omniview/screenshots/settings-window';
+const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--disable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.25 });
+const errors = [];
+page.on('pageerror', error => errors.push(error.message));
+const evidence = [];
+const state = () => page.evaluate(() => structuredClone(window.__mock.state));
+async function check(name, expected) {
+  const actual = await state();
+  for (const [key, value] of Object.entries(expected)) assert.deepEqual(actual[key], value, `${name}: ${key}`);
+  evidence.push({ name, state: actual });
+}
+async function shot(name) {
+  await page.evaluate(() => window.__mock.freezeAt(200));
+  await page.screenshot({ path: `${out}/${name}.png` });
+}
+async function captureAll() {
+  await page.goto('http://127.0.0.1:48971/');
+  await check('Initial appearance', { page: 'Appearance', visible: true, dirty: false });
+  await shot('01-appearance-void');
+  await page.locator('[data-page="Terminal"]').click();
+  await check('Terminal navigation', { page: 'Terminal', dirty: false });
+  await shot('02-terminal');
+  await page.locator('#font').fill('14');
+  await page.locator('#font').press('Tab');
+  await check('Font draft', { dirty: true });
+  assert.equal((await state()).draft.font, '14');
+  await shot('03-terminal-draft');
+  await page.locator('#close').click();
+  await check('Close hides', { visible: false, dirty: true });
+  await shot('04-workspace-unchanged');
+  await page.keyboard.press('Meta+,');
+  await check('Reopen reuses', { visible: true, page: 'Terminal', dirty: true, created: 1, opens: 2 });
+  assert.equal((await state()).draft.font, '14');
+  await shot('05-reopened-draft');
+  await page.locator('[data-page="Appearance"]').click();
+  await check('Navigation guard', { page: 'Terminal', pending: 'Appearance' });
+  await page.getByRole('dialog').waitFor();
+  await shot('06-unsaved-guard');
+  await page.locator('#cancel-nav').click();
+  await check('Cancel retains draft', { page: 'Terminal', pending: null, dirty: true });
+  await page.locator('#discard').click();
+  await page.locator('#shell').fill('/missing/shell');
+  await page.locator('#shell').press('Tab');
+  await page.locator('#save').click();
+  await check('Validation retains draft', { dirty: true, error: 'Choose an executable shell installed on this system.' });
+  assert.equal((await state()).saved.shell, '/bin/zsh');
+  await shot('07-shell-validation');
+  await page.locator('#shell').fill('/bin/zsh');
+  await page.locator('#shell').press('Tab');
+  await page.locator('#font').fill('14');
+  await page.locator('#font').press('Tab');
+  await page.keyboard.press('Meta+s');
+  await check('Save succeeds', { dirty: false, error: '' });
+  assert.equal((await state()).saved.font, '14');
+  await page.keyboard.press('Meta+k');
+  await page.keyboard.type('cursor');
+  await check('Search', { query: 'cursor' });
+  assert.equal(await page.locator('.result').count(), 2);
+  await shot('08-settings-search');
+  await page.locator('[data-key="cursor"]').click();
+  await check('Result navigation', { page: 'Terminal', query: '' });
+  assert.equal(await page.locator('#cursor').evaluate(el => el === document.activeElement), true);
+  await page.goto('http://127.0.0.1:48971/?theme=light');
+  await check('Light variant', { page: 'Appearance', dirty: false });
+  await shot('09-appearance-light');
+  await page.locator('[data-theme="void"]').click();
+  await check('Immediate theme save', { dirty: false });
+  assert.equal((await state()).saved.theme, 'void');
+  assert.equal(await page.locator('body').evaluate(el => el.classList.contains('light')), false);
+  await page.setViewportSize({ width: 1024, height: 768 });
+  assert.equal(await page.locator('.window').evaluate(el => el.getBoundingClientRect().right <= innerWidth), true);
+  assert.equal(await page.locator('#save').isVisible(), true);
+  await check('Compact viewport retains actions', { visible: true });
+  assert.deepEqual(errors, []);
+  await writeFile(`${out}/capture-evidence.json`, JSON.stringify({ viewport: '1440x900 @1.25', errors, checks: evidence }, null, 2));
+  console.log(`PASS: ${evidence.length} interaction checkpoints; 9 screenshots; no page errors.`);
+}
+try { await captureAll(); } finally { await browser.close(); }

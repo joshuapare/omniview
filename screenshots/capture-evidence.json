@@ -1,0 +1,426 @@
+{
+  "viewport": "1440x900 @1.25",
+  "errors": [],
+  "checks": [
+    {
+      "name": "Initial appearance",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Appearance",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Terminal navigation",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Font draft",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Close hides",
+      "state": {
+        "visible": false,
+        "created": 1,
+        "opens": 1,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Reopen reuses",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Navigation guard",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "",
+        "pending": "Appearance",
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Cancel retains draft",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Validation retains draft",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/missing/shell",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": true,
+        "error": "Choose an executable shell installed on this system.",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Save succeeds",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Search",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "cursor",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Result navigation",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 2,
+        "page": "Terminal",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "14",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Light variant",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Appearance",
+        "query": "",
+        "draft": {
+          "theme": "light",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "light",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Immediate theme save",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Appearance",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    },
+    {
+      "name": "Compact viewport retains actions",
+      "state": {
+        "visible": true,
+        "created": 1,
+        "opens": 1,
+        "page": "Appearance",
+        "query": "",
+        "draft": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "saved": {
+          "theme": "void",
+          "shell": "/bin/zsh",
+          "font": "12",
+          "cursor": "block",
+          "blink": true,
+          "terminalTheme": "application"
+        },
+        "dirty": false,
+        "error": "",
+        "pending": null,
+        "returnFocus": null
+      }
+    }
+  ]
+}

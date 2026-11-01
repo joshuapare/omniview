@@ -1,0 +1,368 @@
+{
+  "Kafka": {
+    "fields": [
+      {
+        "label": "Kafka version",
+        "path": "spec.kafka.version",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Metadata version",
+        "path": "spec.kafka.metadataVersion",
+        "type": "text",
+        "options": ""
+      }
+    ],
+    "extras": [
+      [
+        "KRaft",
+        "metadata.annotations[strimzi.io/kraft]",
+        "select",
+        "enabled|disabled"
+      ],
+      [
+        "Node pools",
+        "metadata.annotations[strimzi.io/node-pools]",
+        "select",
+        "enabled|disabled"
+      ]
+    ],
+    "repeatable": "Listeners",
+    "columns": [
+      "Name",
+      "Port",
+      "Type",
+      "TLS"
+    ],
+    "paths": [
+      "spec.kafka.listeners[i].name",
+      "spec.kafka.listeners[i].port",
+      "spec.kafka.listeners[i].type",
+      "spec.kafka.listeners[i].tls"
+    ],
+    "consequence": "KRaft needs explicitly authored broker/controller KafkaNodePools. This draft creates none."
+  },
+  "KafkaNodePool": {
+    "fields": [
+      {
+        "label": "Kafka cluster",
+        "path": "metadata.labels[strimzi.io/cluster]",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Replicas",
+        "path": "spec.replicas",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "Roles",
+        "path": "spec.roles",
+        "type": "select",
+        "options": "broker|controller|broker,controller"
+      },
+      {
+        "label": "Storage type",
+        "path": "spec.storage.type",
+        "type": "select",
+        "options": "persistent-claim|ephemeral"
+      },
+      {
+        "label": "Capacity",
+        "path": "spec.storage.size",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "StorageClass",
+        "path": "spec.storage.class",
+        "type": "text",
+        "options": ""
+      }
+    ],
+    "extras": [
+      [
+        "Delete claim",
+        "spec.storage.deleteClaim",
+        "select",
+        "false|true"
+      ]
+    ],
+    "consequence": "Changing pool roles or storage layout is restricted in guided edit. Shrinking capacity is not offered."
+  },
+  "KafkaConnect": {
+    "fields": [
+      {
+        "label": "Bootstrap servers",
+        "path": "spec.bootstrapServers",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Replicas",
+        "path": "spec.replicas",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "Kafka version",
+        "path": "spec.version",
+        "type": "text",
+        "options": ""
+      }
+    ],
+    "extras": [
+      [
+        "Connector resources",
+        "metadata.annotations[strimzi.io/use-connector-resources]",
+        "select",
+        "true|false"
+      ]
+    ],
+    "repeatable": "Worker Configuration",
+    "columns": [
+      "Key",
+      "Value"
+    ],
+    "paths": [
+      "spec.config[key]"
+    ],
+    "consequence": "Connector resources require explicit strimzi.io/use-connector-resources enablement on this Connect cluster."
+  },
+  "KafkaConnector": {
+    "fields": [
+      {
+        "label": "Connect cluster",
+        "path": "metadata.labels[strimzi.io/cluster]",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Connector class",
+        "path": "spec.class",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Maximum tasks",
+        "path": "spec.tasksMax",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "Desired state",
+        "path": "spec.state",
+        "type": "select",
+        "options": "running|paused|stopped"
+      }
+    ],
+    "extras": [],
+    "repeatable": "Connector Configuration",
+    "columns": [
+      "Key",
+      "Value"
+    ],
+    "paths": [
+      "spec.config[key]"
+    ],
+    "consequence": "Authoring requires connector-resource enablement and an installed connector class. Restart is a request, not success."
+  },
+  "KafkaTopic": {
+    "fields": [
+      {
+        "label": "Kafka cluster",
+        "path": "metadata.labels[strimzi.io/cluster]",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Topic name",
+        "path": "spec.topicName",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Partitions",
+        "path": "spec.partitions",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "Replication factor",
+        "path": "spec.replicas",
+        "type": "number",
+        "options": ""
+      }
+    ],
+    "extras": [],
+    "repeatable": "Topic Configuration",
+    "columns": [
+      "Key",
+      "Value"
+    ],
+    "paths": [
+      "spec.config[key]"
+    ],
+    "consequence": "Partitions cannot decrease. Increasing partitions can change key-to-partition routing. Replica changes require operator/Cruise Control support."
+  },
+  "KafkaUser": {
+    "fields": [
+      {
+        "label": "Kafka cluster",
+        "path": "metadata.labels[strimzi.io/cluster]",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Authentication",
+        "path": "spec.authentication.type",
+        "type": "select",
+        "options": "tls|scram-sha-512|tls-external"
+      },
+      {
+        "label": "Authorization",
+        "path": "spec.authorization.type",
+        "type": "select",
+        "options": "simple"
+      }
+    ],
+    "extras": [],
+    "repeatable": "ACL Rules",
+    "columns": [
+      "Resource",
+      "Name",
+      "Pattern",
+      "Operation",
+      "Host"
+    ],
+    "paths": [
+      "spec.authorization.acls[i].resource.type",
+      "spec.authorization.acls[i].resource.name",
+      "spec.authorization.acls[i].resource.patternType",
+      "spec.authorization.acls[i].operations[]",
+      "spec.authorization.acls[i].host"
+    ],
+    "consequence": "User Operator generates credential Secrets where applicable. Values are never fetched, shown, or edited here."
+  },
+  "KafkaBridge": {
+    "fields": [
+      {
+        "label": "Bootstrap servers",
+        "path": "spec.bootstrapServers",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Replicas",
+        "path": "spec.replicas",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "HTTP port",
+        "path": "spec.http.port",
+        "type": "number",
+        "options": ""
+      }
+    ],
+    "extras": [],
+    "repeatable": "CORS Origins",
+    "columns": [
+      "Allowed origin"
+    ],
+    "paths": [
+      "spec.http.cors.allowedOrigins[]"
+    ],
+    "consequence": "Bridge HTTP exposure needs separate network/authentication controls. Creating this resource does not create an Ingress."
+  },
+  "KafkaMirrorMaker2": {
+    "fields": [
+      {
+        "label": "Connect cluster alias",
+        "path": "spec.connectCluster",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Replicas",
+        "path": "spec.replicas",
+        "type": "number",
+        "options": ""
+      },
+      {
+        "label": "Source alias",
+        "path": "spec.mirrors[0].sourceCluster",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Target alias",
+        "path": "spec.mirrors[0].targetCluster",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Topic pattern",
+        "path": "spec.mirrors[0].topicsPattern",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Group pattern",
+        "path": "spec.mirrors[0].groupsPattern",
+        "type": "text",
+        "options": ""
+      }
+    ],
+    "extras": [],
+    "repeatable": "Cluster Connections",
+    "columns": [
+      "Alias",
+      "Bootstrap servers"
+    ],
+    "paths": [
+      "spec.clusters[i].alias",
+      "spec.clusters[i].bootstrapServers"
+    ],
+    "consequence": "Replication can copy data across trust boundaries. Confirm direction, topic pattern, and target before review."
+  },
+  "KafkaRebalance": {
+    "fields": [
+      {
+        "label": "Kafka cluster",
+        "path": "metadata.labels[strimzi.io/cluster]",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Mode",
+        "path": "spec.mode",
+        "type": "select",
+        "options": "full|add-brokers|remove-brokers"
+      },
+      {
+        "label": "Broker IDs",
+        "path": "spec.brokers",
+        "type": "text",
+        "options": ""
+      },
+      {
+        "label": "Throttle · bytes/s",
+        "path": "spec.replicationThrottle",
+        "type": "number",
+        "options": ""
+      }
+    ],
+    "extras": [],
+    "repeatable": "Ordered Goals",
+    "columns": [
+      "Goal"
+    ],
+    "paths": [
+      "spec.goals[]"
+    ],
+    "consequence": "Default entry is inspect/action. Only explicitly user-managed requests allow authoring. Approval moves partition replicas."
+  }
+}

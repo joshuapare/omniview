@@ -1,0 +1,46 @@
+{
+  "head": "eb29a8d3955033e9ce5fa682ba83e8aa4fdc7462",
+  "compiler": "babel-plugin-react-compiler@1.0.0",
+  "before": {
+    "source": "476f8c1417f6e6dbaa980c172fc57a592e80b0ba",
+    "useTreeStore": "(BuildHIR::lowerExpression) Handle ??= operators in AssignmentExpression",
+    "TreeListViewport": "(BuildHIR::lowerExpression) Handle ||= operators in AssignmentExpression"
+  },
+  "after": [
+    {
+      "file": "packages/base-ui/src/components/tree-list/hooks/useTreeStore.ts",
+      "compiled": [
+        "useTreeStore"
+      ],
+      "errors": []
+    },
+    {
+      "file": "packages/base-ui/src/components/tree-list/TreeList.tsx",
+      "compiled": [
+        "useRenderNode",
+        "TreeListRootContent",
+        "TreeListNodes",
+        "OrderedTreeListNodes",
+        "TreeListRootImpl",
+        "TreeListRow",
+        "TreeListViewport",
+        "useTreeListItemBehavior",
+        "TreeListItemImplementation",
+        "TreeListItem",
+        "TreeListReorderableItem",
+        "TreeListItemDragHandle",
+        "TreeListItemIndent",
+        "TreeListItemToggle",
+        "TreeListItemIcon",
+        "TreeListItemLabel",
+        "TreeListItemDescription",
+        "TreeListItemMeta",
+        "TreeListItemBadge",
+        "TreeListItemActions",
+        "TreeListEmpty",
+        "TreeListLoading"
+      ],
+      "errors": []
+    }
+  ]
+}

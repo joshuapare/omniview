@@ -2,18 +2,21 @@
   "checks": [
     "100000 supplied nodes;50001 visible projection;bounded mounted rows",
     "End reveals unmounted final row;1001-change batch preserves selection",
+    "CSS sizing change preserves scroll-away position and pins active row",
     "Responsive34px geometry retains bounded range and End navigation",
     "300 nested directories reveal level301 leaf without full-DOM rendering",
-    "Tree-only provider and standalone scale surface start no content reads, watch, or rich-editor modules"
+    "Tree-only provider and standalone scale surface start no content reads, watch, or rich-editor modules",
+    "Compiled KeyChord displays Windows Meta without a Command label",
+    "Compiled FileTree opens once on explicit activation and never opens filtered controlled focus"
   ],
   "errors": [],
   "measurements": {
-    "initialMs": 195.79999995231628,
+    "initialMs": 156.90000009536743,
     "initialMountedRows": 38,
-    "endRevealMs": 48.299999952316284,
-    "burst1001Ms": 131.70000004768372,
-    "retainedHeapDeltaBytes": 45886293,
-    "phoneMountedRows": 39,
+    "endRevealMs": 30.200000047683716,
+    "burst1001Ms": 100,
+    "retainedHeapDeltaBytes": 42631578,
+    "phoneMountedRows": 29,
     "minimalIO": {
       "reads": 0,
       "watches": 0,

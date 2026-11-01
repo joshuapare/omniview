@@ -4,7 +4,7 @@ Tracking: https://github.com/omniviewdev/omniview/issues/240
 
 ## Delivery
 
-Implemented in the `filesystem-explorer-design` CLI workspace, UI worktree. Source changes are local, not committed, merged, or released. Four subagents handled the shortcut component, tree viewport, explorer components, and showcase; parent integrated and verified the result.
+Merged into `omniviewdev/ui` main through https://github.com/omniviewdev/ui/pull/92 at `45ff5dbfecb5becbf84a763c22cc028e63071b35` on 2026-11-01. Verified source head was `eb29a8d3955033e9ce5fa682ba83e8aa4fdc7462`, including main `61bf9c2`. All seven hosted checks passed; CodeRabbit skipped the final incremental review, and all nine prior review threads were addressed. No admin override was needed. No package release is claimed. Four initial subagents built the component slices; four additional subagents helped address review and mainline integration, with parent verification.
 
 - Public `FileTree`, `FileExplorer`, `FilePreview`, and optional `useFileSystem` provider controller.
 - Public generic `ShortcutSummary` and `KeyChord`; semantic descriptions, alternatives, and platform-aware keycaps. These display shortcuts, not register them.
@@ -14,6 +14,11 @@ Implemented in the `filesystem-explorer-design` CLI workspace, UI worktree. Sour
 - Watches begin from the established root revision. Obsolete subscription callbacks cannot overwrite current state. Permission failures remain branch-local; healthy branches continue updating after refresh. Preview refresh invalidates reused node objects.
 - DiffViewer releases widgets before owned models, including StrictMode cleanup. Editor worker assets use relative module URLs in built consumers.
 - Actual showcase covers Browse, Tree only, Image layers, Compare, Live watch, and seven provider states. Fixture actions write actual selected bytes or a JSON snapshot. Archive transport is unavailable, with an explicit reason; no fake tar export.
+- Integrated mainline resource-navigation activation, controlled state, and independent drag-source pinning without replacing the explorer's Enter/double-click-only open contract. Committed active descendants prevent opening filtered-out controlled entries.
+- Listing coverage survives continuation loading/errors. Unknown-destination events cannot create fictitious complete branches; incompatible revisions require explicit Refresh instead of automatic retry loops.
+- Manual scroll remains stable across sizing-only and append-only changes; explicit keyboard navigation still reveals the active row.
+- Uncached moves invalidate listed destinations instead of falsely retaining complete listings. Outside-view directory requests settle as errors instead of permanent loading.
+- Removed unsupported logical assignments. Installed React Compiler 1.0.0 diagnostics now report successful compilation of `useTreeStore` and `TreeListViewport`, with no errors in the two probed modules.
 
 ## Open on another WLAN device
 
@@ -21,12 +26,13 @@ http://192.168.68.55:48733/ — tap **File Explorer** in the navigation rail. Th
 
 ## Verification
 
-- Base UI: 141 test files, 1,608 tests passed.
+- Base UI: 147 test files, 1,675 tests passed.
 - Editors: 16 test files, 229 tests passed.
 - Base UI, editors, and showcase typechecks passed; base UI, editors, and production showcase builds passed.
 - Scoped lint: zero errors, one unsuppressed React Compiler/TanStack Virtual compatibility warning. The adapter exposes reactive snapshots; actual scrolling and keyboard reveal were exercised.
-- Production Chromium smoke: 30 checks, 19 captures, zero page errors. Desktop, touch-emulated 390px phone, light and high-contrast dark themes, actual Monaco comparisons, paging/search, hidden files, multiselection, baseline content, real download/snapshot bytes, transfer cancellation, paused/manual/gap/live changes, stable-ID moves, and provider states.
+- Production Chromium smoke: 31 checks, 20 captures, zero page errors. Desktop, touch-emulated 390px phone, light and high-contrast dark themes, actual Monaco comparisons, paging/search, hidden files, multiselection, baseline content, real download/snapshot bytes, transfer cancellation, paused/manual/gap/live changes, stable-ID moves, stale-directory reconciliation, and provider states.
 - All captures reviewed as a contact sheet. Settled previews are captured except the intentional loading state. Offline capture precedes recovery.
+- Eight compiled-component checks cover scale, scroll-away preservation through responsive sizing, Windows Meta labels, and explicit opening with filtered controlled focus. Both browser receipts report zero page errors.
 
 ### One local scale sample
 
@@ -37,11 +43,11 @@ The separate browser scale driver mounts the compiled public component. These ar
 | Supplied nodes | 100,000 |
 | Visible projection | 50,001 |
 | Initially mounted rows | 38 |
-| Initial mount | 195.8 ms |
-| End-key reveal | 48.3 ms |
-| 1,001-change batch | 131.7 ms |
-| Retained heap delta | 45,886,293 bytes |
-| Phone mounted rows | 39 |
+| Initial mount | 156.9 ms |
+| End-key reveal | 30.2 ms |
+| 1,001-change batch | 100.0 ms |
+| Retained heap delta | 42,631,578 bytes |
+| Phone mounted rows | 29 |
 | Deep leaf | level 301 |
 | Tree-only reads / watches / rich modules | 0 / 0 / 0 |
 

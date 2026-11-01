@@ -1,0 +1,82 @@
+{
+  "head": "eb29a8d3955033e9ce5fa682ba83e8aa4fdc7462",
+  "mainBase": "61bf9c2",
+  "pullRequest": "https://github.com/omniviewdev/ui/pull/92",
+  "tests": {
+    "baseUI": {
+      "files": 147,
+      "passed": 1675
+    },
+    "editors": {
+      "files": 16,
+      "passed": 229
+    }
+  },
+  "typechecks": [
+    "base-ui",
+    "editors",
+    "showcase"
+  ],
+  "builds": [
+    "base-ui",
+    "editors",
+    "showcase"
+  ],
+  "lint": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Unsuppressed react-hooks/incompatible-library at TanStack Virtual adapter"
+  },
+  "production": {
+    "checks": 31,
+    "captures": 20,
+    "errors": []
+  },
+  "compiledProbe": {
+    "checks": 8,
+    "errors": [],
+    "measurements": {
+      "initialMs": 156.90000009536743,
+      "initialMountedRows": 38,
+      "endRevealMs": 30.200000047683716,
+      "burst1001Ms": 100,
+      "retainedHeapDeltaBytes": 42631578,
+      "phoneMountedRows": 29,
+      "minimalIO": {
+        "reads": 0,
+        "watches": 0,
+        "richModules": 0
+      }
+    }
+  },
+  "hostedChecks": {
+    "passed": [
+      "check",
+      "deploy-preview",
+      "benchmarks (1/4)",
+      "benchmarks (2/4)",
+      "benchmarks (3/4)",
+      "benchmarks (4/4)",
+      "CodSpeed Performance Analysis"
+    ],
+    "skipped": [
+      "CodeRabbit"
+    ],
+    "runs": {
+      "changeset": 41324906420,
+      "storybook": 41324906205,
+      "benchmarks": 41324906302
+    }
+  },
+  "compiler": {
+    "version": "babel-plugin-react-compiler@1.0.0",
+    "errors": 0,
+    "verifiedFunctions": [
+      "useTreeStore",
+      "TreeListViewport"
+    ]
+  },
+  "mergeCommit": "45ff5dbfecb5becbf84a763c22cc028e63071b35",
+  "mergedAt": "2026-11-01T16:30:22Z",
+  "canonicalMainWorktree": "Fast-forwarded to 45ff5db"
+}

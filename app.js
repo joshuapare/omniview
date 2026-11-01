@@ -18,3 +18,15 @@ document.querySelector('#source').onclick=()=>{if(!state().sourceDirty)state().s
 const boundedSourceClick=document.querySelector('#source').onclick;
 document.querySelector('#source').onclick=()=>{boundedSourceClick();let sensitive=Object.entries(state().values).filter(([p,v])=>/(tokenCode|username|caBundle|body|parameters|headers|state|resource)$/.test(p)||p==='spec.data');if(sensitive.length){let projection=state().source;for(const [,v] of sensitive){for(const raw of Array.isArray(v)?v:[v])if(raw!=='')projection=projection.split(JSON.stringify(raw)).join('"[withheld]"')}const a=document.querySelector('.source');if(a){a.value=projection;a.readOnly=true;document.querySelector('#foot').textContent='Redacted projection only · never written back'}}};
 warnings.ACRAccessToken='Omitting scope requests a refresh token with full scope. Review registry access before applying.';
+// Persist only an explicit presentation preference, never any draft content.
+const modePreferenceKey='omniview.mock.issue319.mode';
+function preferredMode(){try{return localStorage.getItem(modePreferenceKey)==='yaml'?'Source':'Form'}catch{return 'Form'}}
+function rememberMode(value){try{localStorage.setItem(modePreferenceKey,value)}catch{/* Storage may be unavailable; keep the current in-memory view. */}}
+function authoringView(){return kind!=='GeneratorState'&&document.querySelector('#workflow').value!=='Controller-owned'}
+mode=preferredMode();
+const explicitSourceClick=document.querySelector('#source').onclick;
+document.querySelector('#source').onclick=()=>{explicitSourceClick();if(authoringView())rememberMode('yaml')};
+const explicitFormClick=document.querySelector('#form').onclick;
+document.querySelector('#form').onclick=()=>{explicitFormClick();if(authoringView()&&!state().sourceDirty)rememberMode('form')};
+const changeResource=document.querySelector('#kind').onchange;
+document.querySelector('#kind').onchange=e=>{changeResource(e);mode=preferredMode();if(mode==='Source'&&authoringView())explicitSourceClick();else render()};

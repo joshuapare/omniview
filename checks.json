@@ -18,6 +18,24 @@
   "sensitiveProjectionMasks": true,
   "viewportVerified": true,
   "everyCaptureVisuallyReviewed": true,
+  "explicitYamlPreferenceStored": true,
+  "yamlPreferenceAcrossResources": true,
+  "inspectDoesNotOverwritePreference": true,
+  "inspectModeClickDoesNotOverwritePreference": true,
+  "preferenceRestoredAfterInspect": true,
+  "unsupportedFallbackDoesNotOverwritePreference": true,
+  "yamlPreferenceAcrossReload": true,
+  "draftNotPersisted": true,
+  "explicitFormPreferenceStored": true,
+  "formPreferenceAcrossReload": true,
+  "onlyPresentationPreferenceStored": true,
+  "formPreferenceAcrossResources": true,
+  "explicitPreferenceAcrossBrowserReopen": true,
+  "reopenContainsNoDraftValues": true,
+  "controllerOwnedDoesNotOverwritePreference": true,
+  "unavailableDoesNotOverwritePreference": true,
+  "all17ComponentsRetained": true,
+  "storageContainsOnlyDedicatedModeKey": true,
   "screenshotFiles": [
     "01-password-initial.png",
     "02-validation.png",
@@ -43,6 +61,7 @@
     "22-denied.png",
     "23-source-fallback.png",
     "24-narrow.png",
-    "25-cluster-branch.png"
+    "25-cluster-branch.png",
+    "26-mode-preference.png"
   ]
 }

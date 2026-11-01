@@ -1,0 +1,168 @@
+[
+  {
+    "apiVersion": "apiextensions.crossplane.io/v2",
+    "kind": "CompositeResourceDefinition",
+    "metadata": {
+      "name": "databases.platform.example.org"
+    },
+    "spec": {
+      "group": "platform.example.org",
+      "names": {
+        "kind": "Database",
+        "plural": "databases"
+      },
+      "scope": "Namespaced",
+      "versions": [
+        {
+          "name": "v1alpha1",
+          "served": true,
+          "referenceable": true,
+          "schema": {
+            "openAPIV3Schema": {
+              "type": "object",
+              "properties": {
+                "spec": {
+                  "type": "object",
+                  "properties": {
+                    "size": {
+                      "type": "string",
+                      "enum": [
+                        "small",
+                        "large"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "defaultCompositionUpdatePolicy": "Manual"
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1",
+    "kind": "Composition",
+    "metadata": {
+      "name": "preview-database"
+    },
+    "spec": {
+      "compositeTypeRef": {
+        "apiVersion": "platform.example.org/v1alpha1",
+        "kind": "Database"
+      },
+      "mode": "Pipeline",
+      "pipeline": [
+        {
+          "step": "render",
+          "functionRef": {
+            "name": "function-preview-render"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1beta1",
+    "kind": "EnvironmentConfig",
+    "metadata": {
+      "name": "preview-environment"
+    },
+    "data": {
+      "region": "preview-region",
+      "replicas": 3,
+      "featureEnabled": true
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1alpha1",
+    "kind": "ManagedResourceActivationPolicy",
+    "metadata": {
+      "name": "preview-activation"
+    },
+    "spec": {
+      "activate": [
+        "databases.example.org"
+      ]
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1beta1",
+    "kind": "Usage",
+    "metadata": {
+      "name": "preview-protection"
+    },
+    "spec": {
+      "of": {
+        "apiVersion": "platform.example.org/v1alpha1",
+        "kind": "Database",
+        "resourceRef": {
+          "name": "preview-db"
+        }
+      },
+      "reason": "Protect preview database",
+      "replayDeletion": false
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1",
+    "kind": "CompositionRevision",
+    "metadata": {
+      "name": "preview-database-3",
+      "ownerReferences": [
+        {
+          "kind": "Composition",
+          "name": "preview-database",
+          "controller": true
+        }
+      ]
+    },
+    "spec": {
+      "revision": 3,
+      "compositeTypeRef": {
+        "apiVersion": "platform.example.org/v1alpha1",
+        "kind": "Database"
+      },
+      "mode": "Pipeline",
+      "pipeline": [
+        {
+          "step": "render",
+          "functionRef": {
+            "name": "function-preview-render"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "apiVersion": "apiextensions.crossplane.io/v1alpha1",
+    "kind": "ManagedResourceDefinition",
+    "metadata": {
+      "name": "databases.example.org",
+      "ownerReferences": [
+        {
+          "kind": "ProviderRevision",
+          "name": "provider-preview",
+          "controller": true
+        }
+      ]
+    },
+    "spec": {
+      "group": "example.org",
+      "names": {
+        "kind": "Database",
+        "plural": "databases"
+      },
+      "scope": "Namespaced",
+      "state": "Inactive",
+      "versions": [
+        {
+          "name": "v1alpha1",
+          "served": true,
+          "storage": true
+        }
+      ]
+    }
+  }
+]

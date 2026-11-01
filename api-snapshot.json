@@ -1,0 +1,432 @@
+{
+  "Namespace": {
+    "description": "Namespace provides a scope for Names. Use of multiple namespaces is optional.",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.NamespaceSpec",
+        "description": "Spec defines the behavior of the Namespace. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      },
+      "status": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.NamespaceStatus",
+        "description": "Status describes the current status of a Namespace. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "Namespace",
+        "version": "v1"
+      }
+    ]
+  },
+  "ServiceAccount": {
+    "description": "ServiceAccount binds together: * a name, understood by users, and perhaps by peripheral systems, for an identity * a principal that can be authenticated and authorized * a set of secrets",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "automountServiceAccountToken": {
+        "description": "AutomountServiceAccountToken indicates whether pods running as this service account should have an API token automatically mounted. Can be overridden at the pod level.",
+        "type": "boolean"
+      },
+      "imagePullSecrets": {
+        "description": "ImagePullSecrets is a list of references to secrets in the same namespace to use for pulling any images in pods that reference this ServiceAccount. ImagePullSecrets are distinct from Secrets because Secrets can be mounted in the pod, but ImagePullSecrets are only accessed by the kubelet. More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod",
+        "items": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.LocalObjectReference"
+        },
+        "type": "array",
+        "x-kubernetes-list-type": "atomic"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "secrets": {
+        "description": "Secrets is a list of the secrets in the same namespace that pods running using this ServiceAccount are allowed to use. Pods are only limited to this list if this service account has a \"kubernetes.io/enforce-mountable-secrets\" annotation set to \"true\". The \"kubernetes.io/enforce-mountable-secrets\" annotation is deprecated since v1.32. Prefer separate namespaces to isolate access to mounted secrets. This field should not be used to find auto-generated service account token secrets for use outside of pods. Instead, tokens can be requested directly using the TokenRequest API, or service account token secrets can be manually created. More info: https://kubernetes.io/docs/concepts/configuration/secret",
+        "items": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.ObjectReference"
+        },
+        "type": "array",
+        "x-kubernetes-list-map-keys": [
+          "name"
+        ],
+        "x-kubernetes-list-type": "map",
+        "x-kubernetes-patch-merge-key": "name",
+        "x-kubernetes-patch-strategy": "merge"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "ServiceAccount",
+        "version": "v1"
+      }
+    ]
+  },
+  "ResourceQuota": {
+    "description": "ResourceQuota sets aggregate quota restrictions enforced per namespace",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ResourceQuotaSpec",
+        "description": "Spec defines the desired quota. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      },
+      "status": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ResourceQuotaStatus",
+        "description": "Status defines the actual enforced quota and its current usage. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "ResourceQuota",
+        "version": "v1"
+      }
+    ]
+  },
+  "LimitRange": {
+    "description": "LimitRange sets resource usage limits for each kind of resource in a Namespace.",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.LimitRangeSpec",
+        "description": "Spec defines the limits enforced. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "LimitRange",
+        "version": "v1"
+      }
+    ]
+  },
+  "PodTemplate": {
+    "description": "PodTemplate describes a template for creating copies of a predefined pod.",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "template": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.PodTemplateSpec",
+        "description": "Template defines the pods that will be created from this pod template. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "PodTemplate",
+        "version": "v1"
+      }
+    ]
+  },
+  "PersistentVolume": {
+    "description": "PersistentVolume (PV) is a storage resource provisioned by an administrator. It is analogous to a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.PersistentVolumeSpec",
+        "description": "spec defines a specification of a persistent volume owned by the cluster. Provisioned by an administrator. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes"
+      },
+      "status": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.PersistentVolumeStatus",
+        "description": "status represents the current information/status for the persistent volume. Populated by the system. Read-only. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "PersistentVolume",
+        "version": "v1"
+      }
+    ]
+  },
+  "ReplicationController": {
+    "description": "ReplicationController represents the configuration of a replication controller.",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "If the Labels of a ReplicationController are empty, they are defaulted to be the same as the Pod(s) that the replication controller manages. Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ReplicationControllerSpec",
+        "description": "Spec defines the specification of the desired behavior of the replication controller. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      },
+      "status": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ReplicationControllerStatus",
+        "description": "Status is the most recently observed status of the replication controller. This data may be out of date by some window of time. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "ReplicationController",
+        "version": "v1"
+      }
+    ]
+  },
+  "Endpoints": {
+    "description": "Endpoints is a collection of endpoints that implement the actual service. Example:\n\n\t Name: \"mysvc\",\n\t Subsets: [\n\t   {\n\t     Addresses: [{\"ip\": \"10.10.1.1\"}, {\"ip\": \"10.10.2.2\"}],\n\t     Ports: [{\"name\": \"a\", \"port\": 8675}, {\"name\": \"b\", \"port\": 309}]\n\t   },\n\t   {\n\t     Addresses: [{\"ip\": \"10.10.3.3\"}],\n\t     Ports: [{\"name\": \"a\", \"port\": 93}, {\"name\": \"b\", \"port\": 76}]\n\t   },\n\t]\n\nEndpoints is a legacy API and does not contain information about all Service features. Use discoveryv1.EndpointSlice for complete information about Service endpoints.\n\nDeprecated: This API is deprecated in v1.33+. Use discoveryv1.EndpointSlice.",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "subsets": {
+        "description": "The set of all endpoints is the union of all subsets. Addresses are placed into subsets according to the IPs they share. A single address with multiple ports, some of which are ready and some of which are not (because they come from different containers) will result in the address being displayed in different subsets for the different ports. No address will appear in both Addresses and NotReadyAddresses in the same subset. Sets of addresses and ports that comprise a service.",
+        "items": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.EndpointSubset"
+        },
+        "type": "array",
+        "x-kubernetes-list-type": "atomic"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "Endpoints",
+        "version": "v1"
+      }
+    ]
+  },
+  "Node": {
+    "description": "Node is a worker node in Kubernetes. Each node will have a unique identifier in the cache (i.e. in etcd).",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "spec": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.NodeSpec",
+        "description": "Spec defines the behavior of a node. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      },
+      "status": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.NodeStatus",
+        "description": "Most recently observed status of the node. Populated by the system. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "Node",
+        "version": "v1"
+      }
+    ]
+  },
+  "Event": {
+    "description": "Event is a report of an event somewhere in the cluster.  Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data.",
+    "properties": {
+      "action": {
+        "description": "What action was taken/failed regarding to the Regarding object.",
+        "type": "string"
+      },
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "count": {
+        "description": "The number of times this event has occurred.",
+        "format": "int32",
+        "type": "integer"
+      },
+      "eventTime": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.MicroTime",
+        "description": "Time when this Event was first observed."
+      },
+      "firstTimestamp": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time",
+        "description": "The time at which the event was first recorded. (Time of server receipt is in TypeMeta.)"
+      },
+      "involvedObject": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ObjectReference",
+        "description": "The object that this event is about."
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "lastTimestamp": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time",
+        "description": "The time at which the most recent occurrence of this event was recorded."
+      },
+      "message": {
+        "description": "A human-readable description of the status of this operation.",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      },
+      "reason": {
+        "description": "This should be a short, machine understandable string that gives the reason for the transition into the object's current status.",
+        "type": "string"
+      },
+      "related": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.ObjectReference",
+        "description": "Optional secondary object for more complex actions."
+      },
+      "reportingComponent": {
+        "description": "Name of the controller that emitted this Event, e.g. `kubernetes.io/kubelet`.",
+        "type": "string"
+      },
+      "reportingInstance": {
+        "description": "ID of the controller instance, e.g. `kubelet-xyzf`.",
+        "type": "string"
+      },
+      "series": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.EventSeries",
+        "description": "Data about the Event series this event represents or nil if it's a singleton Event."
+      },
+      "source": {
+        "$ref": "#/definitions/io.k8s.api.core.v1.EventSource",
+        "description": "The component reporting this event. Should be a short machine understandable string."
+      },
+      "type": {
+        "description": "Type of this event (Normal, Warning), new types could be added in the future",
+        "type": "string"
+      }
+    },
+    "required": [
+      "metadata",
+      "involvedObject"
+    ],
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "Event",
+        "version": "v1"
+      }
+    ]
+  },
+  "ComponentStatus": {
+    "description": "ComponentStatus (and ComponentStatusList) holds the cluster validation info. Deprecated: This API is deprecated in v1.19+",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "conditions": {
+        "description": "List of component conditions observed",
+        "items": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.ComponentCondition"
+        },
+        "type": "array",
+        "x-kubernetes-list-map-keys": [
+          "type"
+        ],
+        "x-kubernetes-list-type": "map",
+        "x-kubernetes-patch-merge-key": "type",
+        "x-kubernetes-patch-strategy": "merge"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta",
+        "description": "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata"
+      }
+    },
+    "type": "object",
+    "x-kubernetes-group-version-kind": [
+      {
+        "group": "",
+        "kind": "ComponentStatus",
+        "version": "v1"
+      }
+    ]
+  }
+}

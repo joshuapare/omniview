@@ -1,0 +1,336 @@
+{
+  "Namespace": {
+    "scope": "Cluster",
+    "fields": [
+      [
+        "Pod security enforcement",
+        "metadata.labels.pod-security.kubernetes.io/enforce",
+        [
+          "Omit",
+          "restricted",
+          "baseline",
+          "privileged"
+        ]
+      ],
+      [
+        "Environment label",
+        "metadata.labels.environment"
+      ]
+    ],
+    "warning": "Namespace deletion removes namespaced resources. Finalizers require a separate administrator review."
+  },
+  "ServiceAccount": {
+    "fields": [
+      [
+        "Mount API credentials",
+        "automountServiceAccountToken",
+        [
+          "Omit",
+          "false",
+          "true"
+        ]
+      ],
+      [
+        "Image pull Secret reference",
+        "imagePullSecrets[0].name",
+        [
+          "Omit",
+          "registry-preview"
+        ]
+      ],
+      [
+        "Additional pull Secret",
+        "imagePullSecrets[1].name"
+      ]
+    ],
+    "warning": "Token issuance is a separate short-lived request. No token or legacy credential Secret is created."
+  },
+  "ResourceQuota": {
+    "fields": [
+      [
+        "CPU requests",
+        "spec.hard.requests.cpu"
+      ],
+      [
+        "Memory requests",
+        "spec.hard.requests.memory"
+      ],
+      [
+        "Pod count",
+        "spec.hard.pods"
+      ],
+      [
+        "Scope",
+        "spec.scopes[0]",
+        [
+          "Omit",
+          "NotTerminating",
+          "Terminating",
+          "BestEffort",
+          "NotBestEffort"
+        ]
+      ],
+      [
+        "Priority class scope value",
+        "spec.scopeSelector.matchExpressions[0].values[0]"
+      ]
+    ],
+    "warning": "Lower limits may block new workloads. Existing usage is controller-reported, not editable."
+  },
+  "LimitRange": {
+    "fields": [
+      [
+        "Applies to",
+        "spec.limits[0].type",
+        [
+          "Container",
+          "Pod",
+          "PersistentVolumeClaim"
+        ]
+      ],
+      [
+        "Minimum memory",
+        "spec.limits[0].min.memory"
+      ],
+      [
+        "Maximum memory",
+        "spec.limits[0].max.memory"
+      ],
+      [
+        "Default memory limit",
+        "spec.limits[0].default.memory"
+      ],
+      [
+        "Default memory request",
+        "spec.limits[0].defaultRequest.memory"
+      ],
+      [
+        "Maximum CPU limit/request ratio",
+        "spec.limits[0].maxLimitRequestRatio.cpu"
+      ]
+    ],
+    "warning": "Defaults affect new admissions, not running Pods. Container-only defaults hide for other types."
+  },
+  "PodTemplate": {
+    "fields": [
+      [
+        "Template application label",
+        "template.metadata.labels.app"
+      ],
+      [
+        "Container name",
+        "template.spec.containers[0].name"
+      ],
+      [
+        "Container image",
+        "template.spec.containers[0].image"
+      ],
+      [
+        "CPU request",
+        "template.spec.containers[0].resources.requests.cpu"
+      ],
+      [
+        "Service account",
+        "template.spec.serviceAccountName",
+        [
+          "Omit",
+          "preview-reader"
+        ]
+      ]
+    ],
+    "warning": "Stores a template only. No Pod or workload controller is created."
+  },
+  "PersistentVolume": {
+    "scope": "Cluster",
+    "conditional": true,
+    "fields": [
+      [
+        "Capacity",
+        "spec.capacity.storage"
+      ],
+      [
+        "Access mode",
+        "spec.accessModes[0]",
+        [
+          "ReadWriteOnce",
+          "ReadOnlyMany",
+          "ReadWriteMany"
+        ]
+      ],
+      [
+        "Volume mode",
+        "spec.volumeMode",
+        [
+          "Omit",
+          "Filesystem",
+          "Block"
+        ]
+      ],
+      [
+        "Storage class",
+        "spec.storageClassName"
+      ],
+      [
+        "NFS server",
+        "spec.nfs.server"
+      ],
+      [
+        "NFS path",
+        "spec.nfs.path"
+      ],
+      [
+        "Reclaim policy",
+        "spec.persistentVolumeReclaimPolicy",
+        [
+          "Retain",
+          "Delete"
+        ]
+      ]
+    ],
+    "warning": "Static administrator NFS example only. Delete reclaim policy can delete backing storage. Existing volume source is immutable."
+  },
+  "ReplicationController": {
+    "conditional": true,
+    "fields": [
+      [
+        "Replicas",
+        "spec.replicas"
+      ],
+      [
+        "Selector application",
+        "spec.selector.app"
+      ],
+      [
+        "Template application label",
+        "spec.template.metadata.labels.app"
+      ],
+      [
+        "Container name",
+        "spec.template.spec.containers[0].name"
+      ],
+      [
+        "Container image",
+        "spec.template.spec.containers[0].image"
+      ]
+    ],
+    "warning": "Legacy standalone controller only. Selector must match template labels. Scaling may create or terminate Pods."
+  },
+  "Endpoints": {
+    "conditional": true,
+    "fields": [
+      [
+        "Ready address",
+        "subsets[0].addresses[0].ip"
+      ],
+      [
+        "Not-ready address",
+        "subsets[0].notReadyAddresses[0].ip"
+      ],
+      [
+        "Port name",
+        "subsets[0].ports[0].name"
+      ],
+      [
+        "Port number",
+        "subsets[0].ports[0].port"
+      ],
+      [
+        "Protocol",
+        "subsets[0].ports[0].protocol",
+        [
+          "TCP",
+          "UDP",
+          "SCTP"
+        ]
+      ]
+    ],
+    "warning": "Deprecated API. Manual endpoints only for selectorless Services. Addresses redirect traffic; controller-owned endpoints are inspect-only."
+  },
+  "Node": {
+    "scope": "Cluster",
+    "inspect": true,
+    "facts": [
+      [
+        "Scheduling",
+        "spec.unschedulable",
+        "Not observed"
+      ],
+      [
+        "Taints",
+        "spec.taints[]",
+        "Read-only fixture"
+      ],
+      [
+        "Conditions",
+        "status.conditions[]",
+        "Unavailable — not queried"
+      ]
+    ],
+    "actions": [
+      "Review cordon",
+      "Review taint",
+      "Open drain workflow",
+      "Open node proxy"
+    ],
+    "warning": "Kubelet registers Nodes. Drain requires eviction, PDB and local-data review. No Node creation or status editing."
+  },
+  "Event": {
+    "inspect": true,
+    "facts": [
+      [
+        "Reason",
+        "reason",
+        "Scheduled"
+      ],
+      [
+        "Type",
+        "type",
+        "Normal"
+      ],
+      [
+        "Object",
+        "involvedObject",
+        "Pod / preview-job"
+      ],
+      [
+        "Message",
+        "message",
+        "Synthetic scheduler observation"
+      ],
+      [
+        "Count",
+        "count",
+        "1"
+      ],
+      [
+        "Reporter",
+        "reportingComponent",
+        "preview-scheduler"
+      ]
+    ],
+    "actions": [
+      "Open related object"
+    ],
+    "warning": "Generated event record. Not durable audit history. No create, edit, or replay."
+  },
+  "ComponentStatus": {
+    "scope": "Cluster",
+    "inspect": true,
+    "facts": [
+      [
+        "API lifecycle",
+        "kind",
+        "Deprecated since v1.19"
+      ],
+      [
+        "Conditions",
+        "conditions[]",
+        "Unavailable — not queried"
+      ]
+    ],
+    "actions": [
+      "Open existing diagnostics"
+    ],
+    "warning": "Deprecated health interface; no replacement health dashboard or fabricated healthy result."
+  }
+}

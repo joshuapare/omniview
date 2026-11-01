@@ -1,0 +1,69 @@
+{
+  "url": "http://192.168.68.55:48733/",
+  "checks": [
+    "Desktop22px /13px /14px; single36px preview header",
+    "Independent hidden-file visibility",
+    "Provider path search retains ancestors and reports partial coverage",
+    "Paged child listing appends real rows with unknown sibling totals",
+    "Preview closes and reopens with current contents",
+    "Download writes selected current file bytes",
+    "Transfer cancellation remains cancelled",
+    "Snapshot export creates truthful JSON manifest and contents",
+    "Standalone tree supports multiselection and generic keycaps",
+    "Context actions expose selected file actions",
+    "Deleted entry previews baseline, never current-download action",
+    "Layer help opens on hover and keyboard activation",
+    "Cumulative scope excludes deleted tombstones",
+    "Optional lazy text diff renders actual Monaco comparison",
+    "Comparison changes files and releases editors on mode switch",
+    "Live watch remains usable after an early change while opening",
+    "Manual refresh drains paused updates without enabling sync",
+    "Interrupted watch reconciles and fresh subscription applies events",
+    "Live add/remove and confirmed move preserve identity and selection",
+    "Provider state: permission",
+    "Provider state: loading",
+    "Provider state: empty",
+    "Provider state: offline",
+    "Provider state: binary",
+    "Provider state: large",
+    "Provider state: missing-tar",
+    "Theme: Light",
+    "Theme: High Contrast Dark",
+    "Phone34px /13px /16px, no document overflow, touch-help fits viewport",
+    "No page errors across exercised surfaces"
+  ],
+  "captures": [
+    "production-browse",
+    "production-tree-only",
+    "production-layers",
+    "production-compare",
+    "production-compare-yaml",
+    "production-live-paused",
+    "production-live-interrupted",
+    "production-live-move",
+    "production-state-permission",
+    "production-state-loading",
+    "production-state-empty",
+    "production-state-offline",
+    "production-state-binary",
+    "production-state-large",
+    "production-state-missing-tar",
+    "production-theme-light",
+    "production-theme-high-contrast-dark",
+    "production-phone-browse",
+    "production-phone-help"
+  ],
+  "errors": [],
+  "measurements": {
+    "desktop": {
+      "height": 22,
+      "font": "13px",
+      "icon": 14
+    },
+    "phone": {
+      "height": 34,
+      "font": "13px",
+      "icon": 16
+    }
+  }
+}

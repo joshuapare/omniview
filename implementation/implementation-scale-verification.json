@@ -1,0 +1,218 @@
+{
+  "checks": [
+    "100000 supplied nodes;50001 visible projection;bounded mounted rows",
+    "End reveals unmounted final row;1001-change batch preserves selection",
+    "Responsive34px geometry retains bounded range and End navigation",
+    "300 nested directories reveal level301 leaf without full-DOM rendering",
+    "Tree-only provider and standalone scale surface start no content reads, watch, or rich-editor modules"
+  ],
+  "errors": [],
+  "measurements": {
+    "initialMs": 195.79999995231628,
+    "initialMountedRows": 38,
+    "endRevealMs": 48.299999952316284,
+    "burst1001Ms": 131.70000004768372,
+    "retainedHeapDeltaBytes": 45886293,
+    "phoneMountedRows": 39,
+    "minimalIO": {
+      "reads": 0,
+      "watches": 0,
+      "richModules": 0
+    }
+  },
+  "finalTree": {
+    "active": "_r_n_-item-deep-leaf",
+    "rows": [
+      {
+        "id": "_r_n_-item-dir-263",
+        "level": "264",
+        "text": "d263"
+      },
+      {
+        "id": "_r_n_-item-dir-264",
+        "level": "265",
+        "text": "d264"
+      },
+      {
+        "id": "_r_n_-item-dir-265",
+        "level": "266",
+        "text": "d265"
+      },
+      {
+        "id": "_r_n_-item-dir-266",
+        "level": "267",
+        "text": "d266"
+      },
+      {
+        "id": "_r_n_-item-dir-267",
+        "level": "268",
+        "text": "d267"
+      },
+      {
+        "id": "_r_n_-item-dir-268",
+        "level": "269",
+        "text": "d268"
+      },
+      {
+        "id": "_r_n_-item-dir-269",
+        "level": "270",
+        "text": "d269"
+      },
+      {
+        "id": "_r_n_-item-dir-270",
+        "level": "271",
+        "text": "d270"
+      },
+      {
+        "id": "_r_n_-item-dir-271",
+        "level": "272",
+        "text": "d271"
+      },
+      {
+        "id": "_r_n_-item-dir-272",
+        "level": "273",
+        "text": "d272"
+      },
+      {
+        "id": "_r_n_-item-dir-273",
+        "level": "274",
+        "text": "d273"
+      },
+      {
+        "id": "_r_n_-item-dir-274",
+        "level": "275",
+        "text": "d274"
+      },
+      {
+        "id": "_r_n_-item-dir-275",
+        "level": "276",
+        "text": "d275"
+      },
+      {
+        "id": "_r_n_-item-dir-276",
+        "level": "277",
+        "text": "d276"
+      },
+      {
+        "id": "_r_n_-item-dir-277",
+        "level": "278",
+        "text": "d277"
+      },
+      {
+        "id": "_r_n_-item-dir-278",
+        "level": "279",
+        "text": "d278"
+      },
+      {
+        "id": "_r_n_-item-dir-279",
+        "level": "280",
+        "text": "d279"
+      },
+      {
+        "id": "_r_n_-item-dir-280",
+        "level": "281",
+        "text": "d280"
+      },
+      {
+        "id": "_r_n_-item-dir-281",
+        "level": "282",
+        "text": "d281"
+      },
+      {
+        "id": "_r_n_-item-dir-282",
+        "level": "283",
+        "text": "d282"
+      },
+      {
+        "id": "_r_n_-item-dir-283",
+        "level": "284",
+        "text": "d283"
+      },
+      {
+        "id": "_r_n_-item-dir-284",
+        "level": "285",
+        "text": "d284"
+      },
+      {
+        "id": "_r_n_-item-dir-285",
+        "level": "286",
+        "text": "d285"
+      },
+      {
+        "id": "_r_n_-item-dir-286",
+        "level": "287",
+        "text": "d286"
+      },
+      {
+        "id": "_r_n_-item-dir-287",
+        "level": "288",
+        "text": "d287"
+      },
+      {
+        "id": "_r_n_-item-dir-288",
+        "level": "289",
+        "text": "d288"
+      },
+      {
+        "id": "_r_n_-item-dir-289",
+        "level": "290",
+        "text": "d289"
+      },
+      {
+        "id": "_r_n_-item-dir-290",
+        "level": "291",
+        "text": "d290"
+      },
+      {
+        "id": "_r_n_-item-dir-291",
+        "level": "292",
+        "text": "d291"
+      },
+      {
+        "id": "_r_n_-item-dir-292",
+        "level": "293",
+        "text": "d292"
+      },
+      {
+        "id": "_r_n_-item-dir-293",
+        "level": "294",
+        "text": "d293"
+      },
+      {
+        "id": "_r_n_-item-dir-294",
+        "level": "295",
+        "text": "d294"
+      },
+      {
+        "id": "_r_n_-item-dir-295",
+        "level": "296",
+        "text": "d295"
+      },
+      {
+        "id": "_r_n_-item-dir-296",
+        "level": "297",
+        "text": "d296"
+      },
+      {
+        "id": "_r_n_-item-dir-297",
+        "level": "298",
+        "text": "d297"
+      },
+      {
+        "id": "_r_n_-item-dir-298",
+        "level": "299",
+        "text": "d298"
+      },
+      {
+        "id": "_r_n_-item-dir-299",
+        "level": "300",
+        "text": "d299"
+      },
+      {
+        "id": "_r_n_-item-deep-leaf",
+        "level": "301",
+        "text": "leaf.txt"
+      }
+    ]
+  }
+}

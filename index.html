@@ -17,3 +17,44 @@ render=function(){storageRender();if(kind==='CSIDriver'&&section==='Basics'&&mod
 const storageInput=content.oninput;
 content.oninput=function(e){storageInput(e);if(kind==='CSIDriver'&&e.target.dataset.key==='name')state().driver=e.target.value;};
 </script>
+<script>
+const lookupFixture=document.createElement('label');
+lookupFixture.style.cssText='display:inline-flex;gap:8px;align-items:center;margin:0';
+lookupFixture.innerHTML='Provisioner lookup fixture <select id="lookupFixture" aria-label="Provisioner lookup fixture"><option>Available</option><option>Empty</option><option>Denied</option><option>Unavailable</option></select>';
+document.querySelector('.fixture').append(lookupFixture);
+let provisionerLookup='Available',provisionerEntry='lookup';
+const provisionerRender=render;
+render=function(){provisionerRender();lookupFixture.hidden=kind!=='StorageClass';if(kind!=='StorageClass'||section!=='Basics'||mode!=='form'||reviewing)return;const old=content.querySelector('[data-key=driver]');if(!old)return;
+const field=old.closest('label'),value=state().driver;
+const wrap=document.createElement('div');
+wrap.innerHTML='<label>Provisioner entry<select id="provisionerEntry" aria-label="Provisioner entry"><option value="lookup">Search provisioners</option><option value="manual">Manual / unresolved identifier</option><option value="static">No dynamic provisioning</option></select></label><label>Provisioner *<input id="provisionerValue" data-key="driver" aria-describedby="lookupStatus" autocomplete="off" spellcheck="false" list="provisionerChoices"></label><datalist id="provisionerChoices"></datalist><div id="lookupStatus" class="muted" role="status" aria-live="polite"></div>';
+field.replaceWith(wrap);
+const entry=wrap.querySelector('select'),input=wrap.querySelector('input');
+entry.value=provisionerEntry;entry.disabled=locked();input.value=value;input.disabled=locked()||provisionerEntry==='static';
+if(provisionerLookup==='Available'&&provisionerEntry==='lookup')wrap.querySelector('datalist').innerHTML='<option value="csi.preview.example">Preview CSI driver · fixture</option><option value="legacy.preview.example/provisioner">Legacy provisioner · fixture</option>';
+if(provisionerEntry!=='lookup')input.removeAttribute('list');
+wrap.querySelector('#lookupStatus').textContent=provisionerEntry==='static'?'kubernetes.io/no-provisioner':provisionerEntry==='manual'?'Manual identifier · lookup match not required':({Available:'2 synthetic choices · no selection implied',Empty:'No provisioners returned · manual entry available',Denied:'Lookup denied · manual entry available',Unavailable:'Lookup unavailable · manual entry available'})[provisionerLookup];
+entry.onchange=()=>{provisionerEntry=entry.value;if(entry.value==='static')state().driver='kubernetes.io/no-provisioner';render();};
+};
+document.querySelector('#lookupFixture').onchange=e=>{provisionerLookup=e.target.value;render();};
+const originalFieldHelp=helpButton.onclick;
+helpButton.onclick=()=>{originalFieldHelp();if(kind==='StorageClass')document.querySelector('#helpText').textContent='Search synthetic provisioner choices or enter any exact identifier manually. A valid legacy or unresolved provisioner does not need a CSIDriver object. No dynamic provisioning explicitly uses kubernetes.io/no-provisioner; it does not create a volume. Lookup empty, denied and unavailable do not erase your identifier. Unspecified reclaim defaults server-side to Delete; binding to Immediate. No defaults are inserted.';};
+render();
+</script>
+<script>
+const comboboxRender=render;
+render=function(){comboboxRender();const input=content.querySelector('#provisionerValue');if(!input||provisionerEntry!=='lookup'||locked())return;
+input.removeAttribute('list');input.setAttribute('role','combobox');input.setAttribute('aria-autocomplete','list');input.setAttribute('aria-controls','provisionerOptions');input.setAttribute('aria-expanded','false');
+const options=document.createElement('div');options.id='provisionerOptions';options.setAttribute('role','listbox');options.setAttribute('aria-label','Provisioner choices');input.after(options);
+function closeOptions(){options.replaceChildren();input.setAttribute('aria-expanded','false');}
+function showOptions(){closeOptions();if(provisionerLookup!=='Available')return;
+const values=['csi.preview.example','legacy.preview.example/provisioner'].filter(v=>v.toLowerCase().includes(input.value.toLowerCase()));
+for(const value of values){const option=document.createElement('button');option.type='button';option.setAttribute('role','option');option.style.cssText='width:100%;text-align:left;margin-top:4px';option.textContent=value+' · fixture';option.onclick=e=>{e.preventDefault();input.value=value;state().driver=value;closeOptions();input.focus();};option.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();closeOptions();input.focus();}if(e.key==='ArrowDown'){e.preventDefault();option.nextElementSibling?.focus();}if(e.key==='ArrowUp'){e.preventDefault();(option.previousElementSibling||input).focus();}};options.append(option);}
+input.setAttribute('aria-expanded',String(values.length>0));}
+input.oninput=showOptions;input.onfocus=showOptions;input.onkeydown=e=>{if(e.key==='ArrowDown'){e.preventDefault();showOptions();options.querySelector('button')?.focus();}if(e.key==='Escape'){e.preventDefault();closeOptions();}};
+};
+render();
+</script>
+<style>[hidden]{display:none!important}</style>
+<script>content.addEventListener('input',()=>{const errors=content.querySelector('#errors');if(errors)errors.replaceChildren();});</script>
+<style>.grid{align-items:start}</style>

@@ -41,6 +41,20 @@
     "20-narrow.png",
     "21-driver-identity.png",
     "22-driver-invalid.png",
-    "23-attributes-version.png"
-  ]
+    "23-attributes-version.png",
+    "24-provisioner-search.png",
+    "25-provisioner-selected.png",
+    "26-provisioner-manual.png",
+    "27-lookup-empty.png",
+    "27-lookup-denied.png",
+    "27-lookup-unavailable.png",
+    "28-no-dynamic-provisioning.png",
+    "29-manual-review.png",
+    "30-provisioner-edit-locked.png"
+  ],
+  "provisionerKeyboardChoiceSelected": true,
+  "manualUnresolvedIdentifierPreservedAcrossLookupStates": true,
+  "noDynamicProvisioningExplicitBranch": true,
+  "provisionerLookupEmptyDeniedUnavailableDistinct": true,
+  "provisionerEditLocked": true
 }

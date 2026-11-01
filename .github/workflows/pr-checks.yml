@@ -1,0 +1,303 @@
+name: PR Checks
+
+on:
+  pull_request:
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+  pull-requests: read
+
+env:
+  GO_VERSION: "1.26"
+  NODE_VERSION: "26.13.0"
+  GOWORK: "off"
+  REVIEWED_SDK_REVISION: ${{ vars.OMNIVIEW_RESOURCE_V2_REVIEWED_SDK_REVISION }}
+
+jobs:
+  release-packaging-checks:
+    name: Release packaging contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Check Homebrew cask publication
+        run: node --test build/homebrew/update-cask.test.mjs
+      - name: Check macOS packaging shell syntax
+        run: |
+          bash -n build/darwin/build-universal.sh
+          bash -n build/darwin/verify-release-package.sh
+
+  go-checks:
+    name: Go checks
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/omniviewdev/omniview-ci:ubuntu24-v1
+      options: --init
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    defaults:
+      run:
+        shell: bash
+    outputs:
+      c02_corpus_name: ${{ steps.c02-corpus.outputs.corpus_name }}
+    steps:
+      # The runner creates this mount as UID 1001; Git must see the same owner
+      # as the container user after checkout's temporary HOME goes away.
+      - name: Match checkout directory ownership to container user
+        run: chown "$(id -u):$(id -g)" "$PWD"
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26.13.0"
+
+      - name: Setup native pnpm for recovery integration tests
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          version: 12.14.0
+          install: false
+
+      - name: Admit reviewed candidate cohort
+        id: candidate
+        run: node e2e/scripts/candidate-source.mjs resolve
+
+      - name: Checkout reviewed SDK
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/plugin-sdk
+          ref: ${{ steps.candidate.outputs.sdk }}
+          path: .candidate-sources/sdk
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Select reviewed SDK source
+        run: |
+          export SDK_SOURCE="$(realpath .candidate-sources/sdk)"
+          node e2e/scripts/candidate-source.mjs verify-sdk
+          echo "SDK_SOURCE=$SDK_SOURCE" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            .candidate-sources/sdk/go.sum
+
+      - name: Select restored Go cache for Task
+        id: go-cache
+        run: |
+          GO_BUILD_CACHE_DIRECTORY="$(GOWORK=off GOFLAGS= go env GOCACHE)"
+          printf 'directory=%s\n' "$GO_BUILD_CACHE_DIRECTORY" >> "$GITHUB_OUTPUT"
+          GOWORK=off GOFLAGS= go env -json GOVERSION GOOS GOARCH GOCACHE
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify effective Task Go cache
+        run: task check:go-cache GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Build
+        run: task check:go-build GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Vet
+        run: task check:go-vet GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Test
+        run: task check:go-test GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Generate fresh C02 error transport corpus
+        id: c02-corpus
+        run: |
+          CORPUS_NAME="c02-error-corpus-${GITHUB_RUN_ATTEMPT}"
+          export C02_ERROR_CORPUS="$RUNNER_TEMP/${CORPUS_NAME}.json"
+          task check:c02-corpus GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+          printf 'corpus_name=%s\n' "$CORPUS_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Upload C02 error transport corpus
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.c02-corpus.outputs.corpus_name }}
+          path: ${{ runner.temp }}/${{ steps.c02-corpus.outputs.corpus_name }}.json
+          if-no-files-found: error
+
+      - name: Install goimports
+        run: go install golang.org/x/tools/cmd/goimports@latest
+
+      - name: Format check
+        run: task check:fmt-check GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Select effective candidate module for lint
+        run: |
+          printf 'GOFLAGS=%s\n' "$(GOWORK=off GOFLAGS= go run ./scripts/hostmod/main.go --root "$PWD" --sdk-source "$SDK_SOURCE" --format goflags)" >> "$GITHUB_ENV"
+
+      # Reports only issues the PR introduces; the existing backlog is not fixed yet.
+      - name: Lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.14
+          only-new-issues: true
+        env:
+          GOWORK: "off"
+        continue-on-error: true
+
+  bindings-check:
+    name: Bindings freshness
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/omniviewdev/omniview-ci:ubuntu24-v1
+      options: --init
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Keep Git ownership checks enabled instead of adding safe.directory trust.
+      - name: Match checkout directory ownership to container user
+        run: chown "$(id -u):$(id -g)" "$PWD"
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26.13.0"
+
+      - name: Admit reviewed candidate cohort
+        id: candidate
+        run: node e2e/scripts/candidate-source.mjs resolve
+
+      - name: Checkout reviewed SDK
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/plugin-sdk
+          ref: ${{ steps.candidate.outputs.sdk }}
+          path: .candidate-sources/sdk
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Select reviewed SDK source
+        run: |
+          export SDK_SOURCE="$(realpath .candidate-sources/sdk)"
+          node e2e/scripts/candidate-source.mjs verify-sdk
+          echo "SDK_SOURCE=$SDK_SOURCE" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            .candidate-sources/sdk/go.sum
+
+      - name: Select restored Go cache for Task
+        id: go-cache
+        run: |
+          GO_BUILD_CACHE_DIRECTORY="$(GOWORK=off GOFLAGS= go env GOCACHE)"
+          printf 'directory=%s\n' "$GO_BUILD_CACHE_DIRECTORY" >> "$GITHUB_OUTPUT"
+          GOWORK=off GOFLAGS= go env -json GOVERSION GOOS GOARCH GOCACHE
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify effective Task Go cache
+        run: task check:go-cache GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Install pinned private Wails CLI
+        run: GOWORK=off GOFLAGS= bash ./scripts/install-wails-cli.sh
+
+      - name: Check bindings are up to date
+        run: task check:bindings-check GO_BUILD_CACHE_DIRECTORY="${{ steps.go-cache.outputs.directory }}"
+
+      - name: Check native Wails capability contracts
+        run: GOWORK=off GOFLAGS= node --test scripts/wails-tool.test.mjs
+
+  ui-checks:
+    name: UI checks
+    runs-on: ubuntu-latest
+    needs: go-checks
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          version: 12.14.0
+          install: false
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: task check:ui-install
+
+      - name: Download producer C02 error transport corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.go-checks.outputs.c02_corpus_name }}
+          path: ${{ runner.temp }}
+
+      - name: Check actual C02 runtime error transport
+        run: task check:c02-runtime
+        env:
+          C02_ERROR_CORPUS: ${{ runner.temp }}/${{ needs.go-checks.outputs.c02_corpus_name }}.json
+
+      - name: Check Wails Call settlement ownership
+        run: node --test scripts/wails-call.test.mjs
+
+      - name: Build
+        run: task check:ui-build
+
+      - name: Check React compiler source admission
+        run: node --test scripts/react-compiler.test.mjs
+
+      - name: Lint
+        run: task check:ui-lint
+
+      - name: Typecheck
+        run: task check:ui-typecheck
+
+      - name: Component tests
+        run: pnpm test
+
+      - name: Age clock DST regressions
+        run: pnpm exec vitest run ui/utils/ageClock.test.tsx
+        env:
+          TZ: America/New_York
+
+      - name: Runtime resource batching regressions
+        working-directory: packages/omniviewdev-runtime
+        run: node ../../node_modules/vitest/vitest.mjs run src/hooks/resource/useEventBatcher.test.ts

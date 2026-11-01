@@ -1,0 +1,211 @@
+name: PR Validation
+
+on:
+  pull_request:
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+
+env:
+  NODE_OPTIONS: "--max-old-space-size=4096"
+  GO_VERSION: "1.26"
+  NODE_VERSION: "26.13.0"
+  REVIEWED_SDK_REVISION: ${{ vars.OMNIVIEW_RESOURCE_V2_REVIEWED_SDK_REVISION }}
+
+jobs:
+  # One canonical application execution; the exact required check name stays
+  # stable even though reusable workflow checks have a caller/job prefix.
+  e2e-application:
+    uses: ./.github/workflows/e2e-runner.yml
+    with:
+      base: ${{ github.event.pull_request.base.sha }}
+
+  e2e-tests:
+    name: e2e-tests
+    needs: e2e-application
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - name: Require canonical suite or explicit prose-only success
+        env:
+          RESULT: ${{ needs.e2e-application.result }}
+        run: test "$RESULT" = success
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Build Artifacts — downloadable binaries for manual testing
+  # ─────────────────────────────────────────────────────────────────────────────
+  build-artifacts:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: darwin/universal
+            artifact-name: pr-build-macos
+            build-tags: "production"
+            extra-ldflags: ""
+          - os: ubuntu-24.04
+            container: ghcr.io/omniviewdev/omniview-ci:ubuntu24-v1
+            platform: linux/amd64
+            artifact-name: pr-build-linux
+            build-tags: "production"
+            extra-ldflags: ""
+          - os: windows-latest
+            platform: windows/amd64
+            artifact-name: pr-build-windows
+            build-tags: "production"
+            extra-ldflags: "-H windowsgui"
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.container || '' }}
+      options: --init
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    timeout-minutes: 30
+    env:
+      GOWORK: "off"
+    steps:
+      # Container Git must own the mount after checkout's temporary HOME expires.
+      - name: Match checkout directory ownership to container user
+        if: runner.os == 'Linux'
+        shell: bash
+        run: chown "$(id -u):$(id -g)" "$PWD"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Admit reviewed candidate cohort
+        id: candidate
+        shell: bash
+        run: node e2e/scripts/candidate-source.mjs resolve
+
+      - name: Checkout reviewed SDK
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/plugin-sdk
+          ref: ${{ steps.candidate.outputs.sdk }}
+          path: .candidate-sources/sdk
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Select reviewed SDK source
+        shell: bash
+        run: |
+          export SDK_SOURCE="$(cd .candidate-sources/sdk && pwd -P)"
+          node e2e/scripts/candidate-source.mjs verify-sdk
+          echo "SDK_SOURCE=$SDK_SOURCE" >> "$GITHUB_ENV"
+
+      - name: Setup pnpm
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          version: 12.14.0
+          install: false
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            .candidate-sources/sdk/go.sum
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Wails v3
+        shell: bash
+        run: GOWORK=off GOFLAGS= bash ./scripts/install-wails-cli.sh
+
+      - name: Build workspace packages
+        shell: bash
+        run: task packages
+
+      - name: Check native Windows React compiler admission
+        if: runner.os == 'Windows'
+        run: node --test scripts/react-compiler.test.mjs
+
+      - name: Build frontend
+        shell: bash
+        run: task common:build:frontend
+
+      - name: Build Omniview
+        shell: bash
+        env:
+          CGO_ENABLED: "1"
+          CGO_CFLAGS: ${{ runner.os == 'macOS' && '-mmacosx-version-min=10.15' || '' }}
+          CGO_LDFLAGS: ${{ runner.os == 'macOS' && '-mmacosx-version-min=10.15' || '' }}
+          MACOSX_DEPLOYMENT_TARGET: ${{ runner.os == 'macOS' && '10.15' || '' }}
+        run: |
+          HOST_MODFILE="$(task --silent host:prepare)"
+          build_command=(go build -o bin/Omniview)
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            build_command=(bash build/darwin/build-universal.sh bin/Omniview)
+          fi
+          "${build_command[@]}" -modfile="$HOST_MODFILE" -tags "${{ matrix.build-tags }}" -trimpath -buildvcs=false \
+            -ldflags "-w -s ${{ matrix.extra-ldflags }} \
+              -X github.com/omniviewdev/omniview/internal/version.Version=0.0.0-pr.${{ github.event.pull_request.number }} \
+              -X github.com/omniviewdev/omniview/internal/version.GitCommit=${{ github.sha }} \
+              -X github.com/omniviewdev/omniview/internal/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+              -X github.com/omniviewdev/omniview/internal/version.Development=true \
+              -X github.com/omniviewdev/omniview/internal/appstate.buildStateDir=~/.omniview-pr"
+
+      - name: Create macOS .app bundle
+        if: runner.os == 'macOS'
+        run: |
+          task common:generate:icons
+          mkdir -p bin/Omniview.app/Contents/MacOS
+          mkdir -p bin/Omniview.app/Contents/Resources
+          cp build/darwin/icons.icns bin/Omniview.app/Contents/Resources/
+          cp bin/Omniview bin/Omniview.app/Contents/MacOS/
+          cp build/darwin/Info.plist bin/Omniview.app/Contents/
+          /usr/libexec/PlistBuddy -c 'Set :CFBundleShortVersionString 0.0.0' bin/Omniview.app/Contents/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" bin/Omniview.app/Contents/Info.plist
+          codesign --force --deep --sign - bin/Omniview.app
+
+      - name: Prepare artifact (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cd bin
+          zip -r Omniview-pr${{ github.event.pull_request.number }}-macos.zip Omniview.app
+
+      - name: Prepare artifact (Linux)
+        if: runner.os == 'Linux'
+        working-directory: bin
+        run: mv Omniview "Omniview-pr${{ github.event.pull_request.number }}-linux-amd64"
+
+      - name: Prepare artifact (Windows)
+        if: runner.os == 'Windows'
+        working-directory: bin
+        run: Rename-Item -Path "Omniview" -NewName "Omniview-pr${{ github.event.pull_request.number }}-windows-amd64.exe"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: |
+            bin/*.zip
+            bin/Omniview-pr*
+          if-no-files-found: error
+          retention-days: 5

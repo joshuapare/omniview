@@ -1,0 +1,226 @@
+name: Whole-App Profile
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: app-profile-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "26.13.0"
+  GOWORK: "off"
+  GOFLAGS: ""
+  REVIEWED_SDK_REVISION: ${{ vars.OMNIVIEW_RESOURCE_V2_REVIEWED_SDK_REVISION }}
+
+jobs:
+  production-profile:
+    name: Production profile (${{ matrix.channel }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        channel: [stable, nightly]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Admit reviewed candidate SDK
+        id: candidate
+        shell: bash
+        run: node e2e/scripts/candidate-source.mjs resolve
+
+      - name: Checkout reviewed SDK source
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/plugin-sdk
+          ref: ${{ steps.candidate.outputs.sdk }}
+          fetch-depth: 0
+          path: .app-profile-sources/sdk
+          persist-credentials: false
+
+      - name: Verify exact reviewed SDK source
+        shell: bash
+        run: |
+          export SDK_SOURCE="$(cd .app-profile-sources/sdk && pwd -P)"
+          node e2e/scripts/candidate-source.mjs verify-sdk
+          echo "SDK_SOURCE=$SDK_SOURCE" >> "$GITHUB_ENV"
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            .app-profile-sources/sdk/go.sum
+
+      - name: Prepare private reviewed test module
+        id: host-module
+        shell: bash
+        run: |
+          module_directory="$(mktemp -d "$RUNNER_TEMP/production-profile-${{ matrix.channel }}-mod.XXXXXX")"
+          chmod 0700 "$module_directory"
+          modfile="$(GOWORK=off GOFLAGS= go run ./scripts/hostmod/main.go --root "$GITHUB_WORKSPACE" --sdk-source "$SDK_SOURCE" --output-directory "$module_directory")"
+          printf 'modfile=%s\n' "$modfile" >> "$GITHUB_OUTPUT"
+
+      # Exercise production resolution, state initialization, and runtime setup
+      # with a stale unrelated development claim, plus durable overlap guards.
+      # Keep this independent of reviewed UI/plugin source availability.
+      - name: Exercise production profile isolation
+        env:
+          HOST_MODFILE: ${{ steps.host-module.outputs.modfile }}
+        run: >-
+          go test -modfile="$HOST_MODFILE" -mod=readonly -tags server ./internal/instance
+          -run '^TestProduction(StartsWithUnrelatedMissingCustomProfileOwner|RejectsDurableCustomProfileOverlap|RejectsInvalidCustomProfileEvidence|AllowsDisjointCustomProfileClaims)$/${{ matrix.channel }}$'
+          -count=1 -v
+
+  app-profile:
+    name: Whole-app profile
+    # Playwright 1.50.1 supports Ubuntu 24.04, not ubuntu-latest's Ubuntu 26.04.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Admit reviewed candidate cohort
+        id: candidate
+        shell: bash
+        run: node e2e/scripts/candidate-source.mjs resolve
+
+      - name: Checkout reviewed SDK source
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/plugin-sdk
+          ref: ${{ steps.candidate.outputs.sdk }}
+          fetch-depth: 0
+          path: .app-profile-sources/sdk
+          persist-credentials: false
+
+      - name: Checkout reviewed UI source
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/ui
+          ref: ${{ steps.candidate.outputs.ui }}
+          path: .app-profile-sources/ui
+          persist-credentials: false
+
+      - name: Checkout reviewed Kubernetes source
+        uses: actions/checkout@v4
+        with:
+          repository: omniviewdev/omniview-plugin-kubernetes
+          ref: ${{ steps.candidate.outputs.kubernetes }}
+          path: .app-profile-sources/kubernetes
+          persist-credentials: false
+
+      - name: Verify exact candidate sources
+        shell: bash
+        run: |
+          export SDK_SOURCE="$GITHUB_WORKSPACE/.app-profile-sources/sdk"
+          export UI_SOURCE="$GITHUB_WORKSPACE/.app-profile-sources/ui"
+          export KUBERNETES_SOURCE="$GITHUB_WORKSPACE/.app-profile-sources/kubernetes"
+          node e2e/scripts/candidate-source.mjs verify
+          {
+            echo "SDK_SOURCE=$SDK_SOURCE"
+            echo "UI_SOURCE_REF=${{ steps.candidate.outputs.ui }}"
+            echo "KUBERNETES_SOURCE_REF=${{ steps.candidate.outputs.kubernetes }}"
+          } >> "$GITHUB_ENV"
+
+      - name: Setup pnpm
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          version: 12.14.0
+          install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            .app-profile-sources/sdk/go.sum
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Select effective reviewed host module
+        id: host-module
+        shell: bash
+        run: |
+          module_directory="$(mktemp -d "$RUNNER_TEMP/app-profile-host-module.XXXXXX")"
+          chmod 0700 "$module_directory"
+          modfile="$(GOWORK=off GOFLAGS= go run ./scripts/hostmod/main.go --root "$PWD" --sdk-source "$SDK_SOURCE" --output-directory "$module_directory")"
+          printf 'modfile=%s\n' "$modfile" >> "$GITHUB_OUTPUT"
+      - name: Build workspace packages
+        run: task packages
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Prove native pnpm source composition
+        env:
+          A11_PROTOCOL_PROBE: "1"
+          A11_PROTOCOL_REPORT: ${{ runner.temp }}/app-profile-link-protocol.json
+          HOST_MODFILE: ${{ steps.host-module.outputs.modfile }}
+        run: GOWORK=off GOFLAGS= go test -modfile="$HOST_MODFILE" -mod=readonly -tags server ./internal/devworkspace -run '^TestLinkPinnedProtocolProbe$' -count=1
+
+      # Reuse canonical source linking and JS producers, not the obsolete bundled
+      # submodule or unpublished runtime versions. The helper retires its private
+      # collection only after the full real-plugin profile finishes.
+      - name: Profile
+        shell: bash
+        env:
+          UI_SOURCE_REF: ${{ steps.candidate.outputs.ui }}
+          KUBERNETES_SOURCE_REF: ${{ steps.candidate.outputs.kubernetes }}
+          HOST_MODFILE: ${{ steps.host-module.outputs.modfile }}
+        run: |
+          GOWORK=off GOFLAGS= go run -modfile="$HOST_MODFILE" -mod=readonly -tags server ./bench/app/build-plugin \
+            --host "$GITHUB_WORKSPACE" --host-ref "$(git rev-parse HEAD)" \
+            --sdk "$SDK_SOURCE" --sdk-ref "${{ steps.candidate.outputs.sdk }}" \
+            --ui "$GITHUB_WORKSPACE/.app-profile-sources/ui" --ui-ref "$UI_SOURCE_REF" \
+            --kubernetes "$GITHUB_WORKSPACE/.app-profile-sources/kubernetes" --kubernetes-ref "$KUBERNETES_SOURCE_REF" \
+            --link-evidence "$RUNNER_TEMP/app-profile-link-protocol.json" \
+            -- --runs 3
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-profile-results
+          path: bench/app/results/
+          if-no-files-found: ignore
+          retention-days: 30

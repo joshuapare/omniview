@@ -1,0 +1,36 @@
+ISSUE 269 — policy/v1, Kubernetes v1.35.0 / k8s.io v0.35.0
+Design mock awaiting review; no production changes or live connections.
+
+Coverage: PodDisruptionBudget create, mutable-spec edit, managed/denied inspection, unavailable discovery, controller-owned status, Pod eviction integration boundary. PodSecurityPolicy is removed and excluded. Eviction is a POST request, not a persisted resource authoring form.
+
+Pinned sources:
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/api/openapi-spec/swagger.json#L73742-L74821
+https://github.com/kubernetes/api/blob/v0.35.0/policy/v1/types.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/apis/policy/validation/validation.go
+Read actual OpenAPI definitions and namespaced paths. No feature gate is required for the stable fields shown at this snapshot. Discovery, actual verbs and admission must still be checked in production.
+Reference workflow: omniviewdev/omniview#249; Kubernetes plugin PR72 and PR74. The named mock skill is unavailable. Used approved standalone HTML prototype workflow; fetched and applied web-design-guidelines source for visual/accessibility review.
+
+Field / control / manifest ownership:
+Name / text / metadata.name: required in guided create; locked edit.
+Namespace / explicit fixture namespace choice / metadata.namespace: namespaced resource, locked edit. Never infer from all-namespace selection.
+Budget rule / exclusive select / spec.minAvailable OR spec.maxUnavailable. Switching removes the alternative field, never emits both.
+Amount + measure / integer text + pod-count/percentage select / chosen budget field: integer versus quoted percentage string. No guessed amount. 0 count accepted, percentage 0..100. Percentages round up. maxUnavailable requires a compatible scalable controller; this mock does not verify one.
+Selection scope / explicit labels/all/none choice / spec.selector: all emits {}, none emits null. Omitted source remains source-only rather than silently converted.
+Label equality / repeatable key/value / spec.selector.matchLabels[key].
+Expressions / key, In/NotIn/Exists/DoesNotExist, comma-separated values / spec.selector.matchExpressions[].key/operator/values. Exists variants omit values. Rows combine with AND; no generated workload or companion resources.
+Unhealthy policy / omitted-default, IfHealthyBudget, AlwaysAllow / spec.unhealthyPodEvictionPolicy. Empty remains omitted. AlwaysAllow warning persists in review; healthy pods remain budget-protected.
+Status / read-only table / status.observedGeneration, disruptionsAllowed, currentHealthy, desiredHealthy, expectedPods, conditions, disruptedPods. Compare generation before interpreting counters. Mock deliberately shows stale status, never permission to evict. Status is never emitted in new draft.
+Advanced metadata, unknown fields, comments, scalar types, exact large integers / source-only fallback. Manual source edits preserve exact string, disable form authoring and review. No parser, AST update, submission or fake lossless rewrite exists here. Production must reuse shipped AST engine, preserve leaf siblings and omitted fields; no blanket lock regression is proposed for supported production YAML.
+Eviction / existing Pod action integration, disabled in isolated mock / POST /api/v1/namespaces/{namespace}/pods/{name}/eviction; policy/v1 Eviction metadata.name/namespace and optional deleteOptions. Do not add Create Eviction. Existing Pod action owns gracePeriodSeconds, preconditions, dryRun and admission failure handling. Never infer permission from PDB status.
+
+Ownership and capabilities:
+Native policy editor belongs in Kubernetes provider, not base-ui. GitOps/managed fixture locks local authoring and directs user to owning source; no forced ownership transfer. PDB spec fields shown have no additional immutable lock; identity is immutable. resourceVersion/UID and existing revision guards belong to production admission, not editable mock fields. Denied update, missing API, unavailable lookup, denied pod list and empty lookup remain distinct. Reference fixtures do not prove live matching, effective RBAC or controller health.
+
+Composition:
+Faithful isolated HTML composition, not shipped React. Reuse base-ui Dialog, SegmentedControl, FormField, Input, Select, Tooltip/Popover, EditableList/row composition; existing CodeEditor and AST draft engine in production. No new generic primitive needed. Kubernetes selector grammar and IntOrString validation remain in resource adapter. 1000x700 frame, 32px controls, 13px body, 180px section rail, 20x24 content padding. Narrow viewport uses internal scrolling and fixed footer.
+
+Browser evidence:
+Real Chromium pointer, typing, select, focus, Escape, add/remove, section/mode and scenario changes. 01..16 captured at 1440x900 CSS pixels, DPR1.25 (1800x1125 PNG). 17 narrow at 760x740 DPR1.25. Contact sheet visually reviewed all captures. Initial shared-browser screenshot timeout was reported; dedicated issue-only Chrome produced all published captures. No page errors recorded. No raw credentials, annotations or private cluster data used.
+
+Limits / review decisions:
+HTML preview only. Native validation remains authoritative: complete Kubernetes DNS/label syntax, duplicate selector keys, controller compatibility and reference matching are not fully validated here. Initial guided amount is required even though API permits both budget fields omitted; source fallback preserves optional/unsupported shapes. Manual source never reparses. Draft and mode live only in memory; persistence of explicit mode is a production integration requirement, not demonstrated. No credential input, source import, mutation, server dry-run, focus-trapped modal lifecycle or actual Pod action implementation. Help supports hover/focus/click and Escape focus restoration; shared production Tooltip must supply richer accessible label/description wiring. Existing creation frame owns opener/close lifecycle. No claim of production behavior, review approval or shipped code.

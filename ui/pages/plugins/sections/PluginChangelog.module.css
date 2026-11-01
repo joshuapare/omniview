@@ -1,0 +1,19 @@
+.Root {
+  padding: 0;
+}
+
+.Card {
+  padding-bottom: var(--ov-space-4);
+}
+
+.CardHeader {
+  margin-bottom: var(--ov-space-2);
+}
+
+.VersionChip {
+  font-weight: 600;
+}
+
+.Empty {
+  font-style: italic;
+}

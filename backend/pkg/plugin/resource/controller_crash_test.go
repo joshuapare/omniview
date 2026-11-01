@@ -1,0 +1,268 @@
+package resource
+
+import (
+	"context"
+	"errors"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
+	logging "github.com/omniviewdev/plugin-sdk/log"
+	resource "github.com/omniviewdev/plugin-sdk/pkg/resource/v2"
+)
+
+// ======================== isConnectionError tests ======================== //
+
+func TestIsConnectionError_NilError(t *testing.T) {
+	// status.FromError(nil) returns (nil, true) and nil.Code() == codes.OK,
+	// so isConnectionError should return false.
+	assert.False(t, isConnectionError(nil))
+}
+
+func TestIsConnectionError_PlainErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want bool
+	}{
+		{
+			name: "connection refused",
+			err:  errors.New("dial tcp 127.0.0.1:5000: connection refused"),
+			want: true,
+		},
+		{
+			name: "EOF",
+			err:  errors.New("unexpected EOF"),
+			want: true,
+		},
+		{
+			name: "unrelated error",
+			err:  errors.New("not found"),
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := isConnectionError(tt.err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestIsConnectionError_GRPCStatusErrors(t *testing.T) {
+	tests := []struct {
+		name string
+		code codes.Code
+		want bool
+	}{
+		{name: "Unavailable", code: codes.Unavailable, want: true},
+		{name: "Internal", code: codes.Internal, want: true},
+		{name: "NotFound", code: codes.NotFound, want: false},
+		{name: "OK", code: codes.OK, want: false},
+		{name: "InvalidArgument", code: codes.InvalidArgument, want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := status.Error(tt.code, "test error")
+			got := isConnectionError(err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+// ======================== triggerCrashRecovery tests ======================== //
+
+// newCrashTestController builds a minimal controller suitable for
+// triggerCrashRecovery tests. It uses a recording emitter so we don't need Wails.
+func newCrashTestController() *controller {
+	ctrl := &controller{
+		logger:  logging.NewNop(),
+		plugins: make(map[string]*pluginState),
+		emitter: NoopEmitter{},
+		subs:    newSubscriptionManager(),
+	}
+	return ctrl
+}
+
+// addPluginState is a test helper that sets up a pluginState entry for crash tests.
+func addPluginState(ctrl *controller, pluginID string) {
+	_, cancel := context.WithCancel(context.Background())
+	ctrl.plugins[pluginID] = &pluginState{
+		watchCancel: cancel,
+	}
+}
+
+func TestTriggerCrashRecovery_CallbackInvoked(t *testing.T) {
+	ctrl := newCrashTestController()
+	addPluginState(ctrl, "plugin-a")
+
+	var called atomic.Int32
+	ctrl.onCrashCallback = func(pluginID string) {
+		called.Add(1)
+		assert.Equal(t, "plugin-a", pluginID)
+	}
+
+	ctrl.triggerCrashRecovery("plugin-a", errors.New("connection lost"), "watch")
+
+	// The callback is invoked in a goroutine (go c.onCrashCallback(pluginID)),
+	// so give it a moment to execute.
+	assert.Eventually(t, func() bool {
+		return called.Load() == 1
+	}, 2*1e9, 10*1e6, "callback should have been invoked once")
+}
+
+func TestTriggerCrashRecovery_OnceSemantics(t *testing.T) {
+	ctrl := newCrashTestController()
+	addPluginState(ctrl, "plugin-a")
+
+	var callCount atomic.Int32
+	ctrl.onCrashCallback = func(_ string) {
+		callCount.Add(1)
+	}
+
+	// Trigger crash recovery three times for the same plugin.
+	for i := 0; i < 3; i++ {
+		ctrl.triggerCrashRecovery("plugin-a", errors.New("crash"), "watch")
+	}
+
+	// Wait until the single allowed callback has a chance to run.
+	assert.Eventually(t, func() bool {
+		return callCount.Load() >= 1
+	}, 2*1e9, 10*1e6, "callback should have been invoked at least once")
+
+	// Verify it was invoked exactly once despite three triggers.
+	assert.Equal(t, int32(1), callCount.Load(),
+		"callback must be invoked exactly once per sync.Once")
+}
+
+func TestTriggerCrashRecovery_NilCallback_NoPanic(t *testing.T) {
+	ctrl := newCrashTestController()
+	addPluginState(ctrl, "plugin-a")
+	ctrl.onCrashCallback = nil
+
+	// Must not panic.
+	assert.NotPanics(t, func() {
+		ctrl.triggerCrashRecovery("plugin-a", errors.New("crash"), "watch")
+	})
+}
+
+func TestTriggerCrashRecovery_MissingPluginState_NoPanic(t *testing.T) {
+	ctrl := newCrashTestController()
+	// No plugin state for "unknown-plugin".
+	ctrl.onCrashCallback = func(_ string) {
+		t.Fatal("callback should not be invoked when there is no plugin state")
+	}
+
+	assert.NotPanics(t, func() {
+		ctrl.triggerCrashRecovery("unknown-plugin", errors.New("crash"), "watch")
+	})
+}
+
+func TestTriggerCrashRecovery_IndependentPlugins(t *testing.T) {
+	ctrl := newCrashTestController()
+	addPluginState(ctrl, "plugin-a")
+	addPluginState(ctrl, "plugin-b")
+
+	var countA, countB atomic.Int32
+	ctrl.onCrashCallback = func(pluginID string) {
+		switch pluginID {
+		case "plugin-a":
+			countA.Add(1)
+		case "plugin-b":
+			countB.Add(1)
+		}
+	}
+
+	// Crash plugin A.
+	ctrl.triggerCrashRecovery("plugin-a", errors.New("crash"), "watch")
+
+	assert.Eventually(t, func() bool {
+		return countA.Load() == 1
+	}, 2*1e9, 10*1e6, "plugin-a callback should fire")
+
+	// Crash plugin B -- it should still fire even though A already crashed.
+	ctrl.triggerCrashRecovery("plugin-b", errors.New("crash"), "connection")
+
+	assert.Eventually(t, func() bool {
+		return countB.Load() == 1
+	}, 2*1e9, 10*1e6, "plugin-b callback should fire independently")
+
+	// Trigger A again -- should NOT fire a second time.
+	ctrl.triggerCrashRecovery("plugin-a", errors.New("crash again"), "watch")
+
+	// Small sleep-equivalent: use Eventually to confirm no extra call.
+	assert.Never(t, func() bool {
+		return countA.Load() > 1
+	}, 200*1e6, 50*1e6, "plugin-a callback must not fire a second time")
+
+	assert.Equal(t, int32(1), countA.Load())
+	assert.Equal(t, int32(1), countB.Load())
+}
+
+func TestIsConnectionError_ResourceOperationError(t *testing.T) {
+	// A ResourceOperationError means the plugin responded — not a crash.
+	roe := &resource.ResourceOperationError{
+		Code:        "CONNECTION_ERROR",
+		Title:       "Connection error",
+		Message:     "dial tcp 127.0.0.1:51501: connect: connection refused",
+		Suggestions: []string{"Check that the cluster is running"},
+	}
+	assert.False(t, isConnectionError(roe),
+		"ResourceOperationError should NOT be treated as a plugin crash")
+}
+
+func TestIsConnectionError_WrappedResourceOperationError(t *testing.T) {
+	// Even when wrapped with fmt.Errorf, the guard should still work.
+	roe := &resource.ResourceOperationError{
+		Code:    "CONNECTION_ERROR",
+		Title:   "Connection error",
+		Message: "connection refused",
+	}
+	wrapped := errors.Join(errors.New("rpc failed"), roe)
+	assert.False(t, isConnectionError(wrapped),
+		"wrapped ResourceOperationError should NOT be treated as a plugin crash")
+}
+
+// ======================== SetCrashCallback test ======================== //
+
+func TestSetCrashCallback(t *testing.T) {
+	ctrl := newCrashTestController()
+
+	assert.Nil(t, ctrl.onCrashCallback, "callback should initially be nil")
+
+	var invoked bool
+	ctrl.SetCrashCallback(func(_ string) {
+		invoked = true
+	})
+
+	assert.NotNil(t, ctrl.onCrashCallback, "callback should be set after SetCrashCallback")
+
+	// Invoke to verify it's wired correctly.
+	ctrl.onCrashCallback("test")
+	assert.True(t, invoked)
+}
+
+func TestFiniteRawTransportFailureTriggersCrashRecovery(t *testing.T) {
+	ctrl, _ := newTestControllerWithEmitter(t)
+	var crashes atomic.Int32
+	ctrl.onCrashCallback = func(pluginID string) {
+		assert.Equal(t, "transport", pluginID)
+		crashes.Add(1)
+	}
+	registerMockPlugin(ctrl, "transport", &mockProvider{
+		CatalogFunc: lifecycleTestCatalog("native-object"),
+		GetFunc: func(context.Context, resource.GetRequest) (resource.Record, error) {
+			return resource.Record{}, status.Error(codes.Unavailable, "native transport disconnected")
+		},
+	})
+	request := admittedGetRequest(t, ctrl, "transport", "explicit", "native-object", "opaque")
+	_, err := ctrl.Get(testInvocationContext(), "transport", request)
+	assert.Error(t, err)
+	assert.Eventually(t, func() bool { return crashes.Load() == 1 }, 2*time.Second, time.Millisecond)
+}

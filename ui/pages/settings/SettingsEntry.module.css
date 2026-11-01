@@ -1,0 +1,20 @@
+.Field {
+  width: 100%;
+}
+
+.SelectTrigger {
+  width: 100%;
+}
+
+.MultiRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--ov-space-2);
+  width: 100%;
+}
+
+.MultiInput {
+  flex: 1;
+  min-width: 0;
+}

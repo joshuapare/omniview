@@ -11,6 +11,7 @@
   "narrowNoOverflow": true,
   "narrowFooterFits": true,
   "noRuntimeErrors": true,
+  "createAllKinds": true,
   "screenshotFiles": [
     "01-authorization-empty.png",
     "02-validation.png",
@@ -34,6 +35,8 @@
     "20-inspect-target.png",
     "21-source.png",
     "22-source-fallback.png",
-    "23-narrow.png"
+    "23-narrow.png",
+    "24-peer-create.png",
+    "25-request-create.png"
   ]
 }

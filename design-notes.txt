@@ -1,0 +1,52 @@
+Issue 296 — cert-manager.io/v1 resource editor design
+Design review only. Isolated HTML composition, not production React or shipped support. Reuses approved #249 frame proportions: 1000×700, 32px controls, 13px text, 20×24px padding, 180px navigation. Synthetic preview-cluster/preview fixtures only. No API clients, credentials, cluster calls or mutation handlers.
+
+SOURCE GROUNDING
+Pinned upstream version: cert-manager v1.18.2.
+https://github.com/cert-manager/cert-manager/tree/v1.18.2/deploy/crds
+https://github.com/cert-manager/cert-manager/blob/v1.18.2/pkg/apis/certmanager/v1/types_certificate.go
+https://github.com/cert-manager/cert-manager/blob/v1.18.2/pkg/apis/certmanager/v1/types_issuer.go
+https://github.com/cert-manager/cert-manager/blob/v1.18.2/pkg/apis/certmanager/v1/types_certificaterequest.go
+https://github.com/cert-manager/cert-manager/blob/v1.18.2/pkg/apis/acme/v1/types_issuer.go
+https://cert-manager.io/docs/reference/api-docs/ (rolling reference; pinned source takes precedence)
+Workflow references: omniviewdev/omniview#249, #262; Kubernetes plugin PR72/PR74. Visual review used exposed web-design-guidelines skill and fetched current command.md. No named mock skill was available; approved interactive HTML workflow used.
+
+COVERAGE AND OWNERSHIP
+Certificate: namespaced guided create/edit; identity locked during edit. Status, generated Secret contents, request revisions, chain and expiry remain observed-only. ClusterIssuer and same-namespace Issuer references differ explicitly. Desired attributes are requests, not issuance guarantees. Key/identity edits may trigger reissuance. Renewal is a separate capability, never status patching.
+Issuer: namespaced create/edit, only one backend at a time. CA, ACME, SelfSigned, Vault and Venafi branches receive tailored controls. Backend edits require deliberate union replacement in production review; no implicit credential creation.
+ClusterIssuer: same backend controls, cluster-scoped metadata and cross-namespace trust consequence. Credential Secret namespace comes from controller cluster-resource-namespace configuration; never assume Certificate namespace or hardcode cert-manager. Header exposes unresolved configuration requirement.
+CertificateRequest: namespaced immutable one-shot inspection. No ordinary Create/Edit spec form. Owner, issuer, timeline, unavailable chain/expiry shown. Approval/denial and advanced CSR submission are separate integration intents. Approval/denial must check current mutually-exclusive conditions, approval-subresource permission and signer authorization. Username/UID/groups/extra are webhook-populated and never authorable. No identities or PEM loaded. CSR submission is explicitly unavailable in this privacy-safe mock, not a fake successful upload.
+
+CONTROL → EXACT MANIFEST PATH CONTRACT
+All three desired-state forms: name → metadata.name; namespace → metadata.namespace (absent for ClusterIssuer). Both immutable identities during edit. Extra labels/annotations remain source-owned; annotation values must be redacted before any future capture.
+Certificate:
+Output Secret → spec.secretName; never Secret.data or stringData.
+Issuer picker → spec.issuerRef.name/kind/group; group cert-manager.io; same-namespace Issuer or cluster-scoped ClusterIssuer. External issuers remain source-only.
+Typed SAN rows → spec.dnsNames[], ipAddresses[], uris[], emailAddresses[], selected by row type. No scalar inference.
+Requested duration → spec.duration, Go duration string, >=1h.
+Renew before → spec.renewBefore, Go duration, >=5m and less than duration; mutually exclusive with spec.renewBeforePercentage.
+Renew percentage → spec.renewBeforePercentage, integer 1–99, effective renewal >=5m.
+Common name → spec.commonName; literal subject → spec.literalSubject. Literal subject excludes commonName and subject.
+Other name OID/value → spec.otherNames[i].oid / .utf8Value (API spelling).
+Key algorithm/rotation/encoding/size → spec.privateKey.algorithm/rotationPolicy/encoding/size. Omitted means preserve omission, not set guessed executable defaults. Validate algorithm/size/encoding combination in production.
+Usages → spec.usages[]; guided production uses multi-select, not free comma parsing.
+Source-only advanced ownership: spec.subject, isCA, signatureAlgorithm, encodeUsagesInRequest, revisionHistoryLimit, secretTemplate, keystores, additionalOutputFormats, nameConstraints and unknown properties. Do not normalize or delete these. Feature-gated options must be gated by controller support, not CRD presence.
+Issuer/ClusterIssuer:
+Backend choice → exclusive spec.ca | acme | selfSigned | vault | venafi.
+CA Secret → spec.ca.secretName.
+SelfSigned CRL row → spec.selfSigned.crlDistributionPoints[].
+ACME directory/email/account Secret → spec.acme.server/email/privateKeySecretRef.name; optional key remains preserved.
+ACME challenge → spec.acme.solvers[i].http01 OR dns01. HTTP ingress class → .http01.ingress.ingressClassName. DNS provider field denotes source handoff, not a guessed universal DNS provider path. Solver selectors, multiple solvers, Gateway route settings, EAB, profile, preferred chain, CA bundle, account key generation policy and provider-specific credentials stay source-owned. HTTP-01 cannot solve wildcard identifiers. No domain ownership or readiness claims.
+Vault server/sign path → spec.vault.server/path; Kubernetes auth reference → spec.vault.auth.kubernetes.serviceAccountRef.name; role → .auth.kubernetes.role. Token branch → .auth.tokenSecretRef.name/key; AppRole → .auth.appRole.path/roleId/secretRef.name/key; client cert → .auth.clientCertificate plus spec.vault.clientCertSecretRef/clientKeySecretRef. Shared reference field is a layout proposal; production adapter must expand branch-specific required fields, not serialize one guessed generic path. CA Secret → spec.vault.caBundleSecretRef.name/key. Inline CA material remains source-only and must never appear in captures.
+Venafi zone → spec.venafi.zone; platform → exclusive tpp/cloud; endpoint → .tpp.url or .cloud.url; credentials ref → .tpp.credentialsRef.name or .cloud.apiTokenSecretRef.name/key. Secret values never fetched.
+CertificateRequest inspection → metadata.ownerReferences; spec.issuerRef; status.conditions, status.failureTime; chain → status.certificate/ca (not loaded in mock). Advanced request submission would own spec.request (original CSR bytes), duration, issuerRef, usages and isCA once only. CSR matching and endpoint authorization are prerequisites, not client success claims.
+
+REUSE / PROVIDER CONTRACT
+Compose existing base-ui Dialog, FormField, Input, Select/Combobox, SegmentedControl, Collapsible, Button, Tooltip/Popover and repeatable-row controls. Exact theme token migration happens in production; isolated HTML uses faithful dark semantic roles. No new generic component needed. Resource semantics belong to cert-manager add-on form provider, not hardcoded Kubernetes plugin forms. Shared host owns source lifetime, destination, mutation routing and review. #263 contract comment provides action-intent boundary; cert-manager adapter resolves controller capabilities and credential namespace.
+
+REAL BROWSER EVIDENCE
+Captured initial Certificate, validation, edit advanced key controls, reissuance review, source preservation, all five Issuer backends, Issuer edit/review, ClusterIssuer create/edit/review, denied/unavailable/empty/unsupported reference states, immutable request inspect/approve/deny/advanced/review, renew handoff and narrow window. Standard captures: 1440×900 CSS pixels, DPR1.25, 1800×1125 PNG. Narrow:600×800 CSS pixels. Actual typing, selects, clicks, add/remove, sections, native details, dialog Escape and focus restoration exercised. All captured images inspected. No browser page errors observed. Narrow footer remains visible and document has no horizontal overflow.
+
+HONEST MOCK LIMITS / REVIEW DECISIONS
+This prototype is a behavior/layout proposal, not full API validation. Form field drafts and SAN rows survive sections/modes. Source opens a bounded generated JSON document (valid YAML subset); manual source edits lock Form and block Review. The exact edited buffer survives, including comments, invalid syntax and integer spelling. Bounded serialization demonstrates common identity/reference/SAN/duration fields, not complete backend manifests or advanced controls. Source and Form are not advertised as a working bidirectional YAML AST implementation. Production MUST integrate the existing lossless draft engine. No claim of production losslessness or complete API-schema validation.
+Only name-required and bounded hour-duration validation are implemented. Full Go durations, cross-field constraints, subject/SAN validation, algorithm constraints, provider-required fields and errors need production adapter validation. All four named resources have explicit interfaces, but complex provider options remain source-only rather than fabricated controls. No imports, permission checks, CSR parsing, certificate verification, reference queries or execution are performed. Mode preference remains session-only; no draft or credential persistence. Help opens by click/keyboard; automatic hover/focus opening is not demonstrated. Existing native dialog traps focus and Escape returns help focus. Source editor is textarea, not Monaco. Fixture renewal timeline does not prove controller health. Review must precede any production mutation. Mock remains open for user review; no issue checklist approval or closure.

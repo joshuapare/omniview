@@ -1,0 +1,31 @@
+Issue 292 — MetricValue custom.metrics.k8s.io
+Design proposal only; review pending. Interactive isolated HTML composition, not shipped React.
+
+Scope and ownership
+MetricValue is adapter-generated, not persisted. There is no Create/Edit/Apply. Query inputs change request parameters only; all response fields remain read-only. Built-in Kubernetes query/response inspector can own protocol composition; optional adapter providers own adapter-specific discovery and guidance. No new base-ui primitive is needed. Existing Dialog, Select/Combobox, Input, FormField, Button, Tooltip/Popover, Table, Collapsible and code editor compose this interface; production must use semantic theme tokens. Mock uses CSS approximations. Followed approved #249 workflow, not an unavailable named mock skill. Reviewed this prototype against fetched web-design-guidelines skill source.
+
+Pinned primary sources
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/apis/custom_metrics/v1beta2/register.go
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/apis/custom_metrics/v1beta2/types.go
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/apis/custom_metrics/v1beta1/types.go
+https://github.com/kubernetes/metrics/blob/v0.35.0/pkg/client/custom_metrics/versioned_client.go
+Kubernetes baseline v1.35.0 / modules v0.35.0. v1beta1 and v1beta2 remain separate response representations. Optional aggregated adapter must be installed and serve a discovered version/resource/metric. Discovery is neither authorization nor health proof. Mock choices are synthetic discovery fixtures, not fixed supported resource inventory.
+
+Exact control/path mapping
+Served version -> GET /apis/custom.metrics.k8s.io/{version}
+Discovered resource/metric -> discovered group-qualified resource and metric path; namespaced example /namespaces/preview/pods/{object}/{metric}; cluster Node example /nodes/{object}/{metric}.
+Namespace special case -> /namespaces/{namespace}/metrics/{metric}; wildcard namespace queries disabled per pinned client.
+Object name -> URL encoded object path component. Wildcard choice -> *; object selector -> query labelSelector. This does not edit describedObject.
+Metric filter key/value rows -> query metricLabelSelector with AND equality selectors; remove deletes that query row only. Advanced metric selector expressions are not modeled; production should retain native selector syntax rather than simplify it.
+Response object -> items[i].describedObject.{apiVersion,kind,name,namespace}; optional uid,resourceVersion,fieldPath remain source-only if supplied. No object-reference mutation.
+Response metric -> v1beta2 items[i].metric.name and .metric.selector; v1beta1 items[i].metricName and .selector. Selector is metav1.LabelSelector (matchLabels/matchExpressions), not raw labelSelector query text.
+Timestamp -> items[i].timestamp, read-only observation time.
+Calculation window -> v1beta2 items[i].windowSeconds, v1beta1 items[i].window; optional int64; omitted is distinct from explicit zero. Fixture demonstrates 60 only.
+Value -> items[i].value; exact Kubernetes Quantity string, not NumberInput or floating-point normalization. Fixture 12500m is not assumed to be a universal unit.
+Type/list metadata -> apiVersion,kind,metadata and items[] read-only source representation; MetricValueList is response envelope, not extra authored kind.
+
+Interactions/evidence
+17 reviewed PNGs: 16 desktop captures at CSS 1440x900 device scale 1.25, one 760x700 narrow capture. Real input/selection/clicks drove required error, filter add/remove, query review, generated response, both version source views, focus help/Escape, wildcard selection, cluster scope, Namespace special path and six availability states. checks.json contains named boolean checks and screenshot filenames only. Narrow footer fits; internal content scrolls. No raw sensitive values, cluster access or mutation exists. Shared browser capture initially timed out; final captures used isolated Chrome profile. No repo checks/builds executed.
+
+Limits and review decisions
+This is a bounded fixture inspector, not a metrics dashboard, installed discovery implementation, YAML parser, REST client, permission probe or adapter test. Response source is generated read-only fixture text; no lossless editable YAML claim applies. Unknown real response fields and annotations are not imported. Production should retain original response bytes for safe source inspection, with sensitive annotation projections where needed. Source currently omits optional response metric selector while inspector displays query filter intent; production must distinguish returned selectors from requested selectors. v1beta1 source fixture demonstrates Pod only; Node source uses a fixed metricName fixture and is not evidence for arbitrary adapter metrics. Quantity precision, omitted/zero windows, arbitrary response fields, multiple returned objects and unsupported raw response inspection remain design requirements, not verified parser behavior. Unsupported mock state offers honest external native inspection rather than fabricating a response. Query drafts remain in memory across sections; no drafts/credentials are persisted. There is no Form/YAML authoring mode or persisted authoring preference because this component has no authored manifest. Close/reopen workflow is outside this fixture; production must use host Dialog focus lifecycle. No review approval, production implementation or successful live request is claimed.

@@ -1,0 +1,28 @@
+Issue 301 — WasmPlugin design delivery; awaits review, not shipped.
+Workflow: approved #249 isolated interactive HTML mock. Faithful base-ui composition, not production React. Visual review used web-design-guidelines SKILL.md and its fetched command.md source. No new generic control needed.
+Sources:
+https://github.com/istio/istio/blob/1.27.0/manifests/charts/base/files/crd-all.gen.yaml
+https://github.com/istio/api/blob/1.27.0/extensions/v1alpha1/wasm.proto
+References: omniviewdev/omniview#262, #249; omniview-plugin-kubernetes PR72 and PR74.
+API: extensions.istio.io/v1alpha1, namespaced, alpha, extended release channel. CRD installation, compatible Istio control plane/proxy, discovery, separate create/update permission and ownership admission must be checked by production provider. Namespace is not verified config root. No speculative controller health.
+Ownership: add-on Istio provider through extension contract, not hardcoded Kubernetes core. Host owns draft, source safety, capabilities, identity/revision and mutation route. Istio provider owns selectors, module semantics and field mapping. GitOps-owned fixture inspect-only, change source repository. Status controller-owned, never editable. No spec immutable markers found in snapshot; identity name/namespace fixed for edit, spec changes remain consequential and admission-authoritative.
+FIELD -> CONTROL -> OWNED PATH
+Name / namespace -> identity input / destination -> metadata.name, metadata.namespace; locked edit.
+Module URL -> reference input with on-demand help -> spec.url; OCI/no-scheme, file, HTTP(S). No pull occurs.
+SHA-256 -> exact text -> spec.sha256; lower hex 64; upstream requires URL digest match. Full URL/digest equivalence validation remains production work.
+Pull policy -> omit / IfNotPresent / Always -> spec.imagePullPolicy; omitted stays omitted, no executable default inserted.
+Registry credential -> namespaced Secret reference selector -> spec.imagePullSecret. Names only, values never resolved; not-found distinct from none.
+Workload attachment -> mutually exclusive label rows / target rows / explicit all -> spec.selector.matchLabels OR spec.targetRefs[].group,kind,name OR omission. No implicit namespace-wide selection. Target list max16. Gateway/GatewayClass gateway.networking.k8s.io; Service core; ServiceEntry networking.istio.io. GatewayClass requires verified config root; mock blocks review. Services need waypoint. Target refs require 1.22+ revision safeguards; selector ignored by waypoints. Legacy spec.targetRef source-only.
+Extension -> omit/HTTP/NETWORK -> spec.type.
+Phase -> omit/AUTHN/AUTHZ/STATS -> spec.phase. Priority signed int32 -> spec.priority; descending within phase, omission retained.
+Fatal error choice -> omit/FAIL_CLOSE/FAIL_OPEN/FAIL_RELOAD -> spec.failStrategy. Visible bypass warning; reload applies runtime errors only, other errors fail closed.
+Traffic -> repeatable direction + destination port rows -> spec.match[].mode,ports[].number. OR between rows; direction/port within row conjunctive. Empty match omitted. Mock one port per row, source needed for multiport advanced shapes.
+Plugin name -> root-ID text -> spec.pluginName.
+Plugin configuration -> JSON object textarea -> spec.pluginConfig, schema unavailable; no fake domain-specific schema. Omitted if blank. Redacted source/review projection excludes configuration, never mutation source.
+VM env -> repeatable name / INLINE or HOST / masked inline value -> spec.vmConfig.env[].name,valueFrom,value. HOST removes inline value. C_IDENTIFIER checks; full duplicate/count/length validation remains API/provider responsibility. Projection strips inline values; no raw reveal UI.
+verificationKey -> unavailable/unimplemented upstream; no misleading trust control. Existing unsupported field remains source-only.
+Availability -> separate denied, absent CRD, discovery unavailable, managed ownership, empty references, pull/load diagnostic boundary. No status interpretation or fake diagnostic success. Existing diagnostics integration proposed only, not implemented.
+Reused composition: Dialog, SegmentedControl, FormField, Input, Select, NumberInput, Tooltip/Popover, EditableList plus existing code editor in production. Mock uses native controls and textarea. No shared primitive or dependency change proposed.
+PRESERVATION: form section switches retain in-memory draft and omissions; generated source is bounded. Manual source edit, invalid or unsupported, stays byte-for-byte with comments/exact integers and blocks form/review. No lossless YAML parser claim. Redacted preview is separate projection and never submitted. No persistence of drafts/credentials. Mode preference is session-only in this mock, not persisted; production uses host preference. No close/reopen lifecycle implemented. No production server admission, optimistic revision, reference loading, schema length checks, signature verification or traffic effect tested.
+CAPTURES: 01 initial, 02 required error, 03 accessible help, 04 selector add/remove, 05 resource attachments, 06 explicit broad scope, 07 execution+traffic+fail-open, 08 configuration+HOST VM env, 09 redacted source, 10 non-mutating consequence review, 11 identity-locked edit, 12-* distinct capability/ownership/reference/diagnostic states, 13 exact unsupported source, 14 narrow footer/overflow. All desktop captures 1440x900 deviceScaleFactor1.25; narrow680x760 same scale. Reviewed entire browser contact sheet for fit, clipping and privacy. These are fixture pixels, not live app evidence.
+Privacy: synthetic preview-cluster/preview only. No live connections, actual credentials, raw sensitive capture, import, dependency installation or production changes. Browser profile and runtime files excluded from publication.

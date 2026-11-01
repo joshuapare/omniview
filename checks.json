@@ -1,0 +1,29 @@
+{
+  "requiredMetricFocus": true,
+  "addRemoveKeepsSibling": true,
+  "sourceReadonly": true,
+  "quantityAndOmission": true,
+  "queryDraftPreserved": true,
+  "escapeHelpBeforeModal": true,
+  "emptyDistinct": true,
+  "narrowFooterFits": true,
+  "closeRestoresFocus": true,
+  "noBrowserErrors": true,
+  "allCapturesVisuallyReviewed": true,
+  "noLiveRequests": true,
+  "screenshotFiles": [
+    "01-initial.png",
+    "02-validation.png",
+    "03-review.png",
+    "04-values.png",
+    "05-source.png",
+    "06-help.png",
+    "07-loading.png",
+    "07-missing.png",
+    "07-denied.png",
+    "07-unavailable.png",
+    "07-unsupported.png",
+    "08-empty.png",
+    "09-narrow.png"
+  ]
+}

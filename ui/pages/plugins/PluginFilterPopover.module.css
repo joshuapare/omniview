@@ -1,0 +1,30 @@
+.Section {
+  display: grid;
+  gap: var(--ov-space-1);
+}
+
+.SectionTitle {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ov-color-fg-subtle);
+}
+
+.Options {
+  display: grid;
+  gap: 0;
+}
+
+.Option {
+  min-block-size: var(--ov-size-list-item-height-md);
+  font-size: 0.75rem;
+}
+
+.Footer {
+  border-top: 1px solid var(--ov-color-border-muted);
+  padding-block-start: var(--ov-space-2);
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,107 @@
+Gateway API v1.4.0 — review proposal, not shipped code
+
+Scope: all nine issue294 resource kinds. Standard: GatewayClass/Gateway/HTTPRoute/GRPCRoute/BackendTLSPolicy v1; ReferenceGrant v1beta1. Experimental: TCPRoute/TLSRoute/UDPRoute v1alpha2. Installation, discovered versions, verbs and controller feature support must gate actual provider activation.
+
+Ownership: optional Gateway API add-on editor provider, not nine hardcoded Kubernetes built-ins. Provider gets host draft/lifecycle and reference adapter. GatewayClass cluster-scoped and admin-only. All others namespace-scoped. Identity locks on edit; controllerName immutable. Status stays controller-owned. Managed objects use inspect boundary. No delete/recreate shortcut. ReferenceGrant has no status.
+
+Controls: faithful isolated HTML composition, not shipped React/base-ui. Reuse Dialog, SegmentedControl, FormField, Input, NumberInput, Select/Combobox, Table, Collapsible, Tooltip/Popover, TagInput. No new generic primitive proposed; listener, route, TLS and permission semantics stay in provider. Existing #249 compact frame applied. Visual review used web-design-guidelines skill and actual current guideline URL.
+
+Mappings (identity: metadata.name; namespace metadata.namespace except GatewayClass). All controls patch named draft leaves. Additional backend/listener rows patch indexed paths.
+
+GatewayClass
+  Controller → text → spec.controllerName
+  Description → text → spec.description
+  Parameters group → text → spec.parametersRef.group
+  Parameters kind → text → spec.parametersRef.kind
+  Parameters name → text → spec.parametersRef.name
+
+Gateway
+  Gateway class → select → spec.gatewayClassName
+  Listener name → text → spec.listeners.0.name
+  Protocol → select → spec.listeners.0.protocol
+  Port → number → spec.listeners.0.port
+  Hostname → text → spec.listeners.0.hostname
+  TLS mode → select → spec.listeners.0.tls.mode
+  Certificate reference → select → spec.listeners.0.tls.certificateRefs.0.name
+  Allowed route namespaces → select → spec.listeners.0.allowedRoutes.namespaces.from
+
+HTTPRoute
+  Gateway → select → spec.parentRefs.0.name
+  Listener → text → spec.parentRefs.0.sectionName
+  Hostname → text → spec.hostnames.0
+  Path match → select → spec.rules.0.matches.0.path.type
+  Path → text → spec.rules.0.matches.0.path.value
+  Method → select → spec.rules.0.matches.0.method
+  Header name → text → spec.rules.0.matches.0.headers.0.name
+  Header value → text → spec.rules.0.matches.0.headers.0.value
+  Backend service → select → spec.rules.0.backendRefs.0.name
+  Backend namespace → select → spec.rules.0.backendRefs.0.namespace
+  Backend port → number → spec.rules.0.backendRefs.0.port
+  Weight → number → spec.rules.0.backendRefs.0.weight
+
+GRPCRoute
+  Gateway → select → spec.parentRefs.0.name
+  Hostname → text → spec.hostnames.0
+  Match type → select → spec.rules.0.matches.0.method.type
+  gRPC service → text → spec.rules.0.matches.0.method.service
+  gRPC method → text → spec.rules.0.matches.0.method.method
+  Backend service → select → spec.rules.0.backendRefs.0.name
+  Backend namespace → select → spec.rules.0.backendRefs.0.namespace
+  Backend port → number → spec.rules.0.backendRefs.0.port
+  Weight → number → spec.rules.0.backendRefs.0.weight
+
+ReferenceGrant
+  Source group → text → spec.from.0.group
+  Source kind → select → spec.from.0.kind
+  Source namespace → select → spec.from.0.namespace
+  Target group → text → spec.to.0.group
+  Target kind → select → spec.to.0.kind
+  Target name (omit for all) → text → spec.to.0.name
+
+BackendTLSPolicy
+  Target kind → select → spec.targetRefs.0.kind
+  Target group → text → spec.targetRefs.0.group
+  Target service → select → spec.targetRefs.0.name
+  Target port name → text → spec.targetRefs.0.sectionName
+  TLS hostname → text → spec.validation.hostname
+  Trust source → select → spec.validation.wellKnownCACertificates
+  CA ConfigMap → select → spec.validation.caCertificateRefs.0.name
+
+TCPRoute
+  Gateway → select → spec.parentRefs.0.name
+  Listener → text → spec.parentRefs.0.sectionName
+  Backend service → select → spec.rules.0.backendRefs.0.name
+  Backend namespace → select → spec.rules.0.backendRefs.0.namespace
+  Backend port → number → spec.rules.0.backendRefs.0.port
+  Weight → number → spec.rules.0.backendRefs.0.weight
+
+TLSRoute
+  Gateway → select → spec.parentRefs.0.name
+  Listener → text → spec.parentRefs.0.sectionName
+  SNI hostname → text → spec.hostnames.0
+  Backend service → select → spec.rules.0.backendRefs.0.name
+  Backend namespace → select → spec.rules.0.backendRefs.0.namespace
+  Backend port → number → spec.rules.0.backendRefs.0.port
+  Weight → number → spec.rules.0.backendRefs.0.weight
+
+UDPRoute
+  Gateway → select → spec.parentRefs.0.name
+  Listener → text → spec.parentRefs.0.sectionName
+  Backend service → select → spec.rules.0.backendRefs.0.name
+  Backend namespace → select → spec.rules.0.backendRefs.0.namespace
+  Backend port → number → spec.rules.0.backendRefs.0.port
+  Weight → number → spec.rules.0.backendRefs.0.weight
+
+Create/edit/review: fixture-populated samples, not executable defaults. Review local only, no request or success. Gateway listener changes may disrupt traffic; route edits redirect traffic; Grant broadens authority; backend trust changes may break traffic. Namespaced backend references require matching target-side grant; Gateway admission remains independent. TLS references never resolve secret/certificate bytes. Attachment displays unknown, never healthy.
+
+Source boundary: JSON syntax is YAML1.2. Form updates bounded document. Exact text stays intact after manual source edits, including comments/unknown fields/numeric text; Form locks. No parser, AST preservation or safe source-to-form roundtrip claim. Browser tested exact text retention and disabled review. Invalid source intentionally preserved, not normalized. No draft persistence. Explicit mode preference is memory-only here. Full source reconciliation and persisted non-sensitive mode preference remain production host responsibilities.
+
+Advanced/source-only fields: Gateway addresses, infrastructure, namespace selectors and allowed kinds; route multiple rules/matches/hosts, headers/query matches and filters/timeouts/retries/session persistence; policy SANs/options/multiple targets; grant multiple from/to edges; class parameter namespace. These remain available as exact source-only drafts, never a fake guided form. Bounded mock validates port/name examples, not complete CRD/admission. Permission scenarios are fixtures, not authorization checks.
+
+Browser proof: actual native resource/scenario selects, typing path/port/weight, add/edit/remove backend, trust branch, section/mode switching, help/Escape focus restoration. Nine resource captures plus review/edit/error/source/advanced/availability/narrow/graph/help. Standard captures CSS1440x900@1.25; narrow680x900@1.25. Internal scroll preserves footer. Dedicated Chrome profile; no shared browser killed. Initial shared browser capture timed out; dedicated capture succeeded.
+
+Source citations: https://github.com/kubernetes-sigs/gateway-api/tree/v1.4.0/config/crd/standard ; https://github.com/kubernetes-sigs/gateway-api/tree/v1.4.0/config/crd/experimental ; https://github.com/kubernetes-sigs/gateway-api/tree/v1.4.0/apis . Downloaded exact version Go type files were inspected, especially gateway listener protocol validation, immutable class controller and exclusive backend CA source.
+
+Reference workflow: https://github.com/omniviewdev/omniview/issues/249 ; https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/72 ; https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/74 . No named mock skill installed; approved interactive workflow used.
+
+Run: download index.html, interactions.js, model.json; serve together with local HTTP server. No dependencies/build. No network aside from loading local model. Review needed; no issue checkbox changes or approval claim.

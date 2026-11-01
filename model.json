@@ -1,0 +1,416 @@
+{
+  "GatewayClass": [
+    [
+      "Controller",
+      "spec.controllerName",
+      "text",
+      "example.net/gateway-controller"
+    ],
+    [
+      "Description",
+      "spec.description",
+      "text",
+      "Edge routing"
+    ],
+    [
+      "Parameters group",
+      "spec.parametersRef.group",
+      "text",
+      "example.net"
+    ],
+    [
+      "Parameters kind",
+      "spec.parametersRef.kind",
+      "text",
+      "GatewayParameters"
+    ],
+    [
+      "Parameters name",
+      "spec.parametersRef.name",
+      "text",
+      "edge-settings"
+    ]
+  ],
+  "Gateway": [
+    [
+      "Gateway class",
+      "spec.gatewayClassName",
+      "select",
+      "edge-class|private-class"
+    ],
+    [
+      "Listener name",
+      "spec.listeners.0.name",
+      "text",
+      "https"
+    ],
+    [
+      "Protocol",
+      "spec.listeners.0.protocol",
+      "select",
+      "HTTPS|HTTP|TLS|TCP|UDP"
+    ],
+    [
+      "Port",
+      "spec.listeners.0.port",
+      "number",
+      "443"
+    ],
+    [
+      "Hostname",
+      "spec.listeners.0.hostname",
+      "text",
+      "shop.example.test"
+    ],
+    [
+      "TLS mode",
+      "spec.listeners.0.tls.mode",
+      "select",
+      "Terminate|Passthrough"
+    ],
+    [
+      "Certificate reference",
+      "spec.listeners.0.tls.certificateRefs.0.name",
+      "select",
+      "edge-certificate|Unresolved reference"
+    ],
+    [
+      "Allowed route namespaces",
+      "spec.listeners.0.allowedRoutes.namespaces.from",
+      "select",
+      "Same|All|Selector"
+    ]
+  ],
+  "HTTPRoute": [
+    [
+      "Gateway",
+      "spec.parentRefs.0.name",
+      "select",
+      "edge-gateway|private-gateway"
+    ],
+    [
+      "Listener",
+      "spec.parentRefs.0.sectionName",
+      "text",
+      "https"
+    ],
+    [
+      "Hostname",
+      "spec.hostnames.0",
+      "text",
+      "shop.example.test"
+    ],
+    [
+      "Path match",
+      "spec.rules.0.matches.0.path.type",
+      "select",
+      "PathPrefix|Exact|RegularExpression"
+    ],
+    [
+      "Path",
+      "spec.rules.0.matches.0.path.value",
+      "text",
+      "/shop"
+    ],
+    [
+      "Method",
+      "spec.rules.0.matches.0.method",
+      "select",
+      "GET|POST|PUT|DELETE"
+    ],
+    [
+      "Header name",
+      "spec.rules.0.matches.0.headers.0.name",
+      "text",
+      "x-region"
+    ],
+    [
+      "Header value",
+      "spec.rules.0.matches.0.headers.0.value",
+      "text",
+      "west"
+    ],
+    [
+      "Backend service",
+      "spec.rules.0.backendRefs.0.name",
+      "select",
+      "catalog|cart|Unresolved reference"
+    ],
+    [
+      "Backend namespace",
+      "spec.rules.0.backendRefs.0.namespace",
+      "select",
+      "preview|preview-backend"
+    ],
+    [
+      "Backend port",
+      "spec.rules.0.backendRefs.0.port",
+      "number",
+      "8080"
+    ],
+    [
+      "Weight",
+      "spec.rules.0.backendRefs.0.weight",
+      "number",
+      "100"
+    ]
+  ],
+  "GRPCRoute": [
+    [
+      "Gateway",
+      "spec.parentRefs.0.name",
+      "select",
+      "edge-gateway|private-gateway"
+    ],
+    [
+      "Hostname",
+      "spec.hostnames.0",
+      "text",
+      "rpc.example.test"
+    ],
+    [
+      "Match type",
+      "spec.rules.0.matches.0.method.type",
+      "select",
+      "Exact|RegularExpression"
+    ],
+    [
+      "gRPC service",
+      "spec.rules.0.matches.0.method.service",
+      "text",
+      "example.Cart"
+    ],
+    [
+      "gRPC method",
+      "spec.rules.0.matches.0.method.method",
+      "text",
+      "GetCart"
+    ],
+    [
+      "Backend service",
+      "spec.rules.0.backendRefs.0.name",
+      "select",
+      "catalog|cart|Unresolved reference"
+    ],
+    [
+      "Backend namespace",
+      "spec.rules.0.backendRefs.0.namespace",
+      "select",
+      "preview|preview-backend"
+    ],
+    [
+      "Backend port",
+      "spec.rules.0.backendRefs.0.port",
+      "number",
+      "8080"
+    ],
+    [
+      "Weight",
+      "spec.rules.0.backendRefs.0.weight",
+      "number",
+      "100"
+    ]
+  ],
+  "ReferenceGrant": [
+    [
+      "Source group",
+      "spec.from.0.group",
+      "text",
+      "gateway.networking.k8s.io"
+    ],
+    [
+      "Source kind",
+      "spec.from.0.kind",
+      "select",
+      "HTTPRoute|GRPCRoute|Gateway|TLSRoute|TCPRoute|UDPRoute"
+    ],
+    [
+      "Source namespace",
+      "spec.from.0.namespace",
+      "select",
+      "preview|preview-app"
+    ],
+    [
+      "Target group",
+      "spec.to.0.group",
+      "text",
+      ""
+    ],
+    [
+      "Target kind",
+      "spec.to.0.kind",
+      "select",
+      "Service|Secret"
+    ],
+    [
+      "Target name (omit for all)",
+      "spec.to.0.name",
+      "text",
+      "catalog"
+    ]
+  ],
+  "BackendTLSPolicy": [
+    [
+      "Target kind",
+      "spec.targetRefs.0.kind",
+      "select",
+      "Service"
+    ],
+    [
+      "Target group",
+      "spec.targetRefs.0.group",
+      "text",
+      ""
+    ],
+    [
+      "Target service",
+      "spec.targetRefs.0.name",
+      "select",
+      "catalog|cart"
+    ],
+    [
+      "Target port name",
+      "spec.targetRefs.0.sectionName",
+      "text",
+      "https"
+    ],
+    [
+      "TLS hostname",
+      "spec.validation.hostname",
+      "text",
+      "catalog.example.test"
+    ],
+    [
+      "Trust source",
+      "spec.validation.wellKnownCACertificates",
+      "select",
+      "System|ConfigMap reference"
+    ],
+    [
+      "CA ConfigMap",
+      "spec.validation.caCertificateRefs.0.name",
+      "select",
+      "backend-ca|Unresolved reference"
+    ]
+  ],
+  "TCPRoute": [
+    [
+      "Gateway",
+      "spec.parentRefs.0.name",
+      "select",
+      "edge-gateway|private-gateway"
+    ],
+    [
+      "Listener",
+      "spec.parentRefs.0.sectionName",
+      "text",
+      "tcp"
+    ],
+    [
+      "Backend service",
+      "spec.rules.0.backendRefs.0.name",
+      "select",
+      "catalog|cart|Unresolved reference"
+    ],
+    [
+      "Backend namespace",
+      "spec.rules.0.backendRefs.0.namespace",
+      "select",
+      "preview|preview-backend"
+    ],
+    [
+      "Backend port",
+      "spec.rules.0.backendRefs.0.port",
+      "number",
+      "8080"
+    ],
+    [
+      "Weight",
+      "spec.rules.0.backendRefs.0.weight",
+      "number",
+      "100"
+    ]
+  ],
+  "TLSRoute": [
+    [
+      "Gateway",
+      "spec.parentRefs.0.name",
+      "select",
+      "edge-gateway|private-gateway"
+    ],
+    [
+      "Listener",
+      "spec.parentRefs.0.sectionName",
+      "text",
+      "tls"
+    ],
+    [
+      "SNI hostname",
+      "spec.hostnames.0",
+      "text",
+      "secure.example.test"
+    ],
+    [
+      "Backend service",
+      "spec.rules.0.backendRefs.0.name",
+      "select",
+      "catalog|cart|Unresolved reference"
+    ],
+    [
+      "Backend namespace",
+      "spec.rules.0.backendRefs.0.namespace",
+      "select",
+      "preview|preview-backend"
+    ],
+    [
+      "Backend port",
+      "spec.rules.0.backendRefs.0.port",
+      "number",
+      "8080"
+    ],
+    [
+      "Weight",
+      "spec.rules.0.backendRefs.0.weight",
+      "number",
+      "100"
+    ]
+  ],
+  "UDPRoute": [
+    [
+      "Gateway",
+      "spec.parentRefs.0.name",
+      "select",
+      "edge-gateway|private-gateway"
+    ],
+    [
+      "Listener",
+      "spec.parentRefs.0.sectionName",
+      "text",
+      "udp"
+    ],
+    [
+      "Backend service",
+      "spec.rules.0.backendRefs.0.name",
+      "select",
+      "catalog|cart|Unresolved reference"
+    ],
+    [
+      "Backend namespace",
+      "spec.rules.0.backendRefs.0.namespace",
+      "select",
+      "preview|preview-backend"
+    ],
+    [
+      "Backend port",
+      "spec.rules.0.backendRefs.0.port",
+      "number",
+      "5353"
+    ],
+    [
+      "Weight",
+      "spec.rules.0.backendRefs.0.weight",
+      "number",
+      "100"
+    ]
+  ]
+}

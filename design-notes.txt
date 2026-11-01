@@ -1,0 +1,39 @@
+Issue 271 — EndpointSlice design proposal. Awaiting mock review; not production code.
+
+Coverage
+1. discovery.k8s.io/v1 EndpointSlice, namespaced manual ownership: explicit create and edit, identity/addressType locks during edit, endpoints and ports, review, source fallback.
+2. Same kind under controller ownership: default inspect, read-only source, owner-reference inspection boundary. No takeover, delete, restart, regeneration, or ordinary create action.
+
+Field mapping (form control → exact owned path)
+Name text → metadata.name (locked on edit).
+Namespace context → metadata.namespace (preview fixed fixture destination; production picks explicit namespace before opening).
+Address-family select → addressType (IPv4/IPv6 only; immutable after create).
+Manager text → metadata.labels["endpointslice.kubernetes.io/managed-by"] (manual workflow requires distinct manager as design guardrail, not Kubernetes schema requirement).
+Same-namespace selectorless Service picker / no association → metadata.labels["kubernetes.io/service-name"] / omission. Does not create Service or ownerReference.
+Endpoint address rows → endpoints[i].addresses[0]. Add/remove explicitly alters endpoint membership. Additional addresses remain source-only because kube-proxy ignores all but first.
+Ready three-way select → endpoints[i].conditions.ready true/false/omitted.
+Expanded hostname/node/zone → endpoints[i].hostname / nodeName / zone; blank omitted.
+Port name / backend number / protocol / application protocol rows → ports[i].name / port / protocol / appProtocol. Blank port omitted; omitted protocol remains omitted (server TCP default); no inference of Service port or nodePort.
+Advanced source access → conditions.serving and terminating, targetRef object reference, hints.forZones[].name, hints.forNodes[].name, metadata extensions, multiple addresses. No guided synthesis of these fields. deprecatedTopology is non-writable through v1.
+Controller inspection → metadata.ownerReferences and manager label shown as fixture ownership facts, not permission proof or controller-health proof.
+
+Primary API snapshot
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/api/openapi-spec/swagger.json#L62992-L63877
+https://github.com/kubernetes/api/blob/v0.35.0/discovery/v1/types.go
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/pkg/apis/discovery/validation/validation.go
+Read OpenAPI required properties: EndpointSlice addressType and endpoints, Endpoint addresses. Native v1; no installation prerequisite beyond served API, actual verbs/RBAC and ownership. forNodes routing behavior additionally depends on cluster support/configuration; schema existence is not behavior proof.
+Source discrepancy: Go/API prose says maximum 100 ports; pinned server validation uses 20000. Production must not invent a universal 100-port hard limit. Endpoints max 1000; addresses per endpoint 1–100; hints zones/nodes max eight each. Source-only advanced editing requires server validation.
+FQDN deprecated, not processed by kube-proxy; retain imported FQDN through source-only interface, never silently convert addressType.
+
+Interaction and evidence
+15 screenshots; desktop 1440x900 CSS at 1.25 device scale (1800x1125 raster); narrow 680x760 at 1.25. checks.json contains named booleans and filenames only. Inputs/selects/add/remove/help/focus/Escape/source were driven through real browser interactions. Every image visually inspected in review-sheet.jpg. Shared-browser screenshot timeouts resolved with dedicated Chrome profile. Profile excluded from publication.
+Captions: 01 generated ownership; 02 read-only endpoints with focus help; 03 blank manual create; 04 required validation; 05 manually entered backend with false readiness; 06 entered backend port; 07 non-mutating consequence review; 08 shared form source; 09 unsupported/invalid source retained; 10 manual edit identity/family locks; 11 advanced field boundary; 12 denied/unavailable/missing distinct fixtures; 13 narrow footer and internal scroll.
+
+Reuse
+Faithful isolated HTML composition, not shipped React. Existing #249 frame and controls map to base-ui Dialog, SegmentedControl, FormField, Input, Select, Button, Collapsible, Table, Tooltip/Popover. No generic primitive proposal or dependency needed. Native Kubernetes plugin should own adapter; no OSS provider needed for native GVK. Source-preservation and capability contracts should use #263/#264 integration.
+Visual review used web-design-guidelines skill and fetched current Vercel guideline source. Native labels/buttons, visible focus, reduced-motion-safe no animations, dark controls, accessible help, polite errors and internal scrolling present.
+
+Honest limits
+No production app or cluster connected. No API requests, authorization verification, live lookups, mutation, controller/health/reachability assertions. Retry leaves fixture unchanged explicitly. Only fixture Service available; no lookup loading/empty Service-list proof. Discovery denied/unavailable/absent states represented separately.
+Raw source is held exactly in memory after first manual edit; Form/review lock rather than claiming a lossless parser. Unknown source, comments, scalar types and invalid text retained verbatim only within this lockout path. Generated form source is bounded and does not prove production AST preservation. No raw credentials/annotations are supplied, stored or captured.
+Production still needs full DNS/IP/port/appProtocol validation, supported-version/shape checks, server/admission validation, per-verb authorization, resourceVersion conflict handling, ownership unknown/mixed-manager lockout, safe source patching, modal focus trap/opener restoration, unsaved-close warning and explicit mode preference. This mock has no close action or persistence, so values never persist and preference is not demonstrated. IPv6 local syntax check is intentionally incomplete; no claim of server-valid review. Manual manager and fixture Service selection are authoring qualifications, not authentication.

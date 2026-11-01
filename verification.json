@@ -1,5 +1,5 @@
 {
-  "revision": "compact-density",
+  "revision": "visual-cleanup",
   "results": [
     "00-real-app",
     "01-browse",
@@ -12,11 +12,13 @@
     "06-standalone-multiselect",
     "07-context-actions",
     "08-layer-changes",
+    "08b-layer-help",
     "09-cumulative",
     "10-layer-filter",
     "11-runtime-diff",
     "12-live-update",
     "13-paused",
+    "13b-manual-refreshed",
     "14-watch-gap",
     "14b-live-rename",
     "14c-live-delete",
@@ -30,7 +32,8 @@
     "17-state-large",
     "17-state-missing-tar",
     "18-phone-browse",
-    "19-phone-layers"
+    "19-phone-layers",
+    "19b-phone-help"
   ],
   "densityMeasurements": [
     {
@@ -112,6 +115,14 @@
       "metadataFont": "12px"
     },
     {
+      "capture": "08b-layer-help",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
       "capture": "09-cumulative",
       "width": 1440,
       "rowHeight": 22,
@@ -145,6 +156,14 @@
     },
     {
       "capture": "13-paused",
+      "width": 1440,
+      "rowHeight": 22,
+      "fontSize": "13px",
+      "iconSize": 14,
+      "metadataFont": "12px"
+    },
+    {
+      "capture": "13b-manual-refreshed",
       "width": 1440,
       "rowHeight": 22,
       "fontSize": "13px",
@@ -243,6 +262,14 @@
     },
     {
       "capture": "19-phone-layers",
+      "width": 390,
+      "rowHeight": 34,
+      "fontSize": "13px",
+      "iconSize": 16,
+      "metadataFont": "11px"
+    },
+    {
+      "capture": "19b-phone-help",
       "width": 390,
       "rowHeight": 34,
       "fontSize": "13px",

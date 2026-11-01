@@ -26,6 +26,18 @@ The initial mock already used 13px inherited body text; this revision makes that
 
 Virtualization must use the effective row height, including density and responsive changes. The existing hardcoded 36px estimate is an implementation acceptance blocker for compact virtualized trees, not fixed by this HTML mock. Scope that repair to existing TreeList rather than introducing another virtualizer. No production component code changes are part of this design revision.
 
+## Visual copy and refresh revision
+
+- Keep architectural and provider explanations in this document, not permanently inside explorer panels.
+- Standalone tree's adjacent surface shows only navigation and selection shortcuts. Render every key and mouse modifier with the same keycap treatment, including modifier-click, Shift-click, and context actions.
+- Layer controls show their scope toggle and change legend. Explain cumulative versus per-layer scope only in a help disclosure that supports hover, keyboard focus, and click/tap.
+- Combine filename, parent path, change badge, read-only icon, and file actions in one 36px preview header. Truncate the inline path; full path remains available on hover. Remove the separate full-path header.
+- Expose `Live sync` explicitly. With sync off, queue updates and show a short “N updates available” notice with `Refresh`. Refresh applies pending updates without turning live sync back on.
+- After an interrupted subscription, show “Live sync interrupted” with `Refresh`. Keep sequence/cursor diagnostics out of default copy. Do not describe an unknown gap as a confirmed file change or silently claim current data.
+- Remove instructional descriptions from empty/loading/provider-state examples. Retain actionable errors, source context, partial-coverage labels, and bounded-preview information.
+
+The simulation controls and mock safety label remain outside the production component contract. No real export, download, watch transport, or provider connection is added by this revision.
+
 ## Component boundaries
 
 | Surface | Owns | Does not own |

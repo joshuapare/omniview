@@ -1,0 +1,32 @@
+{
+  "componentAPIGroupDiscoveryCovered": true,
+  "requestReviewNonMutating": true,
+  "helpEscapeRestoresFocus": true,
+  "resourceFilterTyped": true,
+  "subresourcesExpanded": true,
+  "currentAndStaleCaptured": true,
+  "deniedUnavailableUnsupportedEmptyDistinct": true,
+  "invalidSourceRetained": true,
+  "coreSourceUsesPod": true,
+  "narrowOverflowAbsent": true,
+  "noCredentialsUsed": true,
+  "noLiveRequestsOrMutations": true,
+  "allScreenshotsVisuallyInspected": true,
+  "productionBehaviorVerified": false,
+  "screenshotFiles": [
+    "01-capabilities.png",
+    "02-subresources.png",
+    "03-filter.png",
+    "04-stale.png",
+    "05-denied.png",
+    "06-unavailable.png",
+    "07-unsupported.png",
+    "08-empty.png",
+    "09-invalid.png",
+    "10-invalid-source.png",
+    "11-source.png",
+    "12-review.png",
+    "13-core.png",
+    "14-narrow.png"
+  ]
+}

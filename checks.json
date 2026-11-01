@@ -33,7 +33,20 @@
     "16-unavailable.png",
     "16-missing.png",
     "17-narrow.png",
-    "18-clusterusage-edit.png"
+    "18-clusterusage-edit.png",
+    "19-dirty-close-confirmation.png",
+    "20-close-cancel-retains-draft.png",
+    "21-closed-opener-focus.png"
   ],
-  "visualReview": true
+  "visualReview": true,
+  "tabWrapsInsideModal": true,
+  "shiftTabWrapsInsideModal": true,
+  "escapeClosesHelpBeforeModal": true,
+  "dirtyEscapeAsksConfirmation": true,
+  "confirmationTrapReverse": true,
+  "confirmationTrapForward": true,
+  "cancelClosePreservesDraft": true,
+  "discardReturnsFocusToOpener": true,
+  "reopenClearsDiscardedDraft": true,
+  "keyboardRuntimeClean": true
 }

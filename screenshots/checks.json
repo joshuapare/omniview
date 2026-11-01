@@ -1,0 +1,101 @@
+{
+  "viewport": "1440x900 @1.25",
+  "records": [
+    {
+      "check": "Pod starts in Form mode with blank required fields",
+      "passed": true
+    },
+    {
+      "screenshot": "01-pod-empty-form.png"
+    },
+    {
+      "check": "Required fields show inline errors",
+      "passed": true
+    },
+    {
+      "screenshot": "02-pod-inline-validation.png"
+    },
+    {
+      "check": "Container-port help opens on hover",
+      "passed": true
+    },
+    {
+      "screenshot": "03-pod-contextual-help.png"
+    },
+    {
+      "check": "Repeatable environment rows retain entered values",
+      "passed": true
+    },
+    {
+      "screenshot": "04-pod-container-resources.png"
+    },
+    {
+      "check": "YAML retains form values after section navigation",
+      "passed": true
+    },
+    {
+      "screenshot": "05-pod-yaml-mode.png"
+    },
+    {
+      "check": "Review retains draft destination and image",
+      "passed": true
+    },
+    {
+      "check": "Edited YAML cannot be silently overwritten by Form",
+      "passed": true
+    },
+    {
+      "check": "Raw YAML edit remains intact after mode switches",
+      "passed": true
+    },
+    {
+      "check": "Deployment has replicas and linked selector preview",
+      "passed": true
+    },
+    {
+      "screenshot": "06-deployment-form.png"
+    },
+    {
+      "check": "StatefulSet exposes governing Service instead of Deployment strategy",
+      "passed": true
+    },
+    {
+      "screenshot": "07-statefulset-form.png"
+    },
+    {
+      "check": "Per-replica storage computes total request",
+      "passed": true
+    },
+    {
+      "screenshot": "08-statefulset-storage.png"
+    },
+    {
+      "check": "Storage lifecycle consequence stays in contextual help",
+      "passed": true
+    },
+    {
+      "screenshot": "09-statefulset-storage-help.png"
+    },
+    {
+      "check": "Storage remains in YAML after leaving Storage section",
+      "passed": true
+    },
+    {
+      "check": "Contextual help works with keyboard focus",
+      "passed": true
+    },
+    {
+      "check": "Escape dismisses help without closing modal",
+      "passed": true
+    },
+    {
+      "check": "Escape closes dialog and restores opener focus",
+      "passed": true
+    },
+    {
+      "check": "Create button reopens draft",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

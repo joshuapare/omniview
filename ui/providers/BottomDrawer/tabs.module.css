@@ -1,0 +1,54 @@
+.Bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Strip {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  min-width: 0;
+  height: 33px;
+  gap: 2px;
+  padding-inline: 2px;
+  border-bottom: 1px solid var(--ov-color-border-muted);
+}
+
+.StripSeparator {
+  align-self: stretch;
+  margin-block: 4px;
+}
+
+.Actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 33px;
+  gap: 2px;
+  padding-inline: var(--ov-space-2);
+  padding-bottom: 1px;
+}
+
+.Button {
+  flex: none;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.TabsViewport {
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* The strip is also the drop zone for drawer tabs from other windows, so it fills the viewport even when empty. */
+.Tabs {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}

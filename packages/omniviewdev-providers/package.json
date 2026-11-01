@@ -1,0 +1,45 @@
+{
+  "name": "@omniviewdev/providers",
+  "version": "0.7.4",
+  "description": "Package to interact with the various providers in Omniview via the UI.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "directory": "packages/omniviewdev-providers",
+    "url": "https://github.com/omniviewdev/omniview"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-tsup.mjs index.ts --minify --dts --format cjs,esm",
+    "lint": "eslint --cache --ext .js,.jsx,.ts,.tsx ./src",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "keywords": [
+    "omniview"
+  ],
+  "author": "Omniview",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "react": "19.3.1",
+    "tsup": "9.0.0",
+    "typescript": "npm:@typescript/typescript6@6.0.2",
+    "vite": "7.3.7",
+    "@typescript/native": "npm:typescript@7.0.2"
+  },
+  "dependencies": {
+    "@wailsio/runtime": "3.0.0-beta.34"
+  }
+}

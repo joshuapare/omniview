@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_externalsecrets.yaml",
+    "scope": "Namespaced",
+    "versions": [
+      "v1",
+      "v1beta1"
+    ],
+    "served": [
+      "true",
+      "false"
+    ],
+    "storage": [
+      "true",
+      "false"
+    ]
+  },
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_secretstores.yaml",
+    "scope": "Namespaced",
+    "versions": [
+      "v1",
+      "v1beta1"
+    ],
+    "served": [
+      "true",
+      "false"
+    ],
+    "storage": [
+      "true",
+      "false"
+    ]
+  },
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_clustersecretstores.yaml",
+    "scope": "Cluster",
+    "versions": [
+      "v1",
+      "v1beta1"
+    ],
+    "served": [
+      "true",
+      "false"
+    ],
+    "storage": [
+      "true",
+      "false"
+    ]
+  },
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_clusterexternalsecrets.yaml",
+    "scope": "Cluster",
+    "versions": [
+      "v1",
+      "v1beta1"
+    ],
+    "served": [
+      "true",
+      "false"
+    ],
+    "storage": [
+      "true",
+      "false"
+    ]
+  },
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_pushsecrets.yaml",
+    "scope": "Namespaced",
+    "versions": [
+      "v1alpha1"
+    ],
+    "served": [
+      "true"
+    ],
+    "storage": [
+      "true"
+    ]
+  },
+  {
+    "url": "https://raw.githubusercontent.com/external-secrets/external-secrets/v0.20.1/config/crds/bases/external-secrets.io_clusterpushsecrets.yaml",
+    "scope": "Cluster",
+    "versions": [
+      "v1alpha1"
+    ],
+    "served": [
+      "true"
+    ],
+    "storage": [
+      "true"
+    ]
+  }
+]

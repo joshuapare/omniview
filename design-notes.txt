@@ -1,0 +1,46 @@
+Issue 300 — Telemetry design review, not production implementation or approval.
+
+Research: issue 300, Epic 262 and approved issue 249 interactive workflow read. PR72/PR74 summaries and immutable image examples linked by issue249 establish shared frame. Named mock skill unavailable; used approved HTML workflow and web-design-guidelines skill source https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md . Known prototype reviewed for labels, focus, dark native controls, internal scrolling, warnings and keyboard help. Remaining production accessibility gaps: true modal focus trap, close/opener restoration and per-field linked errors. No repo build/tests/lint run.
+
+Pinned schema: https://github.com/istio/istio/blob/1.27.0/manifests/charts/base/files/crd-all.gen.yaml#L16626-L17536
+Semantic reference: https://istio.io/v1.27/docs/reference/config/telemetry/
+Telemetry namespaced; v1 served, storage false; v1alpha1 served, storage true in this exact chart. v1 is chosen for new draft, never silently migrate existing API version. CRD presence is not permission or supported controller health. Add-on Istio editor provider owns resource semantics; host owns lifecycle, discovery, capabilities, patch/revision safety and YAML fallback.
+
+FIELD / CONTROL / MANIFEST PATH
+Name / required input / metadata.name. Edit identity read-only.
+Namespace / destination selector / metadata.namespace. Fixture only preview; existing namespace immutable.
+Selected workloads / label equality pair / spec.selector.matchLabels[key]. Namespace-local, AND across production rows. Mock one pair, no wildcard semantics. Sample match checkout-v1 is synthetic.
+Entire namespace / explicit placement choice / omit selector,targetRef,targetRefs. One selector-less resource per namespace; root namespace broadens to mesh. Overlapping workload selectors unsupported; production must detect conflict where lookup authorized, otherwise warn unknown.
+Target / kind and existing-name controls / spec.targetRefs[i].group,kind,name; namespace omitted. Gateway gateway.networking.k8s.io; Service core empty-group waypoint; ServiceEntry networking.istio.io. GatewayClass gateway.networking.k8s.io is root-namespace-only advanced/source attachment, not offered in fixed preview namespace. Maximum16. Deprecated spec.targetRef preserved only in source. selector,targetRef,targetRefs mutually exclusive; never set multiple.
+Provider / independent per-signal picker / spec.tracing[i].providers[j].name, spec.metrics[i].providers[j].name, spec.accessLogging[i].providers[j].name. Omission inherits mesh defaults. Only one tracing provider supported semantically. Fixture catalog not actual availability/capability check. Provider definitions live outside resource in MeshConfig; no provider Create action.
+Traffic direction / choice / tracing[i].match.mode; accessLogging[i].match.mode; metrics[i].overrides[j].match.mode. CLIENT, SERVER, CLIENT_AND_SERVER. Blank omits.
+Sampling / percentage input blank inheritance, explicit0 retained / spec.tracing[i].randomSamplingPercentage. Bounds0..100; no prior trace decision override.
+Span reporting / inherit,enabled,disabled / spec.tracing[i].disableSpanReporting omitted,false,true. Disabling reporting does not disable propagation or sampling.
+Istio tags / inherit,enabled,disabled / spec.tracing[i].enableIstioTags omitted,true,false.
+Request ID sampling / tri-state / spec.tracing[i].useRequestIdForTraceSampling.
+Custom span tag / add/remove named literal fixture row / spec.tracing[i].customTags[key].literal.value. Fixture literal value preview is explicitly fixed; arbitrary literals, environment.name/defaultValue, header.name/defaultValue use source. Union branches mutually exclusive. Setting customTags replaces parent map, not merge. Avoid confidential/personal values; none used in captures.
+Metric / standard enumeration or custom name / spec.metrics[i].overrides[j].match.metric XOR .customMetric. Includes all 11 schema enumerants.
+Metric generation / tri-state / spec.metrics[i].overrides[j].disabled.
+Reporting interval / duration string / spec.metrics[i].reportingInterval. Server duration rule >=1ms; not parsed/validated by mock.
+Dimension key / input / spec.metrics[i].overrides[j].tagOverrides[key].
+Operation / Add-update or Remove / ...operation UPSERT or REMOVE. UPSERT requires nonempty value; REMOVE omits value and retains previous editor branch draft.
+Dimension CEL / expression input / ...value. No CEL execution/typecheck claimed.
+Access logging / tri-state / spec.accessLogging[i].disabled.
+Log filter / expression input / spec.accessLogging[i].filter.expression. CEL not evaluated.
+Status / read-only boundary / status.conditions,observedGeneration,validationMessages; no status write.
+Unknown metadata/spec/sibling structures / source-owned fallback; never rebuild after manual source edits.
+
+SAFETY AND OWNERSHIP
+Direct create/edit are qualified by discovery, create/update verbs, admission and ownership. Ordinary spec is mutable; pinned CRD has no extra immutable spec rules. Kubernetes identity immutable; system metadata/status not form-owned. GitOps-managed fixture offers review/inspection but no save or ownership takeover. Denied/missing/unavailable/empty/unsupported are distinct fixture selections; production lookups must retain unresolved references and draft. Source/field edits do not perform requests. Review includes destination and impact, never successful creation. No implicit providers/workloads/controllers installed.
+
+SOURCE HONESTY
+This is isolated HTML, not shipped React/base-ui. Initial guided source uses JSON syntax, a YAML-compatible subset. It emits only demonstrated owned fields. After ANY manual source change the exact raw string remains authoritative and Form is unavailable. Comments and large integer text survive that source-only round trip. No parser, safe AST patcher, YAML validation or general lossless bidirectional editing claimed. Raw review is unvalidated, non-mutating. Source never persists. No credentials or sensitive annotations included. Production requires real shared manifest AST draft and revision-safe patches, not this bounded generator.
+
+REUSE
+Compose installed base-ui Dialog, SegmentedControl, FormField, Input, Select/Combobox, Table/EditableList, Collapsible, Tooltip/Popover, Button and existing Monaco source surface. Native HTML here models their semantics and 32px density. No new generic base-ui primitive proposed. Resource-specific provider types, CEL and Istio inheritance stay in add-on adapter. Production provider picker filters provider capabilities without claiming health.
+
+PROOF
+19 screenshots, desktop1440x900 at1.25 except dedicated760x780 narrow capture at1.25. All screenshot states driven by real browser input/select/click/focus/Escape; no injected state. Every capture inspected together in contact-sheet.png. Twelve named boolean checks true. No runtime page errors. Source preservation proof limited to raw comment/large integer text after source lock. No live cluster queries, mutations, installs, production builds or release. Browser closed after proof. File URL used: no preview server required.
+
+LIMITS / REVIEW DECISIONS
+One guided rule per signal and one dimension row; arbitrary repeated rules/providers, additional selectors/targetRefs and extraction unions supported through intact source editing only. Namespace fixture fixed. Literal tag fixture value fixed preview. Namespace/root ordering and overlapping policy detection need production API evidence. API validation, CEL validation, provider resolution, authorization, GitOps request link and controller application not executed. Prototype review button deliberately never mutates, including denied and ownership states. Explicit view persistence not modeled; no resource data persisted. Design remains open for review; no checklist approval or shipped support claimed.

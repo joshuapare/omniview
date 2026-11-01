@@ -1,0 +1,21 @@
+{
+  "01-create.png": "CloudEventSource creation: explicit namespace and no preselected sinks.",
+  "02-validation.png": "Incomplete draft: visible error and first-input focus.",
+  "03-help.png": "Keyboard-focus help; Escape dismisses it.",
+  "04-filters.png": "All twelve enum values offered independently for inclusion and exclusion.",
+  "05-review.png": "Namespaced review: external delivery consequence and no submission.",
+  "06-source.png": "Form values serialized into the same local source draft.",
+  "07-source-fallback.png": "Invalid source, comments and exact large integer retained verbatim; form/review blocked.",
+  "08-cluster-edit.png": "ClusterCloudEventSource edit: identity locked, two independent sink branches.",
+  "09-cluster-review.png": "Cluster-wide delivery consequence and authentication reference.",
+  "10-managed.png": "GitOps ownership: repository change required.",
+  "11-denied.png": "Denied permission distinct from missing API.",
+  "12-missing.png": "Missing CRD: no implicit install.",
+  "13-unavailable.png": "Unavailable discovery: no fabricated schema or permission.",
+  "14-reference-empty.png": "Empty authentication list: no implicit companion.",
+  "15-advanced.png": "Optional clusterName override.",
+  "16-observed.png": "Read-only controller status unavailable; no fabricated Active state.",
+  "17-narrow.png": "720×800 internal scroll and visible footer, no horizontal overflow.",
+  "18-cluster-create.png": "Cluster-scoped creation with Azure Event Grid and cluster authentication.",
+  "19-namespaced-edit.png": "CloudEventSource editing keeps name and namespace immutable."
+}

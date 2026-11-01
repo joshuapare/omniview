@@ -1,0 +1,61 @@
+Issue 279 — CustomResourceDefinition design proposal; not production, approval, or shipped code.
+
+Workflow: approved #249 isolated interactive HTML workflow. No named mock skill available. Reviewed known index.html against web-design-guidelines skill and fresh vercel-labs/web-interface-guidelines/main/command.md. Fixed narrow footer fit and field-grid grouping during visual review. HTML composes native equivalents; it is not shipped React/base-ui.
+
+Scope: Kubernetes v1.35.0; apiextensions.k8s.io/v1; CRD is cluster-scoped even when instances are Namespaced. Built-in Kubernetes plugin adapter owns native CRD administration. Custom resource instances remain owned by their own groups and installed providers; no dynamic instance form is implied. ConversionReview is webhook protocol, never a Create resource.
+
+Pinned primary sources:
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/api/openapi-spec/swagger.json#L44714-L45626
+https://github.com/kubernetes/apiextensions-apiserver/blob/v0.35.0/pkg/apis/apiextensions/v1/types.go
+https://github.com/kubernetes/apiextensions-apiserver/blob/v0.35.0/pkg/apis/apiextensions/validation/validation.go#L658-L666
+Validation source confirms group/plural always immutable; scope/kind immutable once Established. The mock edit fixture is Established. Singular/shortNames/categories remain editable. No delete/recreate action. Versions in status.storedVersions cannot be removed until migration and status maintenance complete. Storage selection does not migrate objects. Structural schemas required for new v1 CRDs. CustomResourceFieldSelectors and CRDObservedGenerationTracking depend on installed support; never infer gate availability from a schema.
+
+Exact control/path mapping:
+API group text -> spec.group.
+Plural text -> spec.names.plural.
+Derived definition name -> metadata.name = plural + '.' + group; locked in edit.
+Kind text -> spec.names.kind.
+Scope select -> spec.scope: Namespaced | Cluster.
+Optional singular text -> spec.names.singular; blank omitted.
+Comma-separated short names/categories -> spec.names.shortNames[] / categories[]; blank omitted.
+Version rows -> spec.versions[i].name, served boolean, storage boolean. Single radio storage choice.
+Deprecated checkbox/warning -> spec.versions[i].deprecated / deprecationWarning. Warning omitted unless deprecated.
+Schema advanced JSON text -> spec.versions[i].schema.openAPIV3Schema. Root object locally checked; complex structural/CEL/default/list rules need server validation.
+Conversion select -> spec.conversion.strategy None | Webhook.
+Endpoint discriminant -> spec.conversion.webhook.clientConfig.service OR .url, never both.
+Service namespace/name/path/port -> service.namespace/name/path/port; optional path/port omitted when blank, API default port443 not inserted.
+Review version ordered comma list -> spec.conversion.webhook.conversionReviewVersions[].
+CA bundle omitted in this bounded mock; system roots consequence visible. No PEM or Base64 material collected or captured. Production needs explicit masked keep/replace/remove bundle handling; imported bundle content stays source-only and must never enter captures.
+Status checkbox -> spec.versions[i].subresources.status: {} or omitted.
+Scale checkbox -> spec.versions[i].subresources.scale; desired/observed/selector -> specReplicasPath/statusReplicasPath/labelSelectorPath. Selector optional; needed by HPA. Dot paths constrained locally; schema correspondence not validated.
+Printer column rows -> spec.versions[i].additionalPrinterColumns[j].name/type/jsonPath/format/description/priority. Advanced fields preserve entered text; full validation not demonstrated.
+Selectable rows -> spec.versions[i].selectableFields[j].jsonPath. Maximum8 rows; no claim of full type/path validation.
+Read-only status panel -> status.conditions, status.acceptedNames, status.storedVersions and gate-dependent observedGeneration. Status never authored or submitted.
+Ownership panel -> external field manager fixture only. No force-ownership control.
+Availability panel -> explicit simulation of missing discovery, create/update denied, Service lookup denied/unavailable/empty and unsupported version. They do not execute authorization or disable a real API action because no API action exists.
+
+Shared composition: Dialog, FormField, Input, Select, Checkbox, RadioGroup, SegmentedControl, Tooltip/Popover, Table, Buttons, TextArea and existing source-editor surface. No new generic base-ui component or release proposed. Kubernetes semantics and validation stay in adapter. 1000x700 compact reference frame, 32px inputs, 13px body, 180px section nav, 20x24 content padding, 16px columns. Dense optional sections keep help on demand and safety visible.
+
+Draft boundaries: form authors a bounded document; JSON syntax is valid YAML. Manual source editing retains exact text, comments, unknown content and large scalars; Form then blocks instead of parsing/rebuilding. This mock does NOT claim AST-level bidirectional lossless patching. Raw source and structured draft never persist. Only explicit mode preference is stored. Per-version subresource/column differences, full schemas and unsupported shapes require source-only editing. Production must use existing leaf-level AST contract, preserve unedited siblings, default omission, comments and scalar types, sanitize sensitive annotation projections, and apply revision-aware RBAC/admission checks. Arbitrary sensitive source/import is outside this capture fixture.
+
+Consequences: schema changes can prune stored fields; served changes break clients; webhook failures block access; storage changes require migration. Review is local, destination-aware and non-mutating. No live cluster, companion controller, service, certificate, migration, status write, permission or health claim.
+
+Evidence: capture.cjs drives real native browser typing/select/click/check/keyboard interactions. Dedicated Playwright-launched Chrome uses its own temporary profile and closes browser after capture. Shared harness screenshot initially timed out; discarded in favor of independent browser process. Standard captures1440x900 CSS pixels at device scale1.25 (1800x1125 physical PNG); narrow760x720. checks.json contains named booleans and screenshot filenames only. Browser proof is mock behavior, not production verification. All final images visually reviewed via contact sheet; no sensitive material in fixtures.
+
+Capture captions:
+01-create.png — empty guided names/scope.
+02-invalid.png — required error and focus.
+03-versions-schema.png — two version rows, served/storage/deprecation and expert schema.
+04-webhook-url.png — HTTPS branch and conversion consequence.
+05-webhook-service.png — namespace/name/path/optional port branch.
+06-subresources.png — status and scale declarations, not actions.
+07-columns-selectors.png — printer columns and selectable path.
+08-review.png — cluster destination and non-mutating consequence review.
+09-edit-locks.png — Established identity/scope boundaries.
+10-status-ownership.png — generated status and external manager inspection.
+11-unsupported.png — source fallback availability.
+12-denied.png — lookup forbidden distinct from empty.
+13-source-preserved.png — exact source-only draft with unsafe text retained.
+14-narrow.png — narrow frame retains footer.
+
+Limits: no live-host pixel or production React claim; no full CRD structural/CEL validation, webhook test, trust check, source parser, sensitive bundle import, status mutation, server dry run, or actual submission. Review-dependent issue checkboxes remain unchecked. Design awaits review.

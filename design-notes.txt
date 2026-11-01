@@ -1,0 +1,46 @@
+RBAC resource editor design — issue 273 — review requested, not shipped
+
+Workflow: approved #249 interactive standalone HTML mock. No named mock skill was available. Applied web-design-guidelines skill and fetched its real guideline source. Prototype uses faithful native HTML composition, not shipped React or base-ui components.
+
+Scope: Kubernetes v1.35.0 / k8s.io v0.35.0, rbac.authorization.k8s.io/v1. Role and RoleBinding are namespaced. ClusterRole and ClusterRoleBinding are cluster-scoped. No additional installation/feature gate is required for native v1; discovery and authorization remain separate runtime prerequisites. All references are synthetic, never permission or existence proofs.
+
+Sources read:
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/api/openapi-spec/swagger.json#L74822-L77833
+https://github.com/kubernetes/kubernetes/blob/v1.35.0/staging/src/k8s.io/api/rbac/v1/types.go
+https://github.com/omniviewdev/omniview/issues/262
+https://github.com/omniviewdev/omniview/issues/249 (including PR72/PR74 merged implementation receipts and screenshot references)
+https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
+
+Exact field / control mapping:
+- apiVersion is fixed rbac.authorization.k8s.io/v1. kind follows explicit fixture kind.
+- metadata.name: required name input; immutable in edit.
+- metadata.namespace: explicit namespaced destination input; immutable in edit; omitted for cluster-scoped resources.
+- metadata.labels[key]: optional key/value inputs. Mock supports one label; arbitrary maps and annotations use retained raw source only.
+- Role.rules[0] and direct ClusterRole.rules[0]: verb checkboxes => verbs[], API group input => apiGroups[] (empty token means core group), resource tokens => resources[], optional name tokens => resourceNames[]. Inputs are explicitly comma-separated in this bounded mock; production should compose TagInput/Combobox to avoid delimiter ambiguity.
+- ClusterRole.rules[0].nonResourceURLs[]: explicit URL rule branch; resource fields omitted. Non-resource rules have effect only through ClusterRoleBinding. Custom verbs and additional rules are source-only in this mock, not a production cardinality limit.
+- ClusterRole.aggregationRule.clusterRoleSelectors[i].matchLabels[key]: repeatable OR selector rows. Controller owns resulting rules; no fabricated effective permissions. matchExpressions, additional matchLabels entries and custom selectors stay source-only.
+- RoleBinding.roleRef: kind choice Role or ClusterRole, apiGroup fixed rbac.authorization.k8s.io, name input with fixture suggestions. Role refers to binding's namespace. All roleRef members immutable in edit.
+- ClusterRoleBinding.roleRef: ClusterRole only, group fixed rbac.authorization.k8s.io, name input with fixture suggestions. Immutable in edit. No automatic replacement/deletion.
+- *.subjects[i].kind: ServiceAccount/User/Group select; .name: identity name; .namespace: ServiceAccount namespace only; .apiGroup: empty string for ServiceAccount, rbac.authorization.k8s.io for User/Group. User/Group namespace is omitted. Add/remove are explicit.
+
+Create/edit/ownership:
+All four resources have create and edit fixture modes. Identity locks in edit. Bindings edit subjects but not roleRef. Roles edit permissions, affecting every referencing binding. System-managed fixture is inspect-only, including row actions. Aggregated ClusterRole edits selectors, not controller-produced rules. Autoupdate annotations are never toggled automatically. Metadata/server fields and resourceVersion concurrency need existing production draft/patch handling; mock sends nothing.
+
+Privilege boundaries:
+Warnings remain visible for cluster-wide grants, wildcard/privileged verbs, aggregation and review. bind and escalate are authorization verbs, not subresources. A real write requires normal API authorization plus privilege-escalation constraints; possession of listed permissions can satisfy those constraints. No authorization result is invented. resourceNames cannot restrict create/deletecollection; list/watch need name field selectors. Rules are additive, not deny rules.
+
+Source/draft contract:
+Form owns a bounded generated document. Switching Form/YAML before manual source changes preserves generated values. Any manual source change retains the exact raw string and locks Form and review. This intentionally honest fallback preserves comments, unknown fields, invalid syntax, exact integers and omission without claiming a parser. No raw source is transformed into form state; no redacted projection is submitted. Production must reuse existing lossless owned-path AST draft engine, rather than this mock serializer. Manual source is not validated or submitted here. Drafts and mode preference are not persisted. Full production preference persistence is intentionally not demonstrated.
+
+Availability:
+Denied and discovery-unavailable fixtures block review while retaining draft. Empty reference results differ from failures; explicit unresolved names remain visible with a warning. Discovery does not imply permission. System fixture blocks editing. No cluster requests or live mutations; review is a preview, never a successful operation.
+
+Shared composition:
+Reuse Dialog, SegmentedControl, FormField, Input, Select/Combobox, TagInput, Checkbox, Table, Tooltip/Popover, Collapsible, Button and existing source editor. No new generic base-ui primitive is required. RBAC rule semantics, identity normalization, selectors, privilege review, immutable roleRef and aggregation stay in native Kubernetes adapter. Proposed built-in ownership: these four native kinds, not an add-on provider. Extensions consume the shared provider contract; no separate framework proposed.
+
+Visual review:
+1000x700 frame; 32px controls; 13px body; 20x24px content padding; 16px gaps; internal scroll and fixed footer. 20 real Chromium captures; main captures at 1440x900 device scale 1.25, narrow at 760x800 device scale 1.25. Every image visually inspected in labeled contact sheets. Dedicated Chromium for Testing process/profile inside owned directory avoided shared-browser interference. Profile/cache never published. No sensitive payloads or annotation imports exist in fixtures. Native fields and buttons have labels/focus states. Help opens on focus/hover/click; Escape closes it and restores focus. Error remains visible. Review is always non-mutating.
+
+Boolean evidence: checks.json. Exercised required-name validation, focus help/Escape, section retention, subject add/remove, aggregate add/remove, privileged verb branch, direct/aggregate URL/resource choices, binding immutability, system row locks, source fallback, denied review blocking and narrow overflow. Browser runtime error entries were empty. Screenshots are design evidence, not production tests.
+
+Limits requiring production acceptance: full lossless AST editing; all multi-rule/selector expressions; arbitrary metadata maps; server validation/conflicts; API group/resource discovery; real authorization; keyboard reference-picker filtering; opener close/reopen restoration and persistent explicit mode preference. No mock approval, production completion, release or issue closure claimed.

@@ -51,3 +51,60 @@ $('#review').onclick = review;
 // Review navigation follows the same guard as the primary action.
 document.querySelector('[data-section="Review"]').onclick = review;
 window.addEventListener('beforeunload', e => { if (Object.values(drafts).some(d => d.name || Object.keys(d.values).length)) { e.preventDefault(); e.returnValue = ''; } });
+
+// Keep scope and adapter details out of the working field layout.
+const renderCoreFrame = render;
+render = function () {
+  renderCoreFrame();
+  if (C[kind].scope) {
+    for (const input of document.querySelectorAll('#main input:disabled')) {
+      if (input.value === 'Not applicable') input.closest('label').remove();
+    }
+  }
+  for (const hint of document.querySelectorAll('#main .field small')) {
+    const label = hint.closest('label');
+    const detail = hint.textContent;
+    const control = label.querySelector('input, select');
+    if (control) control.title = detail;
+    const helpButton = document.createElement('button');
+    helpButton.type = 'button';
+    helpButton.textContent = '?';
+    helpButton.setAttribute('aria-label', 'Field details: ' + label.firstChild.textContent.trim());
+    helpButton.style.cssText = 'width:24px;height:24px;padding:0;align-self:flex-end';
+    const open = () => {
+      dismiss();
+      helpOpen = true;
+      const popup = document.createElement('div');
+      popup.id = 'helpbox';
+      popup.className = 'help';
+      popup.setAttribute('role', 'tooltip');
+      popup.textContent = detail;
+      popup.style.cssText = 'right:max(20px,calc((100vw - 950px)/2));top:155px';
+      document.body.append(popup);
+    };
+    helpButton.onmouseenter = open;
+    helpButton.onfocus = open;
+    helpButton.onclick = open;
+    hint.replaceWith(helpButton);
+  }
+  if (kind === 'Namespace') {
+    for (const warning of document.querySelectorAll('#main .warning')) {
+      if (warning.textContent.includes(C[kind].warning)) {
+        if (section === 'Review') warning.textContent = 'Non-mutating review · no namespace deletion or finalization';
+        else warning.remove();
+      }
+    }
+    if (section === 'Connections') {
+      const warning = document.createElement('div');
+      warning.className = 'warning';
+      warning.textContent = C[kind].warning;
+      $('#main').append(warning);
+    }
+  }
+};
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && helpOpen && document.activeElement?.getAttribute('aria-label')?.startsWith('Field details:')) {
+    event.stopImmediatePropagation();
+    dismiss();
+  }
+}, true);

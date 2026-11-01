@@ -1,0 +1,302 @@
+{
+  "GitRepository": [
+    {
+      "label": "Git URL",
+      "path": "spec.url",
+      "control": "Text input"
+    },
+    {
+      "label": "Provider",
+      "path": "spec.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Reference kind",
+      "path": "spec.ref (choice only)",
+      "control": "Select"
+    },
+    {
+      "label": "Reference",
+      "path": "spec.ref[selected kind]",
+      "control": "Text input"
+    },
+    {
+      "label": "Azure service account",
+      "path": "spec.serviceAccountName",
+      "control": "Text input"
+    },
+    {
+      "label": "Signature mode",
+      "path": "spec.verify.mode",
+      "control": "Select"
+    },
+    {
+      "label": "Trusted keys Secret",
+      "path": "spec.verify.secretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Proxy Secret",
+      "path": "spec.proxySecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Sparse checkout directories",
+      "path": "spec.sparseCheckout",
+      "control": "rows"
+    },
+    {
+      "label": "Included repositories",
+      "path": "spec.include",
+      "control": "includes"
+    },
+    {
+      "label": "Recurse submodules",
+      "path": "spec.recurseSubmodules",
+      "control": "bool"
+    },
+    {
+      "label": "Ignore patterns",
+      "path": "spec.ignore",
+      "control": "Text input"
+    }
+  ],
+  "OCIRepository": [
+    {
+      "label": "Registry URL",
+      "path": "spec.url",
+      "control": "Text input"
+    },
+    {
+      "label": "Provider",
+      "path": "spec.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Reference kind",
+      "path": "spec.ref (choice only)",
+      "control": "Select"
+    },
+    {
+      "label": "Reference",
+      "path": "spec.ref[selected kind]",
+      "control": "Text input"
+    },
+    {
+      "label": "Tag filter",
+      "path": "spec.ref.semverFilter",
+      "control": "Text input"
+    },
+    {
+      "label": "Verification",
+      "path": "spec.verify.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Trusted keys Secret",
+      "path": "spec.verify.secretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "OIDC identity rules",
+      "path": "spec.verify.matchOIDCIdentity",
+      "control": "identity"
+    },
+    {
+      "label": "Layer media type",
+      "path": "spec.layerSelector.mediaType",
+      "control": "Text input"
+    },
+    {
+      "label": "Layer operation",
+      "path": "spec.layerSelector.operation",
+      "control": "Select"
+    },
+    {
+      "label": "Pull service account",
+      "path": "spec.serviceAccountName",
+      "control": "Text input"
+    },
+    {
+      "label": "Certificate Secret",
+      "path": "spec.certSecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Proxy Secret",
+      "path": "spec.proxySecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Allow insecure HTTP",
+      "path": "spec.insecure",
+      "control": "bool"
+    },
+    {
+      "label": "Ignore patterns",
+      "path": "spec.ignore",
+      "control": "Text input"
+    }
+  ],
+  "Bucket": [
+    {
+      "label": "Bucket name",
+      "path": "spec.bucketName",
+      "control": "Text input"
+    },
+    {
+      "label": "Endpoint",
+      "path": "spec.endpoint",
+      "control": "Text input"
+    },
+    {
+      "label": "Provider",
+      "path": "spec.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Region",
+      "path": "spec.region",
+      "control": "Text input"
+    },
+    {
+      "label": "Path prefix",
+      "path": "spec.prefix",
+      "control": "Text input"
+    },
+    {
+      "label": "Workload service account",
+      "path": "spec.serviceAccountName",
+      "control": "Text input"
+    },
+    {
+      "label": "Certificate Secret (generic)",
+      "path": "spec.certSecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Proxy Secret",
+      "path": "spec.proxySecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "STS provider",
+      "path": "spec.sts.provider",
+      "control": "Select"
+    },
+    {
+      "label": "STS endpoint",
+      "path": "spec.sts.endpoint",
+      "control": "Text input"
+    },
+    {
+      "label": "STS credentials (LDAP)",
+      "path": "spec.sts.secretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "STS certificate (LDAP)",
+      "path": "spec.sts.certSecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Allow insecure HTTP",
+      "path": "spec.insecure",
+      "control": "bool"
+    },
+    {
+      "label": "Ignore patterns",
+      "path": "spec.ignore",
+      "control": "Text input"
+    }
+  ],
+  "HelmRepository": [
+    {
+      "label": "Repository URL",
+      "path": "spec.url",
+      "control": "Text input"
+    },
+    {
+      "label": "Repository type",
+      "path": "spec.type",
+      "control": "Select"
+    },
+    {
+      "label": "OCI provider",
+      "path": "spec.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Certificate Secret",
+      "path": "spec.certSecretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "Allow insecure OCI HTTP",
+      "path": "spec.insecure",
+      "control": "bool"
+    },
+    {
+      "label": "Pass credentials across hosts",
+      "path": "spec.passCredentials",
+      "control": "bool"
+    }
+  ],
+  "HelmChart": [
+    {
+      "label": "Chart name or path",
+      "path": "spec.chart",
+      "control": "Text input"
+    },
+    {
+      "label": "Source kind",
+      "path": "spec.sourceRef.kind",
+      "control": "Select"
+    },
+    {
+      "label": "Source name",
+      "path": "spec.sourceRef.name",
+      "control": "Select"
+    },
+    {
+      "label": "Source API version",
+      "path": "spec.sourceRef.apiVersion",
+      "control": "Text input"
+    },
+    {
+      "label": "Chart version constraint",
+      "path": "spec.version",
+      "control": "Text input"
+    },
+    {
+      "label": "Build strategy",
+      "path": "spec.reconcileStrategy",
+      "control": "Select"
+    },
+    {
+      "label": "Values files (last wins)",
+      "path": "spec.valuesFiles",
+      "control": "rows"
+    },
+    {
+      "label": "Ignore missing values files",
+      "path": "spec.ignoreMissingValuesFiles",
+      "control": "bool"
+    },
+    {
+      "label": "OCI source verification",
+      "path": "spec.verify.provider",
+      "control": "Select"
+    },
+    {
+      "label": "Trusted keys Secret",
+      "path": "spec.verify.secretRef.name",
+      "control": "secret"
+    },
+    {
+      "label": "OIDC identity rules",
+      "path": "spec.verify.matchOIDCIdentity",
+      "control": "identity"
+    }
+  ]
+}

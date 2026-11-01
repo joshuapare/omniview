@@ -1,0 +1,1 @@
+const {chromium}=require('/Users/joshuapare/Repos/omniviewdev/omniview/node_modules/playwright');const launch=chromium.launchPersistentContext.bind(chromium);chromium.launchPersistentContext=(dir,options)=>launch(dir,{...options,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});require('./capture.cjs');

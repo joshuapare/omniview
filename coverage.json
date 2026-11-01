@@ -1,0 +1,2992 @@
+[
+  {
+    "kind": "GithubAccessToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-GithubAccessToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_githubaccesstokens.yaml",
+    "fields": [
+      {
+        "path": "spec.appID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.auth.privateKey.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.privateKey.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.privateKey.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.installID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.permissions",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Map of permissions the token will have. If omitted, defaults to all permissions the GitHub App has."
+      },
+      {
+        "path": "spec.repositories",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "List of repositories the token will have access to. If omitted, defaults to all repositories the GitHub App\nis installed to."
+      },
+      {
+        "path": "spec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL configures the Github instance URL. Defaults to https://github.com/."
+      }
+    ]
+  },
+  {
+    "kind": "GCRAccessToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-GCRAccessToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_gcraccesstokens.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.workloadIdentity.clusterLocation",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.auth.workloadIdentity.clusterName",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.auth.workloadIdentity.clusterProjectID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.audience",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "audience is the Secure Token Service (STS) audience which contains the resource name for the workload identity pool and the provider identifier in that pool.\nIf specified, Audience found in the external account credential config will be overridden with the configured value.\naudience must be provided when serviceAccountRef or awsSecurityCredentials is configured."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.awsSecurityCredentials.awsCredentialsSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "name of the secret."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.awsSecurityCredentials.awsCredentialsSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "namespace in which the secret exists. If empty, secret will looked up in local namespace."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.awsSecurityCredentials.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "region is for configuring the AWS region to be used."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.credConfig.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "key name holding the external account credential config."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.credConfig.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "name of the configmap."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.credConfig.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "namespace in which the configmap exists. If empty, configmap will looked up in local namespace."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.externalTokenEndpoint",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "externalTokenEndpoint is the endpoint explicitly set up to provide tokens, which will be matched against the\ncredential_source.url in the provided credConfig. This field is merely to double-check the external token source\nURL is having the expected value."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.auth.workloadIdentityFederation.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.projectID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "ProjectID defines which project to use to authenticate with"
+      }
+    ]
+  },
+  {
+    "kind": "QuayAccessToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-QuayAccessToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_quayaccesstokens.yaml",
+    "fields": [
+      {
+        "path": "spec.robotAccount",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Name of the robot account you are federating with"
+      },
+      {
+        "path": "spec.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL configures the Quay instance URL. Defaults to quay.io."
+      }
+    ]
+  },
+  {
+    "kind": "ClusterGenerator",
+    "version": "v1alpha1",
+    "scope": "Cluster",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-ClusterGenerator.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_clustergenerators.yaml",
+    "fields": [
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.managedIdentity.identityId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "If multiple Managed Identity is assigned to the pod, you can select the one to be used"
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientId.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientId.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientId.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.servicePrincipal.secretRef.clientSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.environmentType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "EnvironmentType specifies the Azure cloud environment endpoints to use for\nconnecting and authenticating with Azure. By default it points to the public cloud AAD endpoint.\nThe following endpoints are available, also see here: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152\nPublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud",
+        "enum": [
+          "PublicCloud",
+          "USGovernmentCloud",
+          "ChinaCloud",
+          "GermanCloud",
+          "AzureStackCloud"
+        ],
+        "default": "PublicCloud"
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.registry",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "the domain name of the ACR registry\ne.g. foobarexample.azurecr.io"
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.scope",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Define the scope for the access token, e.g. pull/push access for a repository.\nif not provided it will return a refresh token that has full scope.\nNote: you need to pin it down to the repository level, there is no wildcard available.\n\nexamples:\nrepository:my-repository:pull,push\nrepository:my-repository:pull\n\nsee docs for details: https://docs.docker.com/registry/spec/auth/scope/"
+      },
+      {
+        "path": "spec.generator.acrAccessTokenSpec.tenantId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "TenantID configures the Azure Tenant to send requests to. Required for ServicePrincipal auth type."
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.apiUrl",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "APIURL configures the Cloudsmith API URL. Defaults to https://api.cloudsmith.io."
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.orgSlug",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "OrgSlug is the organization slug in Cloudsmith"
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.cloudsmithAccessTokenSpec.serviceSlug",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "ServiceSlug is the service slug in Cloudsmith for OIDC authentication"
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.auth.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Region specifies the region to operate in."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "You can assume a role before making calls to the\ndesired AWS service."
+      },
+      {
+        "path": "spec.generator.ecrAuthorizationTokenSpec.scope",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Scope specifies the ECR service scope.\nValid options are private and public."
+      },
+      {
+        "path": "spec.generator.fakeSpec.controller",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Used to select the correct ESO controller (think: ingress.ingressClassName)\nThe ESO controller is instantiated with a specific controller name and filters VDS based on this property"
+      },
+      {
+        "path": "spec.generator.fakeSpec.data",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Data defines the static data returned\nby this generator."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.clusterLocation",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.clusterName",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.clusterProjectID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentity.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.audience",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "audience is the Secure Token Service (STS) audience which contains the resource name for the workload identity pool and the provider identifier in that pool.\nIf specified, Audience found in the external account credential config will be overridden with the configured value.\naudience must be provided when serviceAccountRef or awsSecurityCredentials is configured."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.awsSecurityCredentials.awsCredentialsSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "name of the secret."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.awsSecurityCredentials.awsCredentialsSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "namespace in which the secret exists. If empty, secret will looked up in local namespace."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.awsSecurityCredentials.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "region is for configuring the AWS region to be used."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.credConfig.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "key name holding the external account credential config."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.credConfig.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "name of the configmap."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.credConfig.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "namespace in which the configmap exists. If empty, configmap will looked up in local namespace."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.externalTokenEndpoint",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "externalTokenEndpoint is the endpoint explicitly set up to provide tokens, which will be matched against the\ncredential_source.url in the provided credConfig. This field is merely to double-check the external token source\nURL is having the expected value."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.auth.workloadIdentityFederation.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.gcrAccessTokenSpec.projectID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "ProjectID defines which project to use to authenticate with"
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.appID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.auth.privateKey.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.auth.privateKey.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.auth.privateKey.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.installID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.permissions",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Map of permissions the token will have. If omitted, defaults to all permissions the GitHub App has."
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.repositories",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "List of repositories the token will have access to. If omitted, defaults to all repositories the GitHub App\nis installed to."
+      },
+      {
+        "path": "spec.generator.githubAccessTokenSpec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL configures the Github instance URL. Defaults to https://github.com/."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.auth.basic.password.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.auth.basic.password.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.auth.basic.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A basic auth username used to authenticate against the Grafana instance."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.auth.token.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.auth.token.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.serviceAccount.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name is the name of the service account that will be created by ESO."
+      },
+      {
+        "path": "spec.generator.grafanaSpec.serviceAccount.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Role is the role of the service account.\nSee here for the documentation on basic roles offered by Grafana:\nhttps://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-fixed-basic-role-definitions/"
+      },
+      {
+        "path": "spec.generator.grafanaSpec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL is the URL of the Grafana instance."
+      },
+      {
+        "path": "spec.generator.mfaSpec.algorithm",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Algorithm to use for encoding. Defaults to SHA1 as per the RFC."
+      },
+      {
+        "path": "spec.generator.mfaSpec.length",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Length defines the token length. Defaults to 6 characters."
+      },
+      {
+        "path": "spec.generator.mfaSpec.secret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.mfaSpec.secret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.mfaSpec.secret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.mfaSpec.timePeriod",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "TimePeriod defines how long the token can be active. Defaults to 30 seconds."
+      },
+      {
+        "path": "spec.generator.mfaSpec.when",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "When defines a time parameter that can be used to pin the origin time of the generated token."
+      },
+      {
+        "path": "spec.generator.passwordSpec.allowRepeat",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "set AllowRepeat to true to allow repeating characters.",
+        "default": false
+      },
+      {
+        "path": "spec.generator.passwordSpec.digits",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Digits specifies the number of digits in the generated\npassword. If omitted it defaults to 25% of the length of the password"
+      },
+      {
+        "path": "spec.generator.passwordSpec.length",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Length of the password to be generated.\nDefaults to 24",
+        "default": 24
+      },
+      {
+        "path": "spec.generator.passwordSpec.noUpper",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Set NoUpper to disable uppercase characters",
+        "default": false
+      },
+      {
+        "path": "spec.generator.passwordSpec.symbolCharacters",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "SymbolCharacters specifies the special characters that should be used\nin the generated password."
+      },
+      {
+        "path": "spec.generator.passwordSpec.symbols",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Symbols specifies the number of symbol characters in the generated\npassword. If omitted it defaults to 25% of the length of the password"
+      },
+      {
+        "path": "spec.generator.quayAccessTokenSpec.robotAccount",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Name of the robot account you are federating with"
+      },
+      {
+        "path": "spec.generator.quayAccessTokenSpec.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.quayAccessTokenSpec.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.quayAccessTokenSpec.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.quayAccessTokenSpec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL configures the Quay instance URL. Defaults to quay.io."
+      },
+      {
+        "path": "spec.generator.sshKeySpec.comment",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Comment specifies an optional comment for the SSH key"
+      },
+      {
+        "path": "spec.generator.sshKeySpec.keySize",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "KeySize specifies the key size for RSA keys (default: 2048)\nFor RSA keys: 2048, 3072, 4096\nIgnored for ed25519 keys"
+      },
+      {
+        "path": "spec.generator.sshKeySpec.keyType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "KeyType specifies the SSH key type (rsa, ed25519)",
+        "enum": [
+          "rsa",
+          "ed25519"
+        ],
+        "default": "rsa"
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.auth.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Region specifies the region to operate in."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.requestParameters.serialNumber",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "SerialNumber is the identification number of the MFA device that is associated with the IAM user who is making\nthe GetSessionToken call.\nPossible values: hardware device (such as GAHT12345678) or an Amazon Resource Name (ARN) for a virtual device\n(such as arn:aws:iam::123456789012:mfa/user)"
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.requestParameters.sessionDuration",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.requestParameters.tokenCode",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "TokenCode is the value provided by the MFA device, if MFA is required."
+      },
+      {
+        "path": "spec.generator.stsSessionTokenSpec.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "You can assume a role before making calls to the\ndesired AWS service."
+      },
+      {
+        "path": "spec.generator.uuidSpec",
+        "control": "Opaque source-only fallback",
+        "type": "object",
+        "description": "UUIDSpec controls the behavior of the uuid generator."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.allowEmptyResponse",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Do not fail if no secrets are found. Useful for requests where no data is expected.",
+        "default": false
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.controller",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Used to select the correct ESO controller (think: ingress.ingressClassName)\nThe ESO controller is instantiated with a specific controller name and filters VDS based on this property"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.method",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault API method to use (GET/POST/other)"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.parameters",
+        "control": "Opaque source-only fallback",
+        "type": "opaque",
+        "description": "Parameters to pass to Vault write (for non-GET methods)"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault path to obtain the dynamic secret from"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the App Role authentication backend is mounted\nin Vault, e.g: \"approle\"",
+        "default": "approle"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.roleId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "RoleID configured in the App Role authentication backend when setting\nup the authentication backend in Vault."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.roleRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.roleRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.roleRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.appRole.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.clientCert.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.clientCert.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.clientCert.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.cert.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.externalID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "AWS External ID set on assumed IAM roles"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the AWS auth method is enabled in Vault, e.g: \"aws\""
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "AWS region"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "This is the AWS role to be assumed before talking to vault"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.vaultAwsIamServerID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "X-Vault-AWS-IAM-Server-ID is an additional header used by Vault IAM auth method to mitigate against different types of replay attacks. More details here: https://developer.hashicorp.com/vault/docs/auth/aws"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.iam.vaultRole",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault Role. In vault, a role describes an identity with a set of permissions, groups, or policies you want to attach a user of the secrets engine"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.kubernetesServiceAccountToken.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Optional audiences field that will be used to request a temporary Kubernetes service\naccount token for the service account referenced by `serviceAccountRef`.\nDefaults to a single audience `vault` it not specified.\nDeprecated: use serviceAccountRef.Audiences instead"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.kubernetesServiceAccountToken.expirationSeconds",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Optional expiration time in seconds that will be used to request a temporary\nKubernetes service account token for the service account referenced by\n`serviceAccountRef`.\nDeprecated: this will be removed in the future.\nDefaults to 10 minutes."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the JWT authentication backend is mounted\nin Vault, e.g: \"jwt\"",
+        "default": "jwt"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Role is a JWT role to authenticate using the JWT/OIDC Vault\nauthentication method"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.jwt.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.mountPath",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the Kubernetes authentication backend is mounted in Vault, e.g:\n\"kubernetes\"",
+        "default": "kubernetes"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "A required field containing the Vault Role to assume. A Role binds a\nKubernetes ServiceAccount with a set of Vault policies."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.kubernetes.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.ldap.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the LDAP authentication backend is mounted\nin Vault, e.g: \"ldap\"",
+        "default": "ldap"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.ldap.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.ldap.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.ldap.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.ldap.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Username is an LDAP username used to authenticate using the LDAP Vault\nauthentication method"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of the vault namespace to authenticate to. This can be different than the namespace your secret is in.\nNamespaces is a set of features within Vault Enterprise that allows\nVault environments to support Secure Multi-tenancy. e.g: \"ns1\".\nMore about namespaces can be found here https://www.vaultproject.io/docs/enterprise/namespaces\nThis will default to Vault.Namespace field if set, or empty otherwise"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.tokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.tokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.tokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.userPass.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the UserPassword authentication backend is mounted\nin Vault, e.g: \"userpass\"",
+        "default": "userpass"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.userPass.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.userPass.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.userPass.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.auth.userPass.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Username is a username used to authenticate using the UserPass Vault\nauthentication method"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.caBundle",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "PEM encoded CA bundle used to validate Vault server certificate. Only used\nif the Server URL is using HTTPS protocol. This parameter is ignored for\nplain HTTP protocol connection. If not set the system root certificates\nare used to validate the TLS connection."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.caProvider.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the CA certificate can be found in the Secret or ConfigMap."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.caProvider.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the object located at the provider type."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.caProvider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace the Provider type is in.\nCan only be defined when used in a ClusterSecretStore."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.caProvider.type",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "The type of provider to use such as \"Secret\", or \"ConfigMap\".",
+        "enum": [
+          "Secret",
+          "ConfigMap"
+        ]
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.checkAndSet.required",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Required when true, all write operations must include a check-and-set parameter.\nThis helps prevent unintentional overwrites of secrets."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.forwardInconsistent",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "ForwardInconsistent tells Vault to forward read-after-write requests to the Vault\nleader instead of simply retrying within a loop. This can increase performance if\nthe option is enabled serverside.\nhttps://www.vaultproject.io/docs/configuration/replication#allow_forwarding_via_header"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.headers",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Headers to be added in Vault request"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of the vault namespace. Namespaces is a set of features within Vault Enterprise that allows\nVault environments to support Secure Multi-tenancy. e.g: \"ns1\".\nMore about namespaces can be found here https://www.vaultproject.io/docs/enterprise/namespaces"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path is the mount path of the Vault KV backend endpoint, e.g:\n\"secret\". The v2 KV secret engine version specific \"/data\" path suffix\nfor fetching secrets from Vault is optional and will be appended\nif not present in specified path."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.readYourWrites",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "ReadYourWrites ensures isolated read-after-write semantics by\nproviding discovered cluster replication states in each request.\nMore information about eventual consistency in Vault can be found here\nhttps://www.vaultproject.io/docs/enterprise/consistency"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.server",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Server is the connection address for the Vault server, e.g: \"https://vault.example.com:8200\"."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.certSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.certSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.certSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.keySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.keySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.tls.keySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.provider.version",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "Version is the Vault KV secret engine version. This can be either \"v1\" or\n\"v2\". Version defaults to \"v2\".",
+        "enum": [
+          "v1",
+          "v2"
+        ],
+        "default": "v2"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.resultType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "Result type defines which data is returned from the generator.\nBy default it is the \"data\" section of the Vault API response.\nWhen using e.g. /auth/token/create the \"data\" section is empty but\nthe \"auth\" section contains the generated token.\nPlease refer to the vault docs regarding the result data structure.\nAdditionally, accessing the raw response is possibly by using \"Raw\" result type.",
+        "enum": [
+          "Data",
+          "Auth",
+          "Raw"
+        ],
+        "default": "Data"
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.retrySettings.maxRetries",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.vaultDynamicSecretSpec.retrySettings.retryInterval",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.passwordSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.passwordSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.passwordSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.usernameSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.usernameSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.webhookSpec.auth.ntlm.usernameSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.generator.webhookSpec.body",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Body"
+      },
+      {
+        "path": "spec.generator.webhookSpec.caBundle",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "PEM encoded CA bundle used to validate webhook server certificate. Only used\nif the Server URL is using HTTPS protocol. This parameter is ignored for\nplain HTTP protocol connection. If not set the system root certificates\nare used to validate the TLS connection."
+      },
+      {
+        "path": "spec.generator.webhookSpec.caProvider.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the CA certificate can be found in the Secret or ConfigMap."
+      },
+      {
+        "path": "spec.generator.webhookSpec.caProvider.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the object located at the provider type."
+      },
+      {
+        "path": "spec.generator.webhookSpec.caProvider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace the Provider type is in."
+      },
+      {
+        "path": "spec.generator.webhookSpec.caProvider.type",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "The type of provider to use such as \"Secret\", or \"ConfigMap\".",
+        "enum": [
+          "Secret",
+          "ConfigMap"
+        ]
+      },
+      {
+        "path": "spec.generator.webhookSpec.headers",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Headers"
+      },
+      {
+        "path": "spec.generator.webhookSpec.method",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Webhook Method"
+      },
+      {
+        "path": "spec.generator.webhookSpec.result.jsonPath",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Json path of return value"
+      },
+      {
+        "path": "spec.generator.webhookSpec.secrets",
+        "control": "Structured repeatable rows; nested object source fallback in this bounded prototype",
+        "type": "array"
+      },
+      {
+        "path": "spec.generator.webhookSpec.secrets[].name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of this secret in templates"
+      },
+      {
+        "path": "spec.generator.webhookSpec.secrets[].secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.generator.webhookSpec.secrets[].secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.generator.webhookSpec.timeout",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Timeout"
+      },
+      {
+        "path": "spec.generator.webhookSpec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Webhook url to call"
+      },
+      {
+        "path": "spec.kind",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "Kind the kind of this generator.",
+        "enum": [
+          "ACRAccessToken",
+          "CloudsmithAccessToken",
+          "ECRAuthorizationToken",
+          "Fake",
+          "GCRAccessToken",
+          "GithubAccessToken",
+          "QuayAccessToken",
+          "Password",
+          "SSHKey",
+          "STSSessionToken",
+          "UUID",
+          "VaultDynamicSecret",
+          "Webhook",
+          "Grafana"
+        ]
+      }
+    ]
+  },
+  {
+    "kind": "SSHKey",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-SSHKey.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_sshkeys.yaml",
+    "fields": [
+      {
+        "path": "spec.comment",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Comment specifies an optional comment for the SSH key"
+      },
+      {
+        "path": "spec.keySize",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "KeySize specifies the key size for RSA keys (default: 2048)\nFor RSA keys: 2048, 3072, 4096\nIgnored for ed25519 keys"
+      },
+      {
+        "path": "spec.keyType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "KeyType specifies the SSH key type (rsa, ed25519)",
+        "enum": [
+          "rsa",
+          "ed25519"
+        ],
+        "default": "rsa"
+      }
+    ]
+  },
+  {
+    "kind": "STSSessionToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-STSSessionToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_stssessiontokens.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Region specifies the region to operate in."
+      },
+      {
+        "path": "spec.requestParameters.serialNumber",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "SerialNumber is the identification number of the MFA device that is associated with the IAM user who is making\nthe GetSessionToken call.\nPossible values: hardware device (such as GAHT12345678) or an Amazon Resource Name (ARN) for a virtual device\n(such as arn:aws:iam::123456789012:mfa/user)"
+      },
+      {
+        "path": "spec.requestParameters.sessionDuration",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": ""
+      },
+      {
+        "path": "spec.requestParameters.tokenCode",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "TokenCode is the value provided by the MFA device, if MFA is required."
+      },
+      {
+        "path": "spec.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "You can assume a role before making calls to the\ndesired AWS service."
+      }
+    ]
+  },
+  {
+    "kind": "Webhook",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-Webhook.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_webhooks.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.ntlm.passwordSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.ntlm.passwordSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.ntlm.passwordSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.ntlm.usernameSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.ntlm.usernameSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.ntlm.usernameSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.body",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Body"
+      },
+      {
+        "path": "spec.caBundle",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "PEM encoded CA bundle used to validate webhook server certificate. Only used\nif the Server URL is using HTTPS protocol. This parameter is ignored for\nplain HTTP protocol connection. If not set the system root certificates\nare used to validate the TLS connection."
+      },
+      {
+        "path": "spec.caProvider.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the CA certificate can be found in the Secret or ConfigMap."
+      },
+      {
+        "path": "spec.caProvider.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the object located at the provider type."
+      },
+      {
+        "path": "spec.caProvider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace the Provider type is in."
+      },
+      {
+        "path": "spec.caProvider.type",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "The type of provider to use such as \"Secret\", or \"ConfigMap\".",
+        "enum": [
+          "Secret",
+          "ConfigMap"
+        ]
+      },
+      {
+        "path": "spec.headers",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Headers"
+      },
+      {
+        "path": "spec.method",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Webhook Method"
+      },
+      {
+        "path": "spec.result.jsonPath",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Json path of return value"
+      },
+      {
+        "path": "spec.secrets",
+        "control": "Structured repeatable rows; nested object source fallback in this bounded prototype",
+        "type": "array"
+      },
+      {
+        "path": "spec.secrets[].name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of this secret in templates"
+      },
+      {
+        "path": "spec.secrets[].secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.secrets[].secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.timeout",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Timeout"
+      },
+      {
+        "path": "spec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Webhook url to call"
+      }
+    ]
+  },
+  {
+    "kind": "Grafana",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-Grafana.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_grafanas.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.basic.password.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.auth.basic.password.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.basic.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A basic auth username used to authenticate against the Grafana instance."
+      },
+      {
+        "path": "spec.auth.token.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the token is found."
+      },
+      {
+        "path": "spec.auth.token.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.serviceAccount.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name is the name of the service account that will be created by ESO."
+      },
+      {
+        "path": "spec.serviceAccount.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Role is the role of the service account.\nSee here for the documentation on basic roles offered by Grafana:\nhttps://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-fixed-basic-role-definitions/"
+      },
+      {
+        "path": "spec.url",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "URL is the URL of the Grafana instance."
+      }
+    ]
+  },
+  {
+    "kind": "ACRAccessToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-ACRAccessToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_acraccesstokens.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.managedIdentity.identityId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "If multiple Managed Identity is assigned to the pod, you can select the one to be used"
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientId.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientId.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientId.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientSecret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientSecret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.servicePrincipal.secretRef.clientSecret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.auth.workloadIdentity.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.environmentType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "EnvironmentType specifies the Azure cloud environment endpoints to use for\nconnecting and authenticating with Azure. By default it points to the public cloud AAD endpoint.\nThe following endpoints are available, also see here: https://github.com/Azure/go-autorest/blob/main/autorest/azure/environments.go#L152\nPublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud",
+        "enum": [
+          "PublicCloud",
+          "USGovernmentCloud",
+          "ChinaCloud",
+          "GermanCloud",
+          "AzureStackCloud"
+        ],
+        "default": "PublicCloud"
+      },
+      {
+        "path": "spec.registry",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "the domain name of the ACR registry\ne.g. foobarexample.azurecr.io"
+      },
+      {
+        "path": "spec.scope",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Define the scope for the access token, e.g. pull/push access for a repository.\nif not provided it will return a refresh token that has full scope.\nNote: you need to pin it down to the repository level, there is no wildcard available.\n\nexamples:\nrepository:my-repository:pull,push\nrepository:my-repository:pull\n\nsee docs for details: https://docs.docker.com/registry/spec/auth/scope/"
+      },
+      {
+        "path": "spec.tenantId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "TenantID configures the Azure Tenant to send requests to. Required for ServicePrincipal auth type."
+      }
+    ]
+  },
+  {
+    "kind": "CloudsmithAccessToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-CloudsmithAccessToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_cloudsmithaccesstokens.yaml",
+    "fields": [
+      {
+        "path": "spec.apiUrl",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "APIURL configures the Cloudsmith API URL. Defaults to https://api.cloudsmith.io."
+      },
+      {
+        "path": "spec.orgSlug",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "OrgSlug is the organization slug in Cloudsmith"
+      },
+      {
+        "path": "spec.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.serviceSlug",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "ServiceSlug is the service slug in Cloudsmith for OIDC authentication"
+      }
+    ]
+  },
+  {
+    "kind": "MFA",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-MFA.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_mfas.yaml",
+    "fields": [
+      {
+        "path": "spec.algorithm",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Algorithm to use for encoding. Defaults to SHA1 as per the RFC."
+      },
+      {
+        "path": "spec.length",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Length defines the token length. Defaults to 6 characters."
+      },
+      {
+        "path": "spec.secret.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.secret.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.secret.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.timePeriod",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "TimePeriod defines how long the token can be active. Defaults to 30 seconds."
+      },
+      {
+        "path": "spec.when",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "When defines a time parameter that can be used to pin the origin time of the generated token."
+      }
+    ]
+  },
+  {
+    "kind": "GeneratorState",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Inspect only; controller owns resource/state/deadline; no create, edit or delete",
+    "screenshot": "kind-GeneratorState.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_generatorstates.yaml",
+    "fields": [
+      {
+        "path": "spec.garbageCollectionDeadline",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "GarbageCollectionDeadline is the time after which the generator state\nwill be deleted.\nIt is set by the controller which creates the generator state and\ncan be set configured by the user.\nIf the garbage collection deadline is not set the generator state will not be deleted."
+      },
+      {
+        "path": "spec.resource",
+        "control": "Opaque source-only fallback",
+        "type": "opaque",
+        "description": "Resource is the generator manifest that produced the state.\nIt is a snapshot of the generator manifest at the time the state was produced.\nThis manifest will be used to delete the resource. Any configuration that is referenced\nin the manifest should be available at the time of garbage collection. If that is not the case deletion will\nbe blocked by a finalizer."
+      },
+      {
+        "path": "spec.state",
+        "control": "Opaque source-only fallback",
+        "type": "opaque",
+        "description": "State is the state that was produced by the generator implementation."
+      }
+    ]
+  },
+  {
+    "kind": "Fake",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-Fake.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_fakes.yaml",
+    "fields": [
+      {
+        "path": "spec.controller",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Used to select the correct ESO controller (think: ingress.ingressClassName)\nThe ESO controller is instantiated with a specific controller name and filters VDS based on this property"
+      },
+      {
+        "path": "spec.data",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Data defines the static data returned\nby this generator."
+      }
+    ]
+  },
+  {
+    "kind": "Password",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "01-password-initial.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_passwords.yaml",
+    "fields": [
+      {
+        "path": "spec.allowRepeat",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "set AllowRepeat to true to allow repeating characters.",
+        "default": false
+      },
+      {
+        "path": "spec.digits",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Digits specifies the number of digits in the generated\npassword. If omitted it defaults to 25% of the length of the password"
+      },
+      {
+        "path": "spec.length",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Length of the password to be generated.\nDefaults to 24",
+        "default": 24
+      },
+      {
+        "path": "spec.noUpper",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Set NoUpper to disable uppercase characters",
+        "default": false
+      },
+      {
+        "path": "spec.symbolCharacters",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "SymbolCharacters specifies the special characters that should be used\nin the generated password."
+      },
+      {
+        "path": "spec.symbols",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Symbols specifies the number of symbol characters in the generated\npassword. If omitted it defaults to 25% of the length of the password"
+      }
+    ]
+  },
+  {
+    "kind": "UUID",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-UUID.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_uuids.yaml",
+    "fields": [
+      {
+        "path": "spec",
+        "control": "Opaque source-only fallback",
+        "type": "object",
+        "description": "UUIDSpec controls the behavior of the uuid generator."
+      }
+    ]
+  },
+  {
+    "kind": "ECRAuthorizationToken",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-ECRAuthorizationToken.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_ecrauthorizationtokens.yaml",
+    "fields": [
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.auth.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.auth.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Region specifies the region to operate in."
+      },
+      {
+        "path": "spec.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "You can assume a role before making calls to the\ndesired AWS service."
+      },
+      {
+        "path": "spec.scope",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Scope specifies the ECR service scope.\nValid options are private and public."
+      }
+    ]
+  },
+  {
+    "kind": "VaultDynamicSecret",
+    "version": "v1alpha1",
+    "scope": "Namespaced",
+    "workflow": "Conditional create/edit; identity locked on edit; owner mode inspection only",
+    "screenshot": "kind-VaultDynamicSecret.png",
+    "source": "https://github.com/external-secrets/external-secrets/blob/v0.20.1/config/crds/bases/generators.external-secrets.io_vaultdynamicsecrets.yaml",
+    "fields": [
+      {
+        "path": "spec.allowEmptyResponse",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Do not fail if no secrets are found. Useful for requests where no data is expected.",
+        "default": false
+      },
+      {
+        "path": "spec.controller",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Used to select the correct ESO controller (think: ingress.ingressClassName)\nThe ESO controller is instantiated with a specific controller name and filters VDS based on this property"
+      },
+      {
+        "path": "spec.method",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault API method to use (GET/POST/other)"
+      },
+      {
+        "path": "spec.parameters",
+        "control": "Opaque source-only fallback",
+        "type": "opaque",
+        "description": "Parameters to pass to Vault write (for non-GET methods)"
+      },
+      {
+        "path": "spec.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault path to obtain the dynamic secret from"
+      },
+      {
+        "path": "spec.provider.auth.appRole.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the App Role authentication backend is mounted\nin Vault, e.g: \"approle\"",
+        "default": "approle"
+      },
+      {
+        "path": "spec.provider.auth.appRole.roleId",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "RoleID configured in the App Role authentication backend when setting\nup the authentication backend in Vault."
+      },
+      {
+        "path": "spec.provider.auth.appRole.roleRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.appRole.roleRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.appRole.roleRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.appRole.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.appRole.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.appRole.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.cert.clientCert.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.cert.clientCert.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.cert.clientCert.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.cert.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.cert.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.cert.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.iam.externalID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "AWS External ID set on assumed IAM roles"
+      },
+      {
+        "path": "spec.provider.auth.iam.jwt.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.provider.auth.iam.jwt.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.iam.jwt.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.iam.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the AWS auth method is enabled in Vault, e.g: \"aws\""
+      },
+      {
+        "path": "spec.provider.auth.iam.region",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "AWS region"
+      },
+      {
+        "path": "spec.provider.auth.iam.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "This is the AWS role to be assumed before talking to vault"
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.accessKeyIDSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.accessKeyIDSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.accessKeyIDSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.secretAccessKeySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.secretAccessKeySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.secretAccessKeySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.sessionTokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.sessionTokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.iam.secretRef.sessionTokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.iam.vaultAwsIamServerID",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "X-Vault-AWS-IAM-Server-ID is an additional header used by Vault IAM auth method to mitigate against different types of replay attacks. More details here: https://developer.hashicorp.com/vault/docs/auth/aws"
+      },
+      {
+        "path": "spec.provider.auth.iam.vaultRole",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Vault Role. In vault, a role describes an identity with a set of permissions, groups, or policies you want to attach a user of the secrets engine"
+      },
+      {
+        "path": "spec.provider.auth.jwt.kubernetesServiceAccountToken.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Optional audiences field that will be used to request a temporary Kubernetes service\naccount token for the service account referenced by `serviceAccountRef`.\nDefaults to a single audience `vault` it not specified.\nDeprecated: use serviceAccountRef.Audiences instead"
+      },
+      {
+        "path": "spec.provider.auth.jwt.kubernetesServiceAccountToken.expirationSeconds",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": "Optional expiration time in seconds that will be used to request a temporary\nKubernetes service account token for the service account referenced by\n`serviceAccountRef`.\nDeprecated: this will be removed in the future.\nDefaults to 10 minutes."
+      },
+      {
+        "path": "spec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.jwt.kubernetesServiceAccountToken.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.jwt.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the JWT authentication backend is mounted\nin Vault, e.g: \"jwt\"",
+        "default": "jwt"
+      },
+      {
+        "path": "spec.provider.auth.jwt.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Role is a JWT role to authenticate using the JWT/OIDC Vault\nauthentication method"
+      },
+      {
+        "path": "spec.provider.auth.jwt.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.jwt.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.jwt.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.mountPath",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the Kubernetes authentication backend is mounted in Vault, e.g:\n\"kubernetes\"",
+        "default": "kubernetes"
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.role",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "A required field containing the Vault Role to assume. A Role binds a\nKubernetes ServiceAccount with a set of Vault policies."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.serviceAccountRef.audiences",
+        "control": "Add/remove item rows",
+        "type": "array",
+        "description": "Audience specifies the `aud` claim for the service account token\nIf the service account uses a well-known annotation for e.g. IRSA or GCP Workload Identity\nthen this audiences will be appended to the list"
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.serviceAccountRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the ServiceAccount resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.kubernetes.serviceAccountRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Namespace of the resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.ldap.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the LDAP authentication backend is mounted\nin Vault, e.g: \"ldap\"",
+        "default": "ldap"
+      },
+      {
+        "path": "spec.provider.auth.ldap.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.ldap.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.ldap.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.ldap.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Username is an LDAP username used to authenticate using the LDAP Vault\nauthentication method"
+      },
+      {
+        "path": "spec.provider.auth.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of the vault namespace to authenticate to. This can be different than the namespace your secret is in.\nNamespaces is a set of features within Vault Enterprise that allows\nVault environments to support Secure Multi-tenancy. e.g: \"ns1\".\nMore about namespaces can be found here https://www.vaultproject.io/docs/enterprise/namespaces\nThis will default to Vault.Namespace field if set, or empty otherwise"
+      },
+      {
+        "path": "spec.provider.auth.tokenSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.tokenSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.tokenSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.userPass.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path where the UserPassword authentication backend is mounted\nin Vault, e.g: \"userpass\"",
+        "default": "userpass"
+      },
+      {
+        "path": "spec.provider.auth.userPass.secretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.auth.userPass.secretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.auth.userPass.secretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.auth.userPass.username",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Username is a username used to authenticate using the UserPass Vault\nauthentication method"
+      },
+      {
+        "path": "spec.provider.caBundle",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "PEM encoded CA bundle used to validate Vault server certificate. Only used\nif the Server URL is using HTTPS protocol. This parameter is ignored for\nplain HTTP protocol connection. If not set the system root certificates\nare used to validate the TLS connection."
+      },
+      {
+        "path": "spec.provider.caProvider.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The key where the CA certificate can be found in the Secret or ConfigMap."
+      },
+      {
+        "path": "spec.provider.caProvider.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the object located at the provider type."
+      },
+      {
+        "path": "spec.provider.caProvider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace the Provider type is in.\nCan only be defined when used in a ClusterSecretStore."
+      },
+      {
+        "path": "spec.provider.caProvider.type",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "The type of provider to use such as \"Secret\", or \"ConfigMap\".",
+        "enum": [
+          "Secret",
+          "ConfigMap"
+        ]
+      },
+      {
+        "path": "spec.provider.checkAndSet.required",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "Required when true, all write operations must include a check-and-set parameter.\nThis helps prevent unintentional overwrites of secrets."
+      },
+      {
+        "path": "spec.provider.forwardInconsistent",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "ForwardInconsistent tells Vault to forward read-after-write requests to the Vault\nleader instead of simply retrying within a loop. This can increase performance if\nthe option is enabled serverside.\nhttps://www.vaultproject.io/docs/configuration/replication#allow_forwarding_via_header"
+      },
+      {
+        "path": "spec.provider.headers",
+        "control": "Masked key/value pair rows (bounded row draft)",
+        "type": "object",
+        "description": "Headers to be added in Vault request"
+      },
+      {
+        "path": "spec.provider.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "Name of the vault namespace. Namespaces is a set of features within Vault Enterprise that allows\nVault environments to support Secure Multi-tenancy. e.g: \"ns1\".\nMore about namespaces can be found here https://www.vaultproject.io/docs/enterprise/namespaces"
+      },
+      {
+        "path": "spec.provider.path",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Path is the mount path of the Vault KV backend endpoint, e.g:\n\"secret\". The v2 KV secret engine version specific \"/data\" path suffix\nfor fetching secrets from Vault is optional and will be appended\nif not present in specified path."
+      },
+      {
+        "path": "spec.provider.readYourWrites",
+        "control": "Omitted / true / false selector",
+        "type": "boolean",
+        "description": "ReadYourWrites ensures isolated read-after-write semantics by\nproviding discovered cluster replication states in each request.\nMore information about eventual consistency in Vault can be found here\nhttps://www.vaultproject.io/docs/enterprise/consistency"
+      },
+      {
+        "path": "spec.provider.server",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": "Server is the connection address for the Vault server, e.g: \"https://vault.example.com:8200\"."
+      },
+      {
+        "path": "spec.provider.tls.certSecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.tls.certSecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.tls.certSecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.tls.keySecretRef.key",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "A key in the referenced Secret.\nSome instances of this field may be defaulted, in others it may be required."
+      },
+      {
+        "path": "spec.provider.tls.keySecretRef.name",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The name of the Secret resource being referred to."
+      },
+      {
+        "path": "spec.provider.tls.keySecretRef.namespace",
+        "control": "Reference picker or exact reference text",
+        "type": "string",
+        "description": "The namespace of the Secret resource being referred to.\nIgnored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent."
+      },
+      {
+        "path": "spec.provider.version",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "Version is the Vault KV secret engine version. This can be either \"v1\" or\n\"v2\". Version defaults to \"v2\".",
+        "enum": [
+          "v1",
+          "v2"
+        ],
+        "default": "v2"
+      },
+      {
+        "path": "spec.resultType",
+        "control": "Explicit choice",
+        "type": "string",
+        "description": "Result type defines which data is returned from the generator.\nBy default it is the \"data\" section of the Vault API response.\nWhen using e.g. /auth/token/create the \"data\" section is empty but\nthe \"auth\" section contains the generated token.\nPlease refer to the vault docs regarding the result data structure.\nAdditionally, accessing the raw response is possibly by using \"Raw\" result type.",
+        "enum": [
+          "Data",
+          "Auth",
+          "Raw"
+        ],
+        "default": "Data"
+      },
+      {
+        "path": "spec.retrySettings.maxRetries",
+        "control": "Integer input (raw lexical draft)",
+        "type": "integer",
+        "description": ""
+      },
+      {
+        "path": "spec.retrySettings.retryInterval",
+        "control": "Text input; masked for sensitive fields",
+        "type": "string",
+        "description": ""
+      }
+    ]
+  }
+]

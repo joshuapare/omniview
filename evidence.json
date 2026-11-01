@@ -1,0 +1,662 @@
+{
+  "workspaceID": "b1c01bed-e462-46ef-adca-b8df76f5b80f",
+  "generation": "2223db4e-9c2b-4cdd-8b79-9b178f93ba83",
+  "pid": 68584,
+  "settingsWindowId": 2,
+  "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+  "reopens": [
+    {
+      "iteration": 0,
+      "roundTripMs": 720,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 1,
+      "roundTripMs": 674,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 2,
+      "roundTripMs": 731,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 3,
+      "roundTripMs": 689,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 4,
+      "roundTripMs": 680,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 5,
+      "roundTripMs": 721,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 6,
+      "roundTripMs": 719,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    },
+    {
+      "iteration": 7,
+      "roundTripMs": 692,
+      "editorRetained": true,
+      "hash": "#/settings?section=core&category=terminal",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "rootRetained": true,
+      "shown": "true",
+      "value": "13"
+    }
+  ],
+  "retainedSearch": {
+    "query": "font",
+    "rootRetained": true,
+    "shown": "true",
+    "value": "13"
+  },
+  "cancelledNavigation": {
+    "dialogs": 0,
+    "hash": "#/settings?section=core&category=terminal",
+    "query": "font",
+    "value": "13"
+  },
+  "crossWindowTheme": {
+    "settings": {
+      "dirty": false,
+      "previews": [
+        {
+          "background": "rgb(14, 15, 17)",
+          "base": "void"
+        },
+        {
+          "background": "rgb(24, 26, 28)",
+          "base": "dark"
+        },
+        {
+          "background": "rgb(238, 240, 243)",
+          "base": "light"
+        },
+        {
+          "background": "rgb(18, 20, 26)",
+          "base": "obsidian"
+        },
+        {
+          "background": "rgb(15, 15, 15)",
+          "base": "carbon"
+        },
+        {
+          "background": "rgb(0, 43, 54)",
+          "base": "solarized-dark"
+        },
+        {
+          "background": "rgb(253, 246, 227)",
+          "base": "solarized-light"
+        },
+        {
+          "background": "rgb(0, 0, 0)",
+          "base": "high-contrast-dark"
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "base": "high-contrast-light"
+        }
+      ],
+      "selected": "Light",
+      "theme": "light"
+    },
+    "workspace": {
+      "hash": "#/",
+      "tabs": [
+        "Home"
+      ],
+      "theme": "light"
+    }
+  },
+  "minimiseRestore": {
+    "before": {
+      "focused": false,
+      "fullscreen": false,
+      "height": 639,
+      "id": 2,
+      "maximised": false,
+      "minimised": true,
+      "name": "settings",
+      "visible": false,
+      "width": 1059,
+      "x": 2030,
+      "y": 415,
+      "zoom": 1
+    },
+    "after": {
+      "focused": false,
+      "fullscreen": false,
+      "height": 639,
+      "id": 2,
+      "maximised": false,
+      "minimised": false,
+      "name": "settings",
+      "visible": false,
+      "width": 1059,
+      "x": 2030,
+      "y": 415,
+      "zoom": 1
+    }
+  },
+  "repeatedDeepLinks": [
+    {
+      "focus": "Void",
+      "hash": "#/settings?section=core&category=appearance&setting=appearance.theme",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "sameRoot": true
+    },
+    {
+      "focus": "Void",
+      "hash": "#/settings?section=core&category=appearance&setting=appearance.theme",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "sameRoot": true
+    },
+    {
+      "focus": "Void",
+      "hash": "#/settings?section=core&category=appearance&setting=appearance.theme",
+      "mount": "0e01ce3c-c5b0-46db-9008-824959888f1c",
+      "sameRoot": true
+    }
+  ],
+  "minimumLayout": {
+    "requested": {
+      "width": 960,
+      "height": 600
+    },
+    "actual": {
+      "bodyHeight": 601,
+      "bodyWidth": 961,
+      "close": {
+        "bottom": 32,
+        "height": 24,
+        "left": 925,
+        "right": 949,
+        "top": 8,
+        "width": 24,
+        "x": 925,
+        "y": 8
+      },
+      "done": {
+        "bottom": 594,
+        "height": 30,
+        "left": 888.71875,
+        "right": 939,
+        "top": 564,
+        "width": 50.28125,
+        "x": 888.71875,
+        "y": 564
+      },
+      "height": 601,
+      "mainHash": "#/settings?section=core&category=appearance&setting=appearance.theme",
+      "radios": [
+        {
+          "bottom": 216.3125,
+          "height": 75,
+          "left": 234,
+          "right": 463.65625,
+          "top": 141.3125,
+          "width": 229.65625,
+          "x": 234,
+          "y": 141.3125
+        },
+        {
+          "bottom": 216.3125,
+          "height": 75,
+          "left": 471.65625,
+          "right": 701.328125,
+          "top": 141.3125,
+          "width": 229.671875,
+          "x": 471.65625,
+          "y": 141.3125
+        },
+        {
+          "bottom": 216.3125,
+          "height": 75,
+          "left": 709.328125,
+          "right": 938.984375,
+          "top": 141.3125,
+          "width": 229.65625,
+          "x": 709.328125,
+          "y": 141.3125
+        },
+        {
+          "bottom": 299.3125,
+          "height": 75,
+          "left": 234,
+          "right": 463.65625,
+          "top": 224.3125,
+          "width": 229.65625,
+          "x": 234,
+          "y": 224.3125
+        },
+        {
+          "bottom": 299.3125,
+          "height": 75,
+          "left": 471.65625,
+          "right": 701.328125,
+          "top": 224.3125,
+          "width": 229.671875,
+          "x": 471.65625,
+          "y": 224.3125
+        },
+        {
+          "bottom": 299.3125,
+          "height": 75,
+          "left": 709.328125,
+          "right": 938.984375,
+          "top": 224.3125,
+          "width": 229.65625,
+          "x": 709.328125,
+          "y": 224.3125
+        },
+        {
+          "bottom": 382.3125,
+          "height": 75,
+          "left": 234,
+          "right": 463.65625,
+          "top": 307.3125,
+          "width": 229.65625,
+          "x": 234,
+          "y": 307.3125
+        },
+        {
+          "bottom": 382.3125,
+          "height": 75,
+          "left": 471.65625,
+          "right": 701.328125,
+          "top": 307.3125,
+          "width": 229.671875,
+          "x": 471.65625,
+          "y": 307.3125
+        },
+        {
+          "bottom": 382.3125,
+          "height": 75,
+          "left": 709.328125,
+          "right": 938.984375,
+          "top": 307.3125,
+          "width": 229.65625,
+          "x": 709.328125,
+          "y": 307.3125
+        }
+      ],
+      "width": 961
+    }
+  },
+  "reload": {
+    "hash": "#/settings?section=core&category=appearance&setting=appearance.theme",
+    "heading": "Application / Appearance",
+    "marker": null,
+    "tabs": 0,
+    "theme": "void",
+    "timeOrigin": 1793519056445
+  },
+  "beforeShutdown": {
+    "dirty": true,
+    "shown": "false",
+    "value": "14"
+  },
+  "savedFontSize": 13,
+  "verificationLimits": {
+    "desktopLocked": false,
+    "screenCaptureAccess": true,
+    "accessibilityTrusted": true,
+    "OSMenuInteraction": "passed",
+    "pixelScreenshots": "passed",
+    "unexercised": [
+      "Windows/Linux native interaction",
+      "screen-reader narration",
+      "native installed-plugin editor integration (profile has no plugins)"
+    ]
+  },
+  "shutdown": {
+    "launchPhase": "stopped",
+    "health": {
+      "liveness": "",
+      "build": "",
+      "dependencies": "",
+      "servedSource": "",
+      "readiness": "",
+      "hmr": "",
+      "sourceReload": ""
+    },
+    "persistedSecondaryWindows": [],
+    "persistedStateNames": [
+      "main"
+    ]
+  },
+  "restart": {
+    "generation": "3ca5cc20-6ef7-4e29-a815-adbe0a891645",
+    "pid": 23265,
+    "startupWindows": [
+      {
+        "focused": false,
+        "fullscreen": false,
+        "height": 1079,
+        "id": 1,
+        "maximised": false,
+        "minimised": false,
+        "name": "main",
+        "visible": false,
+        "width": 1919,
+        "x": 1600,
+        "y": 196,
+        "zoom": 1
+      }
+    ],
+    "restartedSettings": {
+      "hash": "#/settings?category=general",
+      "heading": "Application / General",
+      "tabs": 0
+    },
+    "restoredSavedFont": {
+      "dirty": false,
+      "value": "13"
+    }
+  },
+  "unavailableThemeKeyboard": {
+    "focus": "High Contrast Light",
+    "selected": "High Contrast Light",
+    "theme": "high-contrast-light"
+  },
+  "longThemeLabelLayout": {
+    "bodyWidth": 1060,
+    "cardWidth": 261,
+    "contentWidth": 261,
+    "viewportWidth": 1060,
+    "wrap": "anywhere"
+  },
+  "nativeMenu": {
+    "generation": "d4d0721d-3392-41f3-9463-1b64bd52cd93",
+    "menu": "Application → Settings…",
+    "shortcutChar": ",",
+    "shortcutModifiers": 0,
+    "state": {
+      "hash": "#/settings?section=core&category=appearance",
+      "marker": "d17208c4-a456-45e4-a9a9-675503525c3e",
+      "rootRetained": true,
+      "shown": "true"
+    },
+    "windows": [
+      {
+        "focused": false,
+        "fullscreen": false,
+        "height": 1079,
+        "id": 1,
+        "maximised": false,
+        "minimised": false,
+        "name": "main",
+        "visible": true,
+        "width": 1919,
+        "x": 1600,
+        "y": 196,
+        "zoom": 1
+      },
+      {
+        "focused": true,
+        "fullscreen": false,
+        "height": 639,
+        "id": 2,
+        "maximised": false,
+        "minimised": false,
+        "name": "settings",
+        "visible": true,
+        "width": 1059,
+        "x": 2030,
+        "y": 415,
+        "zoom": 1
+      }
+    ]
+  },
+  "nativeAccelerator": {
+    "generation": "d4d0721d-3392-41f3-9463-1b64bd52cd93",
+    "input": "System Events OS keystroke Cmd+,",
+    "state": {
+      "hash": "#/settings?section=core&category=appearance",
+      "marker": "d17208c4-a456-45e4-a9a9-675503525c3e",
+      "rootRetained": true,
+      "shown": "true"
+    },
+    "windows": [
+      {
+        "focused": false,
+        "fullscreen": false,
+        "height": 1079,
+        "id": 1,
+        "maximised": false,
+        "minimised": false,
+        "name": "main",
+        "visible": true,
+        "width": 1919,
+        "x": 1600,
+        "y": 196,
+        "zoom": 1
+      },
+      {
+        "focused": true,
+        "fullscreen": false,
+        "height": 639,
+        "id": 2,
+        "maximised": false,
+        "minimised": false,
+        "name": "settings",
+        "visible": true,
+        "width": 1059,
+        "x": 2030,
+        "y": 415,
+        "zoom": 1
+      }
+    ]
+  },
+  "accessibleChrome": {
+    "generation": "d4d0721d-3392-41f3-9463-1b64bd52cd93",
+    "pid": 10925,
+    "title": "Settings",
+    "nativeWindowButtons": [],
+    "state": {
+      "brand": {
+        "bottom": 37,
+        "height": 37,
+        "left": 0,
+        "right": 211,
+        "top": 0,
+        "width": 211,
+        "x": 0,
+        "y": 0
+      },
+      "close": {
+        "bottom": 32,
+        "height": 24,
+        "left": 1024,
+        "right": 1048,
+        "top": 8,
+        "width": 24,
+        "x": 1024,
+        "y": 8
+      },
+      "focus": null,
+      "heading": "Application / Appearance",
+      "height": 640,
+      "theme": "void",
+      "width": 1060
+    },
+    "cgWindowID": 106776
+  },
+  "nativeCaptionDrag": {
+    "before": {
+      "focused": false,
+      "fullscreen": false,
+      "height": 639,
+      "id": 2,
+      "maximised": false,
+      "minimised": false,
+      "name": "settings",
+      "visible": true,
+      "width": 1059,
+      "x": 2030,
+      "y": 415,
+      "zoom": 1
+    },
+    "after": {
+      "focused": true,
+      "fullscreen": false,
+      "height": 639,
+      "id": 2,
+      "maximised": false,
+      "minimised": false,
+      "name": "settings",
+      "visible": true,
+      "width": 1059,
+      "x": 2090,
+      "y": 440,
+      "zoom": 1
+    },
+    "input": "CGEvent native pointer drag in blank integrated Settings caption"
+  },
+  "nativeCloseClick": {
+    "marker": "d17208c4-a456-45e4-a9a9-675503525c3e",
+    "rootRetained": true,
+    "shown": "false"
+  },
+  "nativeOSClose": {
+    "marker": "d17208c4-a456-45e4-a9a9-675503525c3e",
+    "rootRetained": true,
+    "shown": "false"
+  },
+  "nativeGuardKeyboard": {
+    "cancelled": {
+      "dialog": false,
+      "font": "14",
+      "hash": "#/settings?section=core&category=terminal"
+    },
+    "reverseTab": {
+      "focus": "Save changes",
+      "inside": true
+    },
+    "forwardTab": {
+      "focus": "Cancel",
+      "inside": true
+    }
+  },
+  "finalLightState": {
+    "dirty": false,
+    "heading": "Application / Appearance",
+    "selected": "Light",
+    "theme": "light"
+  },
+  "finalState": {
+    "settings": {
+      "dirty": false,
+      "heading": "Application / Appearance",
+      "marker": "d17208c4-a456-45e4-a9a9-675503525c3e",
+      "rootRetained": true,
+      "theme": "void"
+    },
+    "workspace": {
+      "hash": "#/",
+      "tabs": [
+        "Home"
+      ],
+      "theme": "void"
+    }
+  },
+  "screenshots": [
+    "01-appearance-void.png",
+    "02-terminal-draft.png",
+    "03-unsaved-guard.png",
+    "04-appearance-light.png"
+  ],
+  "tests": {
+    "frontend": {
+      "filesPassed": 96,
+      "testsPassed": 1338,
+      "filesSkipped": 1,
+      "testsSkipped": 3
+    },
+    "goFull": {
+      "packagesPassed": 48,
+      "packagesWithoutTests": 11
+    },
+    "windowRace": "passed",
+    "typeScriptApplication": "passed",
+    "typeScriptTests": "passed",
+    "targetedLint": "passed"
+  },
+  "nativeCornerResize": {
+    "before": {
+      "focused": true,
+      "fullscreen": false,
+      "height": 639,
+      "id": 2,
+      "maximised": false,
+      "minimised": false,
+      "name": "settings",
+      "visible": true,
+      "width": 1059,
+      "x": 2030,
+      "y": 415,
+      "zoom": 1
+    },
+    "after": {
+      "focused": true,
+      "fullscreen": false,
+      "height": 679,
+      "id": 2,
+      "maximised": false,
+      "minimised": false,
+      "name": "settings",
+      "visible": true,
+      "width": 1139,
+      "x": 2030,
+      "y": 415,
+      "zoom": 1
+    },
+    "input": "CGEvent native bottom-right corner drag"
+  },
+  "screenshotDimensions": {
+    "width": 1059,
+    "height": 639
+  }
+}

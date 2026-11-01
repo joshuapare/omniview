@@ -77,7 +77,7 @@ function preview(){
   if(!n)return '<section class="preview"><div class="empty"><h2>Select a file</h2></div></section>';
   const deleted=n.change==='D',dir=n.kind==='dir',locked=n.kind==='locked';let body;
   if(deleted)body='<div class="empty">'+I('LuFile')+'<h2>Deleted '+(n.liveDeleted?'from running filesystem':'in layer 3')+'</h2>This file is absent from the resulting filesystem.<br>Previous metadata · '+size(n.size)+'<p><button id="previous">View previous contents</button></p></div>';
-  else if(locked)body='<div class="empty">'+I('LuLock')+'<h2>Permission denied</h2>Provider cannot list /root as uid 101.<br>Other directories remain available.</div>';
+  else if(locked)body='<div class="empty">'+I('LuLock')+'<h2>Permission denied</h2>Cannot open /root as uid 101.</div>';
   else if(dir)body='<div class="empty">'+I('LuFolderOpen')+'<h2>'+esc(n.name)+'</h2>Directory</div>';
   else if(n.kind==='link')body='<div class="empty">'+I('LuLink')+'<h2>Symbolic link</h2>/bin/sh → /bin/busybox<p><button id="follow">Reveal target metadata</button></p></div>';
   else if(state.mode==='Compare'&&n.name==='nginx.conf')body='<div class="diffbar"><span>BASE IMAGE · read-only</span><span>RUNNING SNAPSHOT · +3 −2 lines</span></div><div class="diffcols"><div class="code">'+lines(base,true)+'</div><div class="code">'+lines(current,true)+'</div></div>';
@@ -149,23 +149,24 @@ function renderOverlay(){
   if(!state.modal){root.innerHTML='';return}
   const exp=state.modal==='export';
   let content;
-  if(exp)content=`<p>Export filesystem root from current snapshot. Provider performs archive creation and transfer.</p><p><strong>Source</strong> nginx · /<br><strong>Format</strong> tar archive · preserve POSIX metadata</p><label class="toggle"><input id="tar" type="checkbox" ${state.tar?'checked':''}> Provider supports archive export (tar available)</label>${!state.tar?'<p class="amber">tar is unavailable. Export is disabled. Browsing remains available.</p>':''}<p class="muted">No archive is created by this prototype. Real provider must report progress, cancellation, and failures.</p>`;
+  if(exp)content=`<p><strong>Source</strong> nginx · /<br><strong>Format</strong> tar archive</p><label class="toggle"><input id="tar" type="checkbox" ${state.tar?'checked':''}> tar available</label>${!state.tar?'<p class="amber">tar is not installed in this container.</p>':''}`;
   else if(state.modal==='Previous snapshot contents')content='<p class="muted">'+esc(state.selected)+' · previous version</p><pre style="overflow:auto">'+esc((node?.previous||fileContents(node)).join('\n'))+'</pre>';
+  else if(state.modal==='Metadata contract')content=`<dl class="kv"><dt>Path</dt><dd>${esc(node?.path||'—')}</dd><dt>Kind</dt><dd>${esc(node?.kind||'—')}</dd><dt>Size</dt><dd>${size(node?.size)}</dd><dt>Layer</dt><dd>${node?.layer??'—'}</dd></dl>`;
   else if(state.modal==='Copy path')content=`<p>Selected path, ready to copy:</p><input aria-label="Path to copy" style="width:100%;padding:8px;background:var(--bg);border:1px solid var(--line)" readonly value="${esc(state.selected)}">`;
   else {
     const descriptions={
-      'Metadata contract':'Stable node ID, POSIX path, file kind, size, mode, owner, timestamps, layer provenance, and change status come from provider metadata. No credentials enter tree state.',
-      'Archive capability':'archiveExport: unavailable · reason: missing-tool · requiredTool: tar. Provider owns transport and authorization.',
-      'Download request':'Mock download request recorded. Consumer supplies file transfer, progress, cancellation, and error reporting. No real file is downloaded.',
-      'Provider retry':'Mock retry request recorded. Provider owns reconnect and authorization. No connection occurs.',
-      'Load cancelled':'Mock branch load cancelled. Other loaded branches remain available.',
-      'Link target /bin/busybox':'Target kind: regular executable · /bin/busybox · layer 0. This mock shows metadata only; provider must enforce root boundaries.',
-      'Export request recorded':'Mock archive request recorded for nginx · /. No export was performed. Provider supplies transfer progress and cancellation.',
-      'Snapshot refreshed':'Provider snapshot refreshed in this simulation.'
+      'Archive capability':'tar is not installed in this container.',
+      'Download request':'Download is unavailable in this prototype.',
+      'Provider retry':'Connection unavailable in this prototype.',
+      'Load cancelled':'Loading cancelled.',
+      'Link target /bin/busybox':'/bin/busybox · executable · layer 0.',
+      'Export request recorded':'Export is unavailable in this prototype. No archive was created.',
+      'Snapshot refreshed':'Files refreshed.'
     };
     content='<p>'+esc(descriptions[state.modal]||state.modal)+'</p>';
   }
-  root.innerHTML=`<div class="modalback"><section role="dialog" aria-modal="true" aria-label="${exp?'Export filesystem':esc(state.modal)}" class="modal"><h2>${exp?'Export filesystem':esc(state.modal)}</h2>${content}<div class="buttons"><button id="close">${exp?'Cancel':'Close'}</button>${exp?`<button id="confirmexport" class="active" ${!state.tar?'disabled':''}>Request export</button>`:''}</div></section></div>`;
+  const title=exp?'Export filesystem':state.modal==='Metadata contract'?'File metadata':state.modal;
+  root.innerHTML=`<div class="modalback"><section role="dialog" aria-modal="true" aria-label="${esc(title)}" class="modal"><h2>${esc(title)}</h2>${content}<div class="buttons"><button id="close">${exp?'Cancel':'Close'}</button>${exp?`<button id="confirmexport" class="active" ${!state.tar?'disabled':''}>Request export</button>`:''}</div></section></div>`;
   document.getElementById('close').onclick=closeOverlay;
   if(exp){document.getElementById('tar').onchange=e=>{state.tar=e.target.checked;renderOverlay()};document.getElementById('confirmexport').onclick=()=>{state.modal='Export request recorded';renderOverlay()}}
   root.querySelector('button').focus();

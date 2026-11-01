@@ -1,0 +1,44 @@
+import { BaseTransport } from '@grafana/faro-core';
+import type { TransportItem } from '@grafana/faro-core';
+
+type IngestFn = (payload: string) => Promise<void>;
+
+// Capture unpatched console.error at module load to avoid re-entering the
+// patched console (which writes to the sink → calls transport → recursion).
+export const originalConsoleError = console.error.bind(console);
+
+export class WailsTransport extends BaseTransport {
+  private readonly ingest: IngestFn;
+
+  constructor(ingestFn: IngestFn) {
+    super();
+    this.ingest = ingestFn;
+  }
+
+  get name() {
+    return 'wails';
+  }
+
+  get version() {
+    return '1.0.0';
+  }
+
+  send(items: TransportItem | TransportItem[]): void {
+    let data: string;
+    try {
+      data = JSON.stringify(items);
+    } catch (err) {
+      if (import.meta.env?.DEV) {
+        originalConsoleError('[WailsTransport] JSON.stringify failed:', err);
+      }
+
+      return;
+    }
+
+    this.ingest(data).catch((err) => {
+      if (import.meta.env?.DEV) {
+        originalConsoleError('[WailsTransport] ingest failed:', err);
+      }
+    });
+  }
+}

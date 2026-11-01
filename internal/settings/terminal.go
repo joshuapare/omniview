@@ -1,0 +1,122 @@
+package categories
+
+import (
+	"os"
+
+	"github.com/omniviewdev/omniview/internal/shellenv"
+
+	"github.com/omniviewdev/plugin-sdk/settings"
+)
+
+// defaultTerminalFontSize is the default terminal font size in pixels.
+const defaultTerminalFontSize = 12
+
+//nolint:gochecknoglobals // we're providing this as a package level variable
+var Terminal = settings.Category{
+	ID:          "terminal",
+	Label:       "Terminal",
+	Description: "Customize the behavior of the terminal",
+	Icon:        "LuSquareTerminal",
+	Settings: map[string]settings.Setting{
+		"defaultShell": {
+			ID:          "defaultShell",
+			Type:        settings.Text,
+			Label:       "Default Shell",
+			Default:     defaultShell(),
+			Description: "The default shell to use when opening a terminal",
+			Validator: func(value interface{}) settings.ValidationResult {
+				val, ok := value.(string)
+				if !ok {
+					return settings.ValidationResult{Code: "shell_type", Message: "Enter a shell executable name or path."}
+				}
+				path, _, err := shellenv.Resolve([]string{val})
+				if err != nil {
+					return settings.ValidationResult{Code: "shell_executable", Message: "Choose an executable shell installed on this system."}
+				}
+				// make sure the shell exists on the users system
+				if _, statErr := os.Stat(path); os.IsNotExist(statErr) {
+					return settings.ValidationResult{Code: "shell_missing", Message: "The selected shell no longer exists. Choose an installed shell."}
+				}
+
+				return settings.ValidationResult{Valid: true, Code: "shell_executable", Message: "Shell executable is available."}
+			},
+		},
+
+		settingTheme: {
+			ID:          settingTheme,
+			Type:        settings.Text,
+			Label:       "Theme",
+			Default:     themeApplication,
+			Description: "The color theme for the terminal",
+			Options: []settings.SettingOption{
+				{Value: themeApplication, Label: "Application", Description: ""},
+				{Value: "dracula", Label: "Dracula", Description: ""},
+				{Value: "solarized-dark", Label: "Solarized Dark", Description: ""},
+				{Value: "solarized-light", Label: "Solarized Light", Description: ""},
+				{Value: "one-dark-pro", Label: "One Dark Pro", Description: ""},
+				{Value: "monokai", Label: "Monokai", Description: ""},
+				{Value: "nord", Label: "Nord", Description: ""},
+				{Value: "gruvbox-dark", Label: "Gruvbox Dark", Description: ""},
+				{Value: "tokyo-night", Label: "Tokyo Night", Description: ""},
+				{Value: "catppuccin-mocha", Label: "Catppuccin Mocha", Description: ""},
+				{Value: "github-dark", Label: "GitHub Dark", Description: ""},
+				{Value: "github-light", Label: "GitHub Light", Description: ""},
+				{Value: "material-dark", Label: "Material Dark", Description: ""},
+				{Value: "cobalt2", Label: "Cobalt2", Description: ""},
+				{Value: "ayu-dark", Label: "Ayu Dark", Description: ""},
+				{Value: "synthwave-84", Label: "Synthwave '84", Description: ""},
+				{Value: "rose-pine", Label: "Rose Pine", Description: ""},
+				{Value: "kanagawa", Label: "Kanagawa", Description: ""},
+				{Value: "everforest-dark", Label: "Everforest Dark", Description: ""},
+				{Value: "one-light", Label: "One Light", Description: ""},
+			},
+		},
+		settingFontSize: {
+			ID:          settingFontSize,
+			Type:        settings.Integer,
+			Label:       "Font Size",
+			Default:     defaultTerminalFontSize,
+			Description: "The size of the font in the terminal",
+		},
+		"cursorStyle": {
+			ID:          "cursorStyle",
+			Type:        settings.Text,
+			Label:       "Cursor Style",
+			Default:     "block",
+			Description: "The style of the cursor in the terminal",
+			Options: []settings.SettingOption{
+				{Value: "block", Label: "Block", Description: ""},
+				{Value: "underline", Label: "Underline", Description: ""},
+				{Value: "bar", Label: "Bar", Description: ""},
+			},
+		},
+		"cursorBlink": {
+			ID:          "cursorBlink",
+			Type:        settings.Toggle,
+			Label:       "Cursor Blink",
+			Default:     true,
+			Description: "Whether the cursor should blink in the terminal",
+		},
+	},
+}
+
+// MigrateTerminalValues upgrades the legacy application-theme sentinel.
+func MigrateTerminalValues(values map[string]any) (map[string]any, bool) {
+	migrated := make(map[string]any, len(values))
+	for key, value := range values {
+		migrated[key] = value
+	}
+
+	if migrated[settingTheme] == "default" {
+		migrated[settingTheme] = themeApplication
+		return migrated, true
+	}
+
+	return migrated, false
+}
+
+// defaultShell also consults the account database before package-init defaults
+// are registered, so Finder launches do not bake in an arbitrary fallback.
+func defaultShell() string {
+	return shellenv.Default()
+}

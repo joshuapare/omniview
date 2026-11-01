@@ -1,0 +1,91 @@
+import { test, expect } from '../fixtures/app.fixture';
+import { expectPageDoesNotScroll, shell } from '../fixtures/helpers';
+
+// Borders and subpixel rounding can shift an edge by one pixel.
+function expectWithinPixel(actual: number, expected: number) {
+  expect(Math.abs(actual - expected), `${actual} vs ${expected}`).toBeLessThanOrEqual(1);
+}
+
+test.describe('App Shell', () => {
+  test('loads without errors', async ({ appPage }) => {
+    await expect(shell(appPage).root).toBeVisible();
+  });
+
+  test('header is visible', async ({ appPage }) => {
+    await expect(shell(appPage).header).toBeVisible();
+  });
+
+  test('main content area is visible', async ({ appPage }) => {
+    await expect(shell(appPage).main).toBeVisible();
+  });
+
+  test('footer is visible', async ({ appPage }) => {
+    await expect(shell(appPage).footer).toBeVisible();
+  });
+
+  test('regions tile the window: header on top, content below it, footer at the bottom', async ({ appPage }) => {
+    const { header, main, footer } = shell(appPage);
+    const viewport = appPage.viewportSize()!;
+    const [h, m, f] = await Promise.all([header, main, footer].map(async (l) => (await l.boundingBox())!));
+
+    expect(h.y).toBe(0);
+    expectWithinPixel(h.width, viewport.width);
+    expectWithinPixel(f.y + f.height, viewport.height);
+    expectWithinPixel(f.width, viewport.width);
+
+    expect(m.x).toBe(0);
+    expectWithinPixel(m.y, h.y + h.height);
+    expectWithinPixel(m.x + m.width, viewport.width);
+    expectWithinPixel(m.y + m.height, f.y);
+  });
+
+  for (const size of [{ width: 900, height: 600 }, { width: 1920, height: 1080 }]) {
+    test(`fits a ${size.width}x${size.height} window without page scrollbars`, async ({ page }) => {
+      await page.setViewportSize(size);
+      await page.goto('/');
+      await expect(shell(page).root).toBeVisible();
+
+      const box = (await shell(page).root.boundingBox())!;
+      expectWithinPixel(box.width, size.width);
+      expectWithinPixel(box.height, size.height);
+      await expectPageDoesNotScroll(page);
+    });
+  }
+
+  test('footer tooltips open above the shell', async ({ appPage }) => {
+    await shell(appPage).footer.getByRole('button', { name: 'Notifications' }).hover();
+    const tooltip = appPage.getByText('Notifications', { exact: true });
+    await expect(tooltip).toBeVisible();
+
+    // Whatever is painted at the tooltip's centre must be the tooltip itself.
+    const box = (await tooltip.boundingBox())!;
+    const onTop = await tooltip.evaluate((el, [x, y]) => el.contains(document.elementFromPoint(x, y)), [
+      box.x + box.width / 2, box.y + box.height / 2,
+    ]);
+    expect(onTop).toBe(true);
+  });
+
+  test('global search keeps keyboard focus inside its dialog and restores its opener', async ({ appPage }) => {
+    const name = 'Search Omniview';
+    const opener = appPage.getByRole('button', { name, exact: true });
+    await opener.focus();
+    await appPage.keyboard.press('ControlOrMeta+k');
+    const dialog = appPage.getByRole('dialog', { name, exact: true });
+    const input = dialog.getByRole('combobox', { name, exact: true });
+    await expect(input).toBeFocused();
+    await input.fill('Home');
+    await expect(dialog.getByRole('option', { name: /^Home/ })).toBeVisible();
+    const controls = dialog.locator('button:not(:disabled):not([tabindex="-1"]):visible, summary:visible, input:not(:disabled):visible');
+    const first = controls.first();
+    const last = controls.last();
+    await first.focus();
+    await appPage.keyboard.press('Shift+Tab');
+    await expect(last).toBeFocused();
+    await appPage.keyboard.press('Tab');
+    await expect(first).toBeFocused();
+    await input.focus();
+    await appPage.keyboard.press('Escape');
+    await expect(dialog).not.toBeVisible();
+    await expect(opener).toBeFocused();
+  });
+});

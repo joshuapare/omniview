@@ -1,0 +1,44 @@
+ISSUE 314 — DESIGN FOR REVIEW, NOT SHIPPED
+ArtifactGenerator source.extensions.fluxcd.io/v1beta1. Namespaced. Optional source-watcher required. Flux 2.7.0 pins source-watcher v2.0.1, commit 0ca4059e6bf06c71d92e9bd229a4df31c00aeb88. Not old source-watcher v0.1.0.
+
+PRIMARY SOURCES
+https://fluxcd.io/blog/2025/09/flux-v2.7.0/
+https://github.com/fluxcd/flux2/blob/v2.7.0/manifests/bases/source-watcher/kustomization.yaml
+https://github.com/fluxcd/source-watcher/blob/0ca4059e6bf06c71d92e9bd229a4df31c00aeb88/api/v1beta1/artifactgenerator_types.go
+https://github.com/fluxcd/source-watcher/blob/0ca4059e6bf06c71d92e9bd229a4df31c00aeb88/config/crd/bases/source.extensions.fluxcd.io_artifactgenerators.yaml
+https://github.com/fluxcd/source-watcher/blob/0ca4059e6bf06c71d92e9bd229a4df31c00aeb88/internal/controller/artifactgenerator_manager.go
+
+FIELD / CONTROL / OWNED PATH
+Name, namespace / string inputs / metadata.name, metadata.namespace. Locked during edit.
+Source alias / unique identifier input / spec.sources[i].alias.
+Source kind / GitRepository | OCIRepository | Bucket selector / spec.sources[i].kind.
+Source name / fixture reference datalist with explicit typed reference / spec.sources[i].name.
+Source namespace / optional string input / spec.sources[i].namespace; blank omits, resolving to generator namespace.
+Output name / string input / spec.artifacts[i].name; generated ExternalArtifact name in generator namespace.
+Revision / Content digest or source alias selector / spec.artifacts[i].revision; default means omitted, alias writes @alias.
+Origin revision / Omit or source alias selector / spec.artifacts[i].originRevision. Sets generated artifact origin revision annotation only when available; not a guaranteed Git SHA.
+Copy from / alias plus glob string / spec.artifacts[i].copy[j].from.
+Copy to / destination path string / spec.artifacts[i].copy[j].to; @artifact/ root.
+Copy strategy / Default overwrite | Overwrite | Merge / spec.artifacts[i].copy[j].strategy; default omitted.
+Exclude / one glob per line / spec.artifacts[i].copy[j].exclude[]; empty omitted.
+Add/remove source, output, copy / explicit row actions / corresponding arrays. Copy order is significant.
+Graph / derived structural reference and ordered mapping view / no owned manifest fields.
+Generated artifacts / read-only fixture inventory and reference detail / status.inventory[] and generated owner; never author status.
+
+BOUNDARIES
+No spec field is declared immutable in this API snapshot. Identity is immutable Kubernetes metadata. Source/output/rule edits still depend on admission, ownership, verbs and controller policy. GitOps-owned fixture blocks direct guided edits; production must route to owner repository or explicit conflict-aware override flow. Generated ExternalArtifacts are inspect-only here; generated status and artifact bytes are never entered by users. Changes to output names and removal can disrupt consumers. No source files are fetched and no file-match/output-content prediction is claimed. Cross-namespace source references are explicit; actual access depends on source-watcher configuration and permissions. No source-controller, source-watcher, companion ExternalArtifact or consumer is secretly created by Review.
+
+INTERACTION & LOSSLESS LIMIT
+Interactive standalone HTML composition, not React/base-ui implementation. One bounded in-memory draft emits YAML using JSON-compatible flow values. Untouched Form/YAML switches preserve that draft. Manual source edits remain exact verbatim, including invalid text/comments/unknown content; all guided conversion and review then lock. This intentionally does NOT claim safe AST edits after arbitrary YAML import. Production must integrate existing lossless manifestDraft AST patching, preserve unknown fields, comments, exact numeric/scalar types and siblings, and retain source on conflicts. Only explicit mode preference persists, never drafts. Switching fixture intent intentionally loads a new fixture and is not product navigation.
+No raw sensitive fixture values, annotations, credentials or imported live config used. No live calls or mutations. Generated metadata values omitted rather than fabricated.
+
+REUSE & PROVIDER
+Flux add-on editor provider should register exact GVK and capability/ownership predicates, not Kubernetes built-in hardcoding. Reuse shared Dialog, SegmentedControl, FormField, Input, Select/Combobox, TextArea, Tooltip/Popover, Buttons, and repeatable row composition. Existing Monaco/manifest draft is production source surface; textarea here is a faithful isolated mock boundary. No new generic primitive or base-ui release proposed. Structural graph belongs in Flux adapter, not base-ui. Semantic colors should replace mock palette during implementation.
+Visual review used web-design-guidelines skill at /Users/joshuapare/.agents/skills/web-design-guidelines/SKILL.md and fetched https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md. No named mock skill installed. Approved #249 workflow used. Review found and fixed Escape reopening help and editable unavailable projection. Remaining accessibility limit: full production dialog opener restoration and screen-reader error association need shared Dialog/FormField wiring; mock keeps focus in frame but does not claim production accessibility certification.
+
+CAPTURES
+01 create blank. 02 actionable local validation and focused first field. 03 typed source with add/remove. 04 two ordered copy rules, exclusion and Merge. 05 non-mutating review with consequences. 06 structural composition graph. 07 exact manual-source fallback. 08 edit identity locked. 09 generated ExternalArtifact inspect. 10 GitOps-owned direct edit boundary. 11 optional component missing. 12 create denied. 13 reference lookup denied. 14 no references. 15 discovery unavailable. 16 unsupported version. 17 narrow empty output. 18 keyboard help. 19 populated edit output/revision. 20 populated narrow output with internal scroll and visible footer.
+01–16 and 18–19: 1440x900 CSS pixels, device scale 1.25. 17 and 20: 640x800, device scale 1.25. All images visually reviewed; 01–17 via contact sheet, 18–20 individually. Browser reported zero runtime errors after final interactions.
+
+REMAINING REVIEW DECISIONS
+Whether cross-namespace sources need stronger policy hints; how to route GitOps ownership overrides; whether output removal needs consumer reference discovery before save. References remain explicitly fixture-only. Validation is local guidance, not schema/admission certification. No actual filesystem glob expansion, Helm merge, byte generation, reconciliation, RBAC lookup, controller health or mutation proved. Review remains requested; issue stays open.

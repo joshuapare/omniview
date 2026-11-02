@@ -1,0 +1,26 @@
+# API-group evidence · issue 302
+
+Actual production components with local fixture transport. No live resource reads or mutations. Creating/Submitting is held at the fixture boundary; denied, unavailable and immutable states are not presented as successful mutations.
+
+- [CiliumNetworkPolicy](issue-302/component-0.md)
+- [CiliumClusterwideNetworkPolicy](issue-302/component-1.md)
+- [CiliumCIDRGroup](issue-302/component-2.md)
+- [CiliumEgressGatewayPolicy](issue-302/component-3.md)
+- [CiliumLocalRedirectPolicy](issue-302/component-4.md)
+- [CiliumLoadBalancerIPPool](issue-302/component-5.md)
+- [CiliumNodeConfig](issue-302/component-6.md)
+- [CiliumBGPAdvertisement](issue-302/component-7.md)
+- [CiliumBGPClusterConfig](issue-302/component-8.md)
+- [CiliumBGPPeerConfig](issue-302/component-9.md)
+- [CiliumBGPNodeConfigOverride](issue-302/component-10.md)
+- [CiliumEnvoyConfig](issue-302/component-11.md)
+- [CiliumClusterwideEnvoyConfig](issue-302/component-12.md)
+- [CiliumBGPPeeringPolicy](issue-302/component-13.md)
+- [CiliumGatewayClassConfig](issue-302/component-14.md)
+- [CiliumL2AnnouncementPolicy](issue-302/component-15.md)
+- [CiliumPodIPPool](issue-302/component-16.md)
+- [CiliumEndpoint](issue-302/component-17.md)
+- [CiliumEndpointSlice](issue-302/component-18.md)
+- [CiliumIdentity](issue-302/component-19.md)
+- [CiliumNode](issue-302/component-20.md)
+- [CiliumBGPNodeConfig](issue-302/component-21.md)

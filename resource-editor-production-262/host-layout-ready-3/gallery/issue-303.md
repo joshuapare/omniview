@@ -1,0 +1,25 @@
+# API-group evidence · issue 303
+
+Actual production components with local fixture transport. No live resource reads or mutations. Creating/Submitting is held at the fixture boundary; denied, unavailable and immutable states are not presented as successful mutations.
+
+- [Calico NetworkPolicy](issue-303/component-0.md)
+- [Calico GlobalNetworkPolicy](issue-303/component-1.md)
+- [Calico NetworkSet](issue-303/component-2.md)
+- [Calico GlobalNetworkSet](issue-303/component-3.md)
+- [Calico HostEndpoint](issue-303/component-4.md)
+- [Calico IPPool](issue-303/component-5.md)
+- [Calico IPReservation](issue-303/component-6.md)
+- [Calico BGPConfiguration](issue-303/component-7.md)
+- [Calico BGPFilter](issue-303/component-8.md)
+- [Calico BGPPeer](issue-303/component-9.md)
+- [Calico FelixConfiguration](issue-303/component-10.md)
+- [Calico KubeControllersConfiguration](issue-303/component-11.md)
+- [Calico IPAMConfiguration](issue-303/component-12.md)
+- [Calico Tier](issue-303/component-13.md)
+- [Calico CalicoNodeStatus](issue-303/component-14.md)
+- [Calico Profile](issue-303/component-15.md)
+- [Calico BlockAffinity](issue-303/component-16.md)
+- [Calico ClusterInformation](issue-303/component-17.md)
+- [Calico StagedNetworkPolicy](issue-303/component-18.md)
+- [Calico StagedGlobalNetworkPolicy](issue-303/component-19.md)
+- [Calico StagedKubernetesNetworkPolicy](issue-303/component-20.md)

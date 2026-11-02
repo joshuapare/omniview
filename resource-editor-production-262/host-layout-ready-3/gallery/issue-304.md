@@ -1,0 +1,26 @@
+# API-group evidence · issue 304
+
+Actual production components with local fixture transport. No live resource reads or mutations. Creating/Submitting is held at the fixture boundary; denied, unavailable and immutable states are not presented as successful mutations.
+
+- [BGPConfiguration backing record](issue-304/component-0.md)
+- [BGPFilter backing record](issue-304/component-1.md)
+- [BGPPeer backing record](issue-304/component-2.md)
+- [BlockAffinity backing record](issue-304/component-3.md)
+- [CalicoNodeStatus backing record](issue-304/component-4.md)
+- [ClusterInformation backing record](issue-304/component-5.md)
+- [FelixConfiguration backing record](issue-304/component-6.md)
+- [GlobalNetworkPolicy backing record](issue-304/component-7.md)
+- [GlobalNetworkSet backing record](issue-304/component-8.md)
+- [HostEndpoint backing record](issue-304/component-9.md)
+- [IPAMBlock backing record](issue-304/component-10.md)
+- [IPAMConfig backing record](issue-304/component-11.md)
+- [IPAMHandle backing record](issue-304/component-12.md)
+- [IPPool backing record](issue-304/component-13.md)
+- [IPReservation backing record](issue-304/component-14.md)
+- [KubeControllersConfiguration backing record](issue-304/component-15.md)
+- [NetworkPolicy backing record](issue-304/component-16.md)
+- [NetworkSet backing record](issue-304/component-17.md)
+- [StagedGlobalNetworkPolicy backing record](issue-304/component-18.md)
+- [StagedKubernetesNetworkPolicy backing record](issue-304/component-19.md)
+- [StagedNetworkPolicy backing record](issue-304/component-20.md)
+- [Tier backing record](issue-304/component-21.md)

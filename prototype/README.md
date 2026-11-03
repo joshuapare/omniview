@@ -25,3 +25,7 @@ Eight screenshots were captured with Chromium at a 1440×900 CSS viewport and 1.
 Uses installed base-ui dark surface tokens, actual react-icons SVG exports, and source-defined 38px header / 24px footer. No running main-native or main-dev instance was available for live application pixel capture. Header bell placement and right-edge center are explicit design proposals; current app has footer entry points. Scenario connection/resource names and all telemetry are invented examples.
 
 This is not production UI: no backend execution, persistence across reload/restart, authorization, actual resource routing, rule evaluation, real cancellation, focus trap, working filter tabs, or notification preferences. Only the default guest-filesystem expansion path was exercised; alternate parameter selection is illustrative. Retention in this prototype means retaining an operation after hiding its toast, not durable disk storage. The GitHub issue specifies the real contracts and acceptance criteria.
+
+## Copy policy revision
+
+Omit unsupported controls without explanatory placeholders. Removed cancellation-support text, provider-continuation text, the notification-center explainer, and redundant pause-result prose. Rule metadata and resize requirements now live in keyboard-accessible help disclosures. Keep only the concise irreversible-growth warning inline in the form. Prototype-only scenario controls and simulation labeling are not proposed product UI.

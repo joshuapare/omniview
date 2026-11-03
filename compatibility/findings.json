@@ -1,0 +1,11 @@
+{
+  "surface": "Isolated Chromium page importing actual repository SnackbarProvider and installed @omniviewdev/base-ui 0.7.0 ToastProvider; no component mocks",
+  "viewport": "1440x900 CSS pixels; device scale 1.25",
+  "warning": {"retainedNotificationCount": 0, "toastActions": ["Expand disk…", "Close"], "secondDeclaredActionVisible": false, "clickedActionResult": "resize", "toastDismissedAfterAction": true},
+  "error": {"retainedNotificationCount": 1, "toastAction": "Details", "details": "Guest filesystem expansion failed. Virtual disk capacity: 120 GiB.", "expandedActions": ["Copy details", "View VM", "Retry…"]},
+  "capacity": {"persistentToastsCreated": 6, "visibleMessages": ["Task 2", "Task 3", "Task 4", "Task 5", "Task 6"], "firstToastEvicted": true},
+  "hover": {"durationMs": 1600, "observation": "Toast disappeared while pointer remained over toast; no pause-on-hover"},
+  "publicToastMethods": ["dismiss", "dismissAll", "promise", "toast"],
+  "pageErrors": [],
+  "limits": "Not a full app or backend run. No task-service implementation, restart recovery, native pixels, or real plugin activity exercised. Footer in probe is a simplified trigger; center and toast are actual components."
+}

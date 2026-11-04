@@ -1,0 +1,11 @@
+{
+  "host": "d153a8a724f98c8999e8e29ba820ab0382ed3c66",
+  "kubernetes": "98c3a50fccaec1ee04b308392fa7c32c383fe316",
+  "sdk": "e391d4f586e26f9dec12a5c81079ba81a3b05eb3",
+  "pull_requests": [
+    "https://github.com/omniviewdev/omniview/pull/395",
+    "https://github.com/omniviewdev/omniview-plugin-kubernetes/pull/206",
+    "https://github.com/omniviewdev/plugin-sdk/pull/63"
+  ],
+  "release_performed": false
+}

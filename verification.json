@@ -1,0 +1,32 @@
+{
+  "catalogMetrics": 24,
+  "visualizations": [
+    "area",
+    "line",
+    "bars",
+    "stat"
+  ],
+  "visualSwitchUpstreamRequests": 0,
+  "liveValues": {
+    "cpuMillicores": 80,
+    "memoryWorkingSetBytes": 134217728,
+    "receivePacketsPerSecond": 128,
+    "threads": 48
+  },
+  "fixture": "Owned synthetic exporter telemetry evaluated by real Prometheus through real Grafana. New families have only newly collected history; no history fabricated.",
+  "checks": {
+    "providerRace": "passed",
+    "frontendTypecheck": "passed",
+    "frontendFullSuite": {
+      "passed": 1666,
+      "skipped": 3
+    },
+    "visualRegressionTests": 14,
+    "liveProviderMetrics": 24,
+    "tablet": {
+      "viewportWidth": 1024,
+      "scrollWidth": 1024
+    }
+  },
+  "generation": "4ebc1880-c0da-4d0b-9019-9742f023834c"
+}

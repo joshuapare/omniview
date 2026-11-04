@@ -1,0 +1,54 @@
+{
+  "verifiedAt": "2026-11-04T22:59:25.010Z",
+  "cluster": "kind",
+  "context": "kind-kind",
+  "node": "kind-control-plane",
+  "namespace": "metrics-workloads",
+  "applicationPods": [
+    "metrics-cpu-f8f9cff47-sgq8v",
+    "metrics-io-759c5874bf-sqbt7"
+  ],
+  "monitoringChart": "kube-prometheus-stack 92.18.0",
+  "grafanaDatasourceUID": "prometheus",
+  "policy": "replace mapped metrics",
+  "syntheticKubernetesAPI": false,
+  "syntheticMetricExporter": false,
+  "telemetry": {
+    "command": "make metrics-lab-verify",
+    "exit": 0,
+    "passed": [
+      "Ready Nodes",
+      "two Ready Running application Pods",
+      "kubelet cAdvisor scrape provenance",
+      "kube-state-metrics scrape provenance",
+      "positive CPU cores",
+      "positive memory working set",
+      "positive network receive and transmit",
+      "exact CPU and memory requests",
+      "exact CPU and memory limits",
+      "actual container restart counters",
+      "positive filesystem writes"
+    ],
+    "optionalUnavailable": [
+      "CPU throttled seconds/sec"
+    ]
+  },
+  "credentialSafety": {
+    "tests": 2,
+    "passed": 2,
+    "scope": [
+      "symlinked state directory cannot change unrelated credentials or permissions",
+      "atomic private replacement preserves hardlinked external credentials"
+    ],
+    "realKubeconfigRegeneration": "passed"
+  },
+  "visualChecks": [
+    "actual green Ready container indicators",
+    "Kind local monitoring / Prometheus selected",
+    "real CPU area chart",
+    "real memory line chart",
+    "real network packets bar chart",
+    "real container threads stat",
+    "persisted Last 15 minutes and panel selections survived host restart and cluster switch"
+  ]
+}

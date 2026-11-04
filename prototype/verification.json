@@ -1,0 +1,78 @@
+{
+  "checks": [
+    "Default CPU and memory panels",
+    "No checkbox wall or native selects",
+    "Queries hidden by default",
+    "Search browser opens",
+    "Search returns network metrics only",
+    "Metric adds through real input",
+    "Additional metric creates third chart",
+    "Metric browser closes after selection",
+    "Chart hover exposes timestamp and formatted value",
+    "Container breakdown enabled",
+    "Container series stay separate",
+    "Metric chip removes selection",
+    "Query disclosure opens",
+    "Interpolation tokens receive distinct highlighting",
+    "Query editor appears only on request",
+    "Edited query persists in preview",
+    "Source picker opens",
+    "Source selection uses friendly label",
+    "Time preset updates",
+    "Chart axis follows selected range",
+    "Inspector is a separate disclosure",
+    "Inspector does not claim backend evidence",
+    "Escape closes popover",
+    "Refresh control updates preview state",
+    "Tablet has no horizontal overflow",
+    "Tablet metric browser stays inside viewport",
+    "Drawer closes to expose unchanged table layout",
+    "Illustrative ready-container indicators remain in table",
+    "Pod row reopens metrics drawer",
+    "No page errors in final document"
+  ],
+  "screenshotReview": [
+    {
+      "name": "01-metrics-overview.png",
+      "unchangedFromReviewed": true
+    },
+    {
+      "name": "02-search-metrics.png",
+      "unchangedFromReviewed": false
+    },
+    {
+      "name": "03-network-chart.png",
+      "unchangedFromReviewed": true
+    },
+    {
+      "name": "04-query-disclosure.png",
+      "unchangedFromReviewed": true
+    },
+    {
+      "name": "05-tablet.png",
+      "unchangedFromReviewed": true
+    }
+  ],
+  "viewport": {
+    "desktop": [
+      1440,
+      900
+    ],
+    "tablet": [
+      1024,
+      768
+    ]
+  },
+  "https": "https://macbook-pro.tailadc78.ts.net:48632/",
+  "regressions": {
+    "uiPassed": 1660,
+    "uiSkipped": 3,
+    "filesPassed": 188,
+    "filesSkipped": 1
+  },
+  "limits": [
+    "Prototype data is simulated, not live metrics.",
+    "Running containers in the mock are illustrative; actual integration fixture Pods are Pending.",
+    "Physical iPad access has not been exercised."
+  ]
+}

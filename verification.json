@@ -1,0 +1,26 @@
+{
+  "metricsTabHeadingCount": 0,
+  "metricsTabInnerTopPaddingPx": 0,
+  "overviewHeadingCount": 1,
+  "diagnostics": {
+    "diagnosticsOpen": true,
+    "diagnosticRows": [
+      "Connection",
+      "Revision"
+    ]
+  },
+  "uncachedRange": {
+    "removed": false,
+    "minCharts": 3,
+    "mutations": 6,
+    "retainedSvgs": 3,
+    "bars": 176,
+    "range": "Last 6 hours"
+  },
+  "frontendTests": {
+    "passed": 1691,
+    "skipped": 3
+  },
+  "typecheck": "passed",
+  "fixture": "Synthetic Pods and exporter telemetry through actual IDE, Prometheus and Grafana. Not a production cluster; no Nodes provisioned."
+}

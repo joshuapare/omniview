@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-11-04T22:59:25.010Z",
+  "verifiedAt": "2026-11-04T23:47:12.542Z",
   "cluster": "kind",
   "context": "kind-kind",
   "node": "kind-control-plane",
@@ -49,6 +49,33 @@
     "real memory line chart",
     "real network packets bar chart",
     "real container threads stat",
-    "persisted Last 15 minutes and panel selections survived host restart and cluster switch"
-  ]
+    "persisted Last 15 minutes and panel selections survived host restart and cluster switch",
+    "actual 1568x1175 tablet-sized browser render",
+    "compact actual source/freshness inspector",
+    "three chart SVG nodes retained across first real one-hour fetch; zero removals; no stale text"
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1900,
+      "height": 1080,
+      "deviceScaleFactor": 1.25
+    },
+    "tabletSized": {
+      "width": 1568,
+      "height": 1175,
+      "deviceScaleFactor": 1
+    }
+  },
+  "historyContinuity": {
+    "range": "Last 1 hour",
+    "retainedChartNodes": 3,
+    "removedChartNodes": 0,
+    "staleVisible": false
+  },
+  "remoteAudit": {
+    "status": "blocked",
+    "reason": "Managed plugin loader imports loopback Vite URLs; supported archive cutover failed provider reconnect",
+    "recovery": "Managed runtime restored and real metrics verified again; actual screenshots supplied",
+    "temporaryGatewayRemoved": true
+  }
 }

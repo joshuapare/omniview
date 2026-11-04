@@ -1,0 +1,86 @@
+{
+  "generation": "0a56f78a-ed21-406f-af91-c558b9277858",
+  "sourceCommits": {
+    "host": "60af932fb",
+    "kubernetes": "b94f047"
+  },
+  "freshness": {
+    "rootCause": "Host incorrectly capped provider sample freshness at the five-second cache reuse TTL; UI refresh is thirty seconds.",
+    "fixed": "Provider deadlines retained; missing deadlines use sample observation plus five minutes. Cache reuse stays capped at five seconds.",
+    "realExpiryRegression": "passed"
+  },
+  "observation": {
+    "started": 1793824796363,
+    "samples": 104,
+    "maxStale": 0,
+    "maxSuffixes": 0,
+    "minSvgCount": 3,
+    "disconnected": false,
+    "pathUpdates": 48,
+    "elapsedMs": 95004,
+    "retainedOriginalSvgs": 3,
+    "upstreamQueries": 40
+  },
+  "persistence": {
+    "beforeRestart": {
+      "preferences": {
+        "omniview.kubernetes.metrics.v1.presentation.k8s%3A%2Fpods": "{\"version\":1,\"additional\":[\"network_receive_packets\",\"threads\"],\"hidden\":[],\"duration\":\"900000\",\"visualizations\":{\"memory_usage\":\"line\",\"network_receive_packets\":\"bars\",\"threads\":\"stat\"}}"
+      },
+      "modes": [
+        "area",
+        "line",
+        "bars",
+        "stat"
+      ],
+      "range": "Last 15 minutes"
+    },
+    "afterRestart": [
+      "area",
+      "line",
+      "bars",
+      "stat"
+    ],
+    "overview": {
+      "range": "Last 15 minutes",
+      "modes": [
+        "area",
+        "line",
+        "bars",
+        "stat"
+      ]
+    },
+    "afterDrawerCloseAndDifferentPod": {
+      "range": "Last 15 minutes",
+      "modes": [
+        "area",
+        "line",
+        "bars",
+        "stat"
+      ],
+      "staleIndicators": 0
+    },
+    "absoluteRangeEndStored": false
+  },
+  "render": {
+    "range": "Last 15 minutes",
+    "modes": [
+      "area",
+      "line",
+      "bars",
+      "stat"
+    ],
+    "staleIndicators": 0,
+    "transition": [
+      "0.16s",
+      "0.16s",
+      "0.16s"
+    ]
+  },
+  "checks": {
+    "backendRacePackages": 2,
+    "frontendTypecheck": "passed",
+    "frontendTestsPassed": 1690,
+    "frontendTestsSkipped": 3
+  },
+  "fixture": "Actual IDE with owned synthetic exporter data queried through real Prometheus and Grafana. Not production workload evidence."
+}
